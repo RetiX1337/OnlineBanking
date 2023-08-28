@@ -1,0 +1,30 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <property name = "hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <property name = "hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+
+        <property name = "hibernate.connection.url">jdbc:mysql://localhost:3306/online_banking</property>
+
+        <property name = "hibernate.connection.username">root</property>
+
+        <property name = "hibernate.connection.password">123456</property>
+
+        <property name="show_sql">true</property>
+
+        <mapping class="org.onlinebanking.core.domain.models.User"/>
+        <mapping class="org.onlinebanking.core.domain.models.Customer"/>
+        <mapping class="org.onlinebanking.core.domain.models.BankAccount"/>
+        <mapping class="org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument"/>
+        <mapping class="org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer"/>
+        <mapping class="org.onlinebanking.core.domain.models.paymentinstruments.cards.Card"/>
+        <mapping class="org.onlinebanking.core.domain.models.paymentinstruments.cards.CreditCard"/>
+        <mapping class="org.onlinebanking.core.domain.models.paymentinstruments.cards.DebitCard"/>
+        <mapping class="org.onlinebanking.core.domain.models.transactions.Transaction"/>
+
+    </session-factory>
+</hibernate-configuration>
