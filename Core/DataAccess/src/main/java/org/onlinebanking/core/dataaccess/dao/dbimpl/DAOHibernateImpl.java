@@ -1,128 +1,60 @@
 package org.onlinebanking.core.dataaccess.dao.dbimpl;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.onlinebanking.core.dataaccess.config.HibernateSessionFactory;
 import org.onlinebanking.core.dataaccess.dao.interfaces.DAOInterface;
-import org.onlinebanking.core.dataaccess.exceptions.EntityNotFoundException;
-import org.onlinebanking.core.dataaccess.exceptions.EntityNotSavedException;
 import org.onlinebanking.core.domain.models.Identifiable;
-import org.onlinebanking.core.domain.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Repository
 public abstract class DAOHibernateImpl<T extends Identifiable> implements DAOInterface<T> {
-    protected final HibernateSessionFactory hibernateSessionFactory;
+    protected final SessionFactory sessionFactory;
     protected final Class<T> clazz;
 
-    public DAOHibernateImpl(@Autowired HibernateSessionFactory hibernateSessionFactory, Class<T> clazz) {
-        this.hibernateSessionFactory = hibernateSessionFactory;
+    public DAOHibernateImpl(@Autowired SessionFactory sessionFactory, Class<T> clazz) {
+        this.sessionFactory = sessionFactory;
         this.clazz = clazz;
     }
 
     @Override
     public void save(T t) {
-        Session session = hibernateSessionFactory.getSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            session.persist(t);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            transaction.rollback();
-            throw new EntityNotSavedException();
-        } finally {
-            session.close();
-        }
+        sessionFactory.getCurrentSession().save(t);
     }
 
+    @Transactional
     @Override
     public T findById(Long id) {
-        Session session = hibernateSessionFactory.getSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            T t = session.get(clazz, id);
-            transaction.commit();
-            return t;
-        } catch (Exception e) {
-            transaction.rollback();
-            throw new EntityNotFoundException();
-        } finally {
-            session.close();
-        }
+        return sessionFactory.getCurrentSession().get(clazz, id);
     }
 
     @Override
     public void delete(T t) {
-        Session session = hibernateSessionFactory.getSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            session.remove(t);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            throw new EntityNotFoundException();
-        } finally {
-            session.close();
-        }
+        sessionFactory.getCurrentSession().remove(t);
     }
 
     @Override
     public void deleteById(Long id) {
-        Session session = hibernateSessionFactory.getSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            T t = session.find(clazz, id);
-            session.remove(t);
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            throw new EntityNotFoundException();
-        } finally {
-            session.close();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        T t = session.find(clazz, id);
+        session.remove(t);
     }
 
     @Override
     public List<T> findAll() {
-        Session session = hibernateSessionFactory.getSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            String hql = "FROM " + clazz.getSimpleName();
-            Query query = session.createQuery(hql);
-            List<T> list = query.getResultList();
-            transaction.commit();
-            return list;
-        } catch (Exception e) {
-            transaction.rollback();
-            throw new EntityNotFoundException();
-        } finally {
-            session.close();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM " + clazz.getSimpleName();
+        Query query = session.createQuery(hql);
+        return query.getResultList();
     }
 
     @Override
     public T update(T t) {
-        Session session = hibernateSessionFactory.getSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            T mergedT = (T) session.merge(t);
-            transaction.commit();
-            return mergedT;
-        } catch (Exception e) {
-            transaction.rollback();
-            throw new EntityNotFoundException();
-        } finally {
-            session.close();
-        }
+        return  (T) sessionFactory.getCurrentSession().merge(t);
     }
 
 }

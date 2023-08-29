@@ -6,7 +6,7 @@ public class DebitCardDTO extends CardDTO {
     protected BigDecimal dailyWithdrawalLimit;
     protected Integer dailyTransactionLimit;
 
-    DebitCardDTO() {
+    public DebitCardDTO() {
 
     }
 

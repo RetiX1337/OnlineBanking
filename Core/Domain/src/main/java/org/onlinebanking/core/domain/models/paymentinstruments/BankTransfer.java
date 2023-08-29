@@ -1,5 +1,7 @@
 package org.onlinebanking.core.domain.models.paymentinstruments;
 
+import org.onlinebanking.core.domain.dto.BankTransferDTO;
+
 import javax.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,6 +15,11 @@ public class BankTransfer extends PaymentInstrument {
     private Integer dailyTransactionLimit;
     @Column(name = "transaction_counter")
     private Integer transactionCounter;
+
+    public BankTransfer(BankTransferDTO bankTransferDTO) {
+        this.bankAccount = bankTransferDTO.getBankAccount();
+        this.dailyTransactionLimit = bankTransferDTO.getDailyTransactionLimit();
+    }
 
     public BankTransfer() {
 

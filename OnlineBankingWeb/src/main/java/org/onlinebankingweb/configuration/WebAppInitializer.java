@@ -1,11 +1,15 @@
 package org.onlinebankingweb.configuration;
 
+import org.springframework.orm.hibernate5.support.OpenSessionInViewFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
+
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+        return new Class[] {SpringConfig.class};
     }
 
     @Override
@@ -16,5 +20,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected String[] getServletMappings() {
         return new String[] {"/"};
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        OpenSessionInViewFilter openSessionInViewFilter = new OpenSessionInViewFilter();
+        return new Filter[]{openSessionInViewFilter};
     }
 }

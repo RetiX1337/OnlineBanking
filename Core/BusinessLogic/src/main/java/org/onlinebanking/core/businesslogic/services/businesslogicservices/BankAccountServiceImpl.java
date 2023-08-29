@@ -9,6 +9,7 @@ import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,14 +17,12 @@ import java.util.List;
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
     private final BankAccountDAO bankAccountDAO;
-    private final PaymentInstrumentService paymentInstrumentService;
 
-    public BankAccountServiceImpl(@Autowired BankAccountDAO bankAccountDAO,
-                                  @Autowired PaymentInstrumentService paymentInstrumentService) {
+    public BankAccountServiceImpl(@Autowired BankAccountDAO bankAccountDAO) {
         this.bankAccountDAO = bankAccountDAO;
-        this.paymentInstrumentService = paymentInstrumentService;
     }
 
+    @Transactional
     @Override
     public void openBankAccount(Customer customer) {
         boolean isUnique = false;
@@ -37,6 +36,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         bankAccountDAO.save(bankAccount);
     }
 
+    @Transactional
     @Override
     public boolean activateBankAccount(BankAccount bankAccount) {
         if (!isPresent(bankAccount)) {
@@ -50,6 +50,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         return false;
     }
 
+    @Transactional
     @Override
     public boolean deactivateBankAccount(BankAccount bankAccount) {
         if (!isPresent(bankAccount)) {
@@ -63,11 +64,19 @@ public class BankAccountServiceImpl implements BankAccountService {
         return false;
     }
 
+    @Transactional
+    @Override
+    public BankAccount updateBankAccount(BankAccount bankAccount) {
+        return bankAccountDAO.update(bankAccount);
+    }
+
+    @Transactional(readOnly = true)
     @Override
     public List<BankAccount> findByCustomer(Customer customer) {
         return bankAccountDAO.findByCustomer(customer);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public BankAccount findByAccountNumber(String accountNumber) {
         return bankAccountDAO.findByAccountNumber(accountNumber);
