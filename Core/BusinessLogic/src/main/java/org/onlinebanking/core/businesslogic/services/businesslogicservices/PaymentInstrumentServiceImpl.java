@@ -55,12 +55,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 
     @Transactional
     @Override
-    public boolean closePaymentInstrument(PaymentInstrument paymentInstrument) {
-        return false;
-    }
-
-    @Transactional
-    @Override
     public PaymentInstrument updatePaymentInstrument(PaymentInstrument paymentInstrument) {
         return paymentInstrumentDAO.update(paymentInstrument);
     }
@@ -69,6 +63,12 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Override
     public List<PaymentInstrument> findByBankAccount(BankAccount bankAccount) {
         return paymentInstrumentDAO.findByBankAccount(bankAccount);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaymentInstrument findById(Long id) {
+        return paymentInstrumentDAO.findById(id);
     }
 
     private CardDTO initCardDTO(PaymentInstrumentDTO paymentInstrumentDTO) {

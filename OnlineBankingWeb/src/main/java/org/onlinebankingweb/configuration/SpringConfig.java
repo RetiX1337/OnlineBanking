@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("org.onlinebanking")
+@ComponentScan("org.onlinebanking.core")
 @ComponentScan(basePackages = "org.onlinebankingweb.controllers")
 @PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement

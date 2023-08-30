@@ -4,6 +4,7 @@ import org.iban4j.Iban;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.BankAccountDAO;
+import org.onlinebanking.core.domain.dto.BankTransferDTO;
 import org.onlinebanking.core.domain.dto.TransactionDTO;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
@@ -17,9 +18,12 @@ import java.util.List;
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
     private final BankAccountDAO bankAccountDAO;
+    private final PaymentInstrumentService paymentInstrumentService;
 
-    public BankAccountServiceImpl(@Autowired BankAccountDAO bankAccountDAO) {
+    @Autowired
+    public BankAccountServiceImpl(BankAccountDAO bankAccountDAO, PaymentInstrumentService paymentInstrumentService) {
         this.bankAccountDAO = bankAccountDAO;
+        this.paymentInstrumentService = paymentInstrumentService;
     }
 
     @Transactional
@@ -34,6 +38,8 @@ public class BankAccountServiceImpl implements BankAccountService {
         bankAccount.setAccountHolder(customer);
         bankAccount.activateBankAccount();
         bankAccountDAO.save(bankAccount);
+
+        paymentInstrumentService.openPaymentInstrument(initBankTransfer(bankAccount));
     }
 
     @Transactional
@@ -95,6 +101,12 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     private boolean isPresent(BankAccount bankAccount) {
         return bankAccountDAO.findByAccountNumber(bankAccount.getAccountNumber()) != null;
+    }
+
+    private BankTransferDTO initBankTransfer(BankAccount bankAccount) {
+        BankTransferDTO bankTransferDTO = new BankTransferDTO();
+        bankTransferDTO.setBankAccount(bankAccount);
+        return bankTransferDTO;
     }
 
 }

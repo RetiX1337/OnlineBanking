@@ -53,4 +53,10 @@ public abstract class Card extends PaymentInstrument {
     public Date getExpiryDate() {
         return expiryDate;
     }
+
+
+    @Override
+    public String getDescription() {
+        return cardNumber + " " + expiryDate;
+    }
 }

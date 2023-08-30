@@ -1,6 +1,7 @@
 package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 
 import org.onlinebanking.core.domain.dto.CreditCardDTO;
+import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrumentType;
 
 import javax.persistence.*;
 
@@ -42,5 +43,10 @@ public class CreditCard extends Card {
 
     public BigDecimal getCreditLimit() {
         return creditLimit;
+    }
+
+    @Override
+    public PaymentInstrumentType getPaymentInstrumentType() {
+        return PaymentInstrumentType.CREDIT_CARD;
     }
 }

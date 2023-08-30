@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Menu</title>
+</head>
+<body>
+<h1>Payment</h1>
+<h2>Bank Account</h2>
+<p>Account Number: <span th:text="${bankAccount.accountNumber}"></span></p>
+<p>Account Holder: <span th:text="${bankAccount.accountHolder.firstName} + ' ' + ${bankAccount.accountHolder.lastName}"></span></p>
+<p>Account Balance: <span th:text="${bankAccount.accountBalance}"></span></p>
+<h2>Choose Payment Instrument</h2>
+<table>
+    <tr th:each="paymentInstrument:${paymentInstrumentList}">
+        <td th:text="${paymentInstrument.id}"/>
+        <td th:text="${paymentInstrument.getPaymentInstrumentType()}"/>
+        <td th:text="${paymentInstrument.getDescription()}"/>
+        <td>
+            <form th:action="@{/payment/payment_instrument/}" method="get">
+                <input type="hidden" th:name="id" th:value="${paymentInstrument.id}" />
+                <button type="submit">Details</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

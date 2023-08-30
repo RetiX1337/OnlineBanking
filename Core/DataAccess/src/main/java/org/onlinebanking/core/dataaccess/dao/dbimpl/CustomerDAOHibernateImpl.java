@@ -18,7 +18,7 @@ public class CustomerDAOHibernateImpl extends DAOHibernateImpl<Customer> impleme
     }
 
     @Override
-    public Customer findByTaxPayerId(Long taxPayerId) {
+    public Customer findByTaxPayerId(String taxPayerId) {
         Session session = sessionFactory.getCurrentSession();
         String hql = "FROM Customer WHERE taxPayerId = :taxPayerId";
         Query query = session.createQuery(hql);

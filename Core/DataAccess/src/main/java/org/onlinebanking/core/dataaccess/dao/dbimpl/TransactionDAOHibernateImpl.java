@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class TransactionDAOHibernateImpl extends DAOHibernateImpl<Transaction> implements TransactionDAO {
 
@@ -19,11 +21,11 @@ public class TransactionDAOHibernateImpl extends DAOHibernateImpl<Transaction> i
     }
 
     @Override
-    public BankAccount findBySenderBankAccount(BankAccount bankAccount) {
+    public List<Transaction> findBySenderBankAccount(BankAccount bankAccount) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM BankAccount WHERE sender = :sender";
+        String hql = "FROM Transaction WHERE sender = :sender";
         Query query = session.createQuery(hql);
         query.setParameter("sender", bankAccount);
-        return (BankAccount) query.uniqueResult();
+        return query.getResultList();
     }
 }

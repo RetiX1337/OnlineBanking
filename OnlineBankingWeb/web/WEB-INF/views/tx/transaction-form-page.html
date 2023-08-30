@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction</title>
+</head>
+<body>
+<form th:action="@{/tx/process-transaction}" method="post">
+    <p> Amount:
+        <label>
+            <input type="text" name="amount"/>
+        </label></p>
+    <p> Receiver Account Number:
+        <label>
+            <input type="text" name="receiverBankAccountNumber"/>
+        </label></p>
+    <p><input type="hidden" th:name="paymentInstrumentId" th:value="${paymentInstrument.id}" /></p>
+    <p> <input type="submit" value="Submit"/></p>
+</form>
+</body>
+</html>

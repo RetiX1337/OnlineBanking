@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.onlinebanking.core.dataaccess.dao.interfaces.DAOInterface;
 import org.onlinebanking.core.domain.models.Identifiable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +15,7 @@ public abstract class DAOHibernateImpl<T extends Identifiable> implements DAOInt
     protected final SessionFactory sessionFactory;
     protected final Class<T> clazz;
 
-    public DAOHibernateImpl(@Autowired SessionFactory sessionFactory, Class<T> clazz) {
+    public DAOHibernateImpl(SessionFactory sessionFactory, Class<T> clazz) {
         this.sessionFactory = sessionFactory;
         this.clazz = clazz;
     }
@@ -26,7 +25,6 @@ public abstract class DAOHibernateImpl<T extends Identifiable> implements DAOInt
         sessionFactory.getCurrentSession().save(t);
     }
 
-    @Transactional
     @Override
     public T findById(Long id) {
         return sessionFactory.getCurrentSession().get(clazz, id);

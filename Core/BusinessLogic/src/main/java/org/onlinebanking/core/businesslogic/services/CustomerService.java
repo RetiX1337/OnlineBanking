@@ -8,5 +8,5 @@ public interface CustomerService {
     void deleteCustomer(Customer customer);
     Customer updateCustomer(Customer customer);
     boolean assignCustomerToUser(Customer customer, User user);
-    Customer findByTaxPayerId(Long taxPayerId);
+    Customer findByTaxPayerId(String taxPayerId);
 }

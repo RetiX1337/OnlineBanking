@@ -9,7 +9,9 @@ import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.transactions.Transaction;
 import org.onlinebanking.core.domain.models.transactions.TransactionStatus;
+import org.onlinebanking.core.domain.models.transactions.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -17,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Random;
 
+@Service
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionDAO transactionDAO;
     private final BankAccountService bankAccountService;
@@ -63,13 +66,13 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
-        return null;
+        return transactionDAO.findBySenderBankAccount(bankAccount);
     }
 
     @Transactional
     @Override
     public Transaction updateTransaction(Transaction transaction) {
-        return null;
+        return transactionDAO.update(transaction);
     }
 
     private Transaction createTransaction(TransactionDTO transactionDTO) {
@@ -78,11 +81,13 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction = new Transaction();
         transaction.setPaymentInstrument(transactionDTO.getPaymentInstrument());
+        transaction.setSender(sender);
+        transaction.setReceiver(receiver);
         transaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
         transaction.setTransactionName(createTransactionName(sender, receiver));
         transaction.setAmount(transactionDTO.getAmount());
         transaction.setTransactionStatus(TransactionStatus.COMPLETED);
-        transaction.setTransactionType(transactionDTO.getTransactionType());
+        transaction.setTransactionType(TransactionType.TRANSFER);
 
         return transaction;
     }

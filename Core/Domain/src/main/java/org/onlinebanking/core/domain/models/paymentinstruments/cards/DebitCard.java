@@ -1,6 +1,7 @@
 package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 
 import org.onlinebanking.core.domain.dto.DebitCardDTO;
+import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrumentType;
 
 import javax.persistence.*;
 
@@ -54,6 +55,11 @@ public class DebitCard extends Card {
         }
 
         return true;
+    }
+
+    @Override
+    public PaymentInstrumentType getPaymentInstrumentType() {
+        return PaymentInstrumentType.DEBIT_CARD;
     }
 
     public void setDailyWithdrawalLimit(BigDecimal dailyWithdrawalLimit) {
