@@ -1,5 +1,8 @@
 package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 
+import org.onlinebanking.core.domain.dto.CreditCardDTO;
+import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrumentType;
+
 import javax.persistence.*;
 
 import java.math.BigDecimal;
@@ -11,6 +14,15 @@ import java.math.BigDecimal;
 public class CreditCard extends Card {
     @Column(name = "credit_limit")
     protected BigDecimal creditLimit;
+
+    public CreditCard(CreditCardDTO creditCardDTO) {
+        this.bankAccount = creditCardDTO.getBankAccount();
+        this.creditLimit = creditCardDTO.getCreditLimit();
+        this.CVVHash = creditCardDTO.getCVVHash();
+        this.PINHash = creditCardDTO.getPINHash();
+        this.expiryDate = creditCardDTO.getExpiryDate();
+        this.cardNumber = creditCardDTO.getCardNumber();
+    }
 
     public CreditCard() {
 
@@ -31,5 +43,10 @@ public class CreditCard extends Card {
 
     public BigDecimal getCreditLimit() {
         return creditLimit;
+    }
+
+    @Override
+    public PaymentInstrumentType getPaymentInstrumentType() {
+        return PaymentInstrumentType.CREDIT_CARD;
     }
 }

@@ -10,6 +10,7 @@ public interface BankAccountService {
     void openBankAccount(Customer customer);
     boolean activateBankAccount(BankAccount bankAccount);
     boolean deactivateBankAccount(BankAccount bankAccount);
+    BankAccount updateBankAccount(BankAccount bankAccount);
     List<BankAccount> findByCustomer(Customer customer);
     BankAccount findByAccountNumber(String accountNumber);
 }

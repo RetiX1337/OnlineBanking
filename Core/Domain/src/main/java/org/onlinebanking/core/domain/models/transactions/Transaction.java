@@ -3,6 +3,7 @@ package org.onlinebanking.core.domain.models.transactions;
 import javax.persistence.*;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Identifiable;
+import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -30,11 +31,18 @@ public class Transaction implements Identifiable {
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     private BankAccount receiver;
+    @ManyToOne
+    @JoinColumn(name = "payment_instrument_id")
+    private PaymentInstrument paymentInstrument;
     @Column(name = "amount")
     private BigDecimal amount;
 
     public Transaction() {
 
+    }
+
+    public void setPaymentInstrument(PaymentInstrument paymentInstrument) {
+        this.paymentInstrument = paymentInstrument;
     }
 
     public void setAmount(BigDecimal amount) {
@@ -63,6 +71,10 @@ public class Transaction implements Identifiable {
 
     public void setReceiver(BankAccount receiver) {
         this.receiver = receiver;
+    }
+
+    public PaymentInstrument getPaymentInstrument() {
+        return paymentInstrument;
     }
 
     public BigDecimal getAmount() {

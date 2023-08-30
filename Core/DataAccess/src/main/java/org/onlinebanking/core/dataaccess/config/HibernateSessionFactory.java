@@ -1,5 +1,4 @@
 package org.onlinebanking.core.dataaccess.config;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,5 +29,9 @@ public class HibernateSessionFactory {
 
     public Session getSession() {
         return sessionFactory.openSession();
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }

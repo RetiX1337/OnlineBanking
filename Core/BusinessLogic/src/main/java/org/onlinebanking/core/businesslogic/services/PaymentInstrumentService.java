@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface PaymentInstrumentService {
     boolean openPaymentInstrument(PaymentInstrumentDTO paymentInstrumentDTO);
-    boolean closePaymentInstrument(PaymentInstrument paymentInstrument);
     PaymentInstrument updatePaymentInstrument(PaymentInstrument paymentInstrument);
     List<PaymentInstrument> findByBankAccount(BankAccount bankAccount);
+    PaymentInstrument findById(Long id);
 
 }

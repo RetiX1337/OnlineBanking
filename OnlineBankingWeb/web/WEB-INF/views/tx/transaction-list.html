@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transactions</title>
+</head>
+<body>
+<h1>Transaction History</h1>
+<h2>Bank Account</h2>
+<p>Account Number: <span th:text="${bankAccount.accountNumber}"></span></p>
+<p>Account Holder: <span th:text="${bankAccount.accountHolder.firstName} + ' ' + ${bankAccount.accountHolder.lastName}"></span></p>
+<p>Account Balance: <span th:text="${bankAccount.accountBalance}"></span></p>
+<h2>Choose Payment Instrument</h2>
+<table>
+  <tr th:each="transaction:${transactionList}">
+    <td th:text="${transaction.id}"/>
+    <td th:text="${transaction.getTransactionName()}"/>
+    <td th:text="${transaction.paymentInstrument.getPaymentInstrumentType()}"/>
+    <td th:text="${transaction.paymentInstrument.getDescription()}"/>
+    <td th:text="${transaction.getReceiver().getAccountNumber()}"/>
+    <td th:text="${transaction.getAmount()}"/>
+    <td th:text="${transaction.getTransactionDate()}"/>
+  </tr>
+</table>
+</body>
+</html>

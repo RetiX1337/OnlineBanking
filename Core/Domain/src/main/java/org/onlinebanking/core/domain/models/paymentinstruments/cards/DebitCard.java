@@ -1,5 +1,8 @@
 package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 
+import org.onlinebanking.core.domain.dto.DebitCardDTO;
+import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrumentType;
+
 import javax.persistence.*;
 
 import java.math.BigDecimal;
@@ -22,6 +25,16 @@ public class DebitCard extends Card {
 
     }
 
+    public DebitCard(DebitCardDTO debitCardDTO) {
+        this.bankAccount = debitCardDTO.getBankAccount();
+        this.expiryDate = debitCardDTO.getExpiryDate();
+        this.cardNumber = debitCardDTO.getCardNumber();
+        this.PINHash = debitCardDTO.getPINHash();
+        this.CVVHash = debitCardDTO.getCVVHash();
+        this.dailyWithdrawalLimit = debitCardDTO.getDailyWithdrawalLimit();
+        this.dailyTransactionLimit = debitCardDTO.getDailyTransactionLimit();
+    }
+
     @Override
     public boolean withdraw(BigDecimal amount) {
         boolean isExceedingWithdrawalLimit = amount.compareTo(dailyWithdrawalLimit.subtract(withdrawalCounter)) > 0;
@@ -42,6 +55,11 @@ public class DebitCard extends Card {
         }
 
         return true;
+    }
+
+    @Override
+    public PaymentInstrumentType getPaymentInstrumentType() {
+        return PaymentInstrumentType.DEBIT_CARD;
     }
 
     public void setDailyWithdrawalLimit(BigDecimal dailyWithdrawalLimit) {
