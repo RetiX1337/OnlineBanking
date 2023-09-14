@@ -1,5 +1,7 @@
 package org.onlinebanking.core.domain.models;
 
+import org.onlinebanking.core.domain.models.user.User;
+
 import javax.persistence.*;
 
 @Entity

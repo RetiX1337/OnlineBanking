@@ -16,7 +16,7 @@
 
         <property name="show_sql">true</property>
 
-        <mapping class="org.onlinebanking.core.domain.models.User"/>
+        <mapping class="org.onlinebanking.core.domain.models.user.User"/>
         <mapping class="org.onlinebanking.core.domain.models.Customer"/>
         <mapping class="org.onlinebanking.core.domain.models.BankAccount"/>
         <mapping class="org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument"/>
