@@ -38,15 +38,14 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .exceptionHandling(h -> h.authenticationEntryPoint(unauthorizedHandler))
                 .authorizeRequests(registry -> registry
-                        .antMatchers("/auth").permitAll()
                         .antMatchers("/").permitAll()
+                        .antMatchers("/auth/login").permitAll()
                         .antMatchers("/a").hasRole("ADMIN_ROLE")
                         .anyRequest().authenticated()
                 );
