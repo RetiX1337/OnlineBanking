@@ -25,7 +25,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     }
 
     @Override
-    protected Filter[] getServletFilters() {
+    protected Filter[] getServletFilters() { 
         OpenSessionInViewFilter openSessionInViewFilter = new OpenSessionInViewFilter();
         DelegatingFilterProxy securityFilterChain = new DelegatingFilterProxy("springSecurityFilterChain");
         return new Filter[]{openSessionInViewFilter, securityFilterChain};
