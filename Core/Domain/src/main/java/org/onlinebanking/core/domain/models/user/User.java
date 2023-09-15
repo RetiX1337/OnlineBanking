@@ -18,8 +18,10 @@ public class User implements Identifiable {
     private String email;
     @Column(name = "password_hash")
     private String passwordHash;
-    @Transient
-    //TODO add roles to db and to persistence
+    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "user_role")
+    @Enumerated(EnumType.STRING)
     private List<UserRole> roles;
 
     public User() {

@@ -28,13 +28,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        User user = userService.findByEmail(email);
-        User user = new User();
-        user.setEmail("matvej1888@gmail.com");
-        user.setUsername("whyretski");
-        user.setPasswordHash(new BCryptPasswordEncoder().encode("123456"));
-        user.setId(1L);
-        user.setRoles(List.of(UserRole.USER_ROLE, UserRole.GUEST_ROLE, UserRole.ADMIN_ROLE));
+        User user = userService.findByEmail(email);
+//        User user = new User();
+//        user.setEmail("111@gmail.com");
+//        user.setUsername("whyretski");
+//        user.setPasswordHash(new BCryptPasswordEncoder().encode("1111111"));
+//        user.setId(1L);
+//        user.setRoles(List.of(UserRole.USER_ROLE, UserRole.GUEST_ROLE, UserRole.ADMIN_ROLE));
+        System.out.println(user.getUsername());
+        System.out.println(user.getRoles());
         List<UserRole> userRoles = user.getRoles();
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (UserRole userRole : userRoles) {

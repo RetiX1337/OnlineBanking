@@ -36,7 +36,7 @@ public class JWTService {
                 .verify(token);
     }
 
-    public UserPrincipal convert(DecodedJWT jwt) {
+    public UserPrincipal convertToPrincipal(DecodedJWT jwt) {
         List<SimpleGrantedAuthority> authorityList = getClaimOrEmptyList(jwt, "au").stream()
                 .map(SimpleGrantedAuthority::new)
                 .toList();
