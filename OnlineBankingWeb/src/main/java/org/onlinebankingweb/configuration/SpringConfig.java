@@ -1,11 +1,14 @@
 package org.onlinebankingweb.configuration;
 
+import org.onlinebankingweb.security.services.jwt.JWTProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -20,13 +23,19 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
+import java.time.Duration;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("org.onlinebanking.core")
-@ComponentScan(basePackages = "org.onlinebankingweb.controllers")
-@PropertySource("classpath:hibernate.properties")
+@ComponentScan(basePackages = {"org.onlinebankingweb.controllers",
+        "org.onlinebanking.core",
+        "org.onlinebankingweb.security"})
+@PropertySources({
+        @PropertySource("classpath:hibernate.properties"),
+        @PropertySource("classpath:jwt.properties")
+})
 @EnableTransactionManagement
+@Import(WebSecurityConfig.class)
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
@@ -37,6 +46,13 @@ public class SpringConfig implements WebMvcConfigurer {
         this.applicationContext = applicationContext;
         this.environment = environment;
     }
+
+    @Bean
+    public JWTProperties jwtProperties() {
+        return new JWTProperties(environment.getRequiredProperty("security.secret-key"),
+                Duration.parse(environment.getRequiredProperty("security.token-duration")));
+    }
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -98,4 +114,5 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
     }
+
 }

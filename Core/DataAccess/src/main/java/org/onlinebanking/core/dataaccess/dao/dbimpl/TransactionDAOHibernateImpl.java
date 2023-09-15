@@ -3,12 +3,10 @@ package org.onlinebanking.core.dataaccess.dao.dbimpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.onlinebanking.core.dataaccess.config.HibernateSessionFactory;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.transactions.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

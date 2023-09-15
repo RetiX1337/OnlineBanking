@@ -3,7 +3,7 @@ package org.onlinebanking.core.businesslogic.services.businesslogicservices;
 import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.CustomerDAO;
 import org.onlinebanking.core.domain.models.Customer;
-import org.onlinebanking.core.domain.models.User;
+import org.onlinebanking.core.domain.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

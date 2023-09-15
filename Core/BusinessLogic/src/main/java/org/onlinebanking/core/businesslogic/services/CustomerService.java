@@ -1,7 +1,7 @@
 package org.onlinebanking.core.businesslogic.services;
 
 import org.onlinebanking.core.domain.models.Customer;
-import org.onlinebanking.core.domain.models.User;
+import org.onlinebanking.core.domain.models.user.User;
 
 public interface CustomerService {
     boolean registerCustomer();

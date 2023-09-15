@@ -1,6 +1,9 @@
-package org.onlinebanking.core.domain.models;
+package org.onlinebanking.core.domain.models.user;
+
+import org.onlinebanking.core.domain.models.Identifiable;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -15,9 +18,18 @@ public class User implements Identifiable {
     private String email;
     @Column(name = "password_hash")
     private String passwordHash;
+    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "user_role")
+    @Enumerated(EnumType.STRING)
+    private List<UserRole> roles;
 
     public User() {
 
+    }
+
+    public List<UserRole> getRoles() {
+        return roles;
     }
 
     public String getEmail() {
@@ -30,6 +42,10 @@ public class User implements Identifiable {
 
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
     }
 
     public void setEmail(String email) {

@@ -3,6 +3,8 @@ package org.onlinebanking.core.domain.models;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.HashMap;
 
 @Entity
 @Table(name = "bank_accounts")
@@ -27,6 +29,7 @@ public class BankAccount implements Identifiable {
             accountBalance = accountBalance.subtract(amount);
             return true;
         }
+        byte[] arr;
         return false;
     }
 
