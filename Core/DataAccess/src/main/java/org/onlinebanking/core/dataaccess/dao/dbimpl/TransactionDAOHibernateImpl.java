@@ -21,9 +21,9 @@ public class TransactionDAOHibernateImpl extends DAOHibernateImpl<Transaction> i
     @Override
     public List<Transaction> findBySenderBankAccount(BankAccount bankAccount) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Transaction WHERE sender = :sender";
+        String hql = "FROM Transaction WHERE sender = :bankAccount OR receiver = :bankAccount";
         Query query = session.createQuery(hql);
-        query.setParameter("sender", bankAccount);
+        query.setParameter("bankAccount", bankAccount);
         return query.getResultList();
     }
 }

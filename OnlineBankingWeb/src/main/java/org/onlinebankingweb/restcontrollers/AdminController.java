@@ -1,4 +1,4 @@
-package org.onlinebankingweb.controllers;
+package org.onlinebankingweb.restcontrollers;
 
 import org.onlinebankingweb.security.userprincipal.UserPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

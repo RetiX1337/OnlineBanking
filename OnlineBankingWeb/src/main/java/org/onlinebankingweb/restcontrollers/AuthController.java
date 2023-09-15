@@ -1,4 +1,4 @@
-package org.onlinebankingweb.controllers;
+package org.onlinebankingweb.restcontrollers;
 
 import org.onlinebankingweb.security.models.LoginRequest;
 import org.onlinebankingweb.security.models.LoginResponse;
