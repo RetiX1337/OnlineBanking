@@ -25,13 +25,14 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         User user = new User();
-        user.setPasswordHash(userDTO.getPasswordHash());
+        user.setPasswordHash(userDTO.getPassword());
         user.setEmail(userDTO.getEmail());
         user.setUsername(userDTO.getUsername());
         userDAO.save(user);
         return true;
     }
 
+    /*
     @Transactional
     @Override
     public boolean loginUser(UserDTO userDTO) {
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
         }
         return user.getPasswordHash().equals(userDTO.getPasswordHash());
     }
+     */
 
     @Transactional(readOnly = true)
     @Override

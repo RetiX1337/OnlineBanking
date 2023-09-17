@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/bank")
+@RequestMapping("/user")
 @Scope("session")
 public class UserController {
     private final UserService userService;

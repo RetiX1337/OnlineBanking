@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org" lang="en">
+<head>
+    <link th:href="@{~/static/css/style.css}" rel="stylesheet" type="text/css"/>
+    <title>Online Banking</title>
+</head>
+<body>
+<header>
+    <h1>Online Banking</h1>
+    <a class="custom-btn" href="#">Login</a>
+</header>
+<div class="container">
+    <div class="content">
+        <h2>Welcome to Online Banking</h2>
+        <p>Manage your finances with ease and security.</p>
+        <a th:href="@{/auth/register}" class="custom-btn">Open an account</a>
+    </div>
+</div>
+</body>
+</html>

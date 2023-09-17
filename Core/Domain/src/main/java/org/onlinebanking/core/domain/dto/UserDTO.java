@@ -3,14 +3,14 @@ package org.onlinebanking.core.domain.dto;
 public class UserDTO {
     private String username;
     private String email;
-    private String passwordHash;
+    private String password;
 
     public UserDTO() {
 
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setEmail(String email) {
@@ -21,8 +21,8 @@ public class UserDTO {
         this.username = username;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
     public String getEmail() {

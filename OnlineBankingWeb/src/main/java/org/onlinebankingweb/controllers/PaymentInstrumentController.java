@@ -43,7 +43,7 @@ public class PaymentInstrumentController {
         List<PaymentInstrument> paymentInstrumentList = paymentInstrumentService.findByBankAccount(bankAccount);
         model.addAttribute("bankAccount", bankAccount);
         model.addAttribute("paymentInstrumentList", paymentInstrumentList);
-        return "paymentinstrument/payment-menu-page";
+        return "oldviews/paymentinstrument/payment-menu-page";
     }
 
     @GetMapping("/payment_instrument")
