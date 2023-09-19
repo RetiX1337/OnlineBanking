@@ -35,15 +35,8 @@ public class AuthService {
 
     //TODO
     @Transactional
-    public boolean attemptRegister(UserDTO userDTO, CustomerDTO customerDTO) {
-        /*
-        if (userService.registerUser(userDTO)) {
-            customerService.registerCustomer(customerDTO);
-            Customer customer = customerService.findByTaxPayerId(customerDTO.getTaxPayerId());
-            User user = userService.findByEmail(userDTO.getEmail());
-            customerService.assignCustomerToUser(customer, user);
-        }
-         */
+    public boolean attemptRegisterCustomer(UserDTO userDTO, CustomerDTO customerDTO) {
+
         return false;
     }
 

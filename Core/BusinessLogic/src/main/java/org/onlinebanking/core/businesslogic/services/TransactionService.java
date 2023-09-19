@@ -7,7 +7,7 @@ import org.onlinebanking.core.domain.models.transactions.Transaction;
 import java.util.List;
 
 public interface TransactionService {
-    boolean processPayment(TransactionDTO transactionDTO);
+    Transaction processPayment(TransactionDTO transactionDTO);
     List<Transaction> findByBankAccount(BankAccount bankAccount);
     Transaction updateTransaction(Transaction transaction);
 

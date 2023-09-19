@@ -40,7 +40,7 @@ public class AuthController {
         String password = userCustomerWrapper.getUserDTO().getPassword();
         String passwordHash = passwordEncoder.encode(password);
         userCustomerWrapper.getUserDTO().setPassword(passwordHash);
-        authService.attemptRegister(userCustomerWrapper.getUserDTO(), userCustomerWrapper.getCustomerDTO());
+        authService.attemptRegisterCustomer(userCustomerWrapper.getUserDTO(), userCustomerWrapper.getCustomerDTO());
         return null;
     }
 }

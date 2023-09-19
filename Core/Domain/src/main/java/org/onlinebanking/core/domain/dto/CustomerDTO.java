@@ -8,6 +8,10 @@ public class CustomerDTO {
     private String address;
     private String taxPayerId;
 
+    public CustomerDTO() {
+
+    }
+
     public String getFirstName() {
         return firstName;
     }

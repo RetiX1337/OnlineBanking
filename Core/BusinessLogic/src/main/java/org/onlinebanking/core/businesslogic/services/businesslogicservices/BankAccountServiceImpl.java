@@ -28,18 +28,18 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Transactional
     @Override
-    public void openBankAccount(Customer customer) {
-        boolean isUnique = false;
-        String iban = getIban(isUnique);
+    public BankAccount openBankAccount(Customer customer) {
+        String iban = getIban();
 
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountBalance(BigDecimal.ZERO);
         bankAccount.setAccountNumber(iban);
         bankAccount.setAccountHolder(customer);
         bankAccount.activateBankAccount();
-        bankAccountDAO.save(bankAccount);
+        BankAccount savedBankAccount = bankAccountDAO.save(bankAccount);
 
-        paymentInstrumentService.openPaymentInstrument(initBankTransfer(bankAccount));
+        paymentInstrumentService.openPaymentInstrument(initBankTransfer(savedBankAccount));
+        return savedBankAccount;
     }
 
     @Transactional
@@ -88,7 +88,8 @@ public class BankAccountServiceImpl implements BankAccountService {
         return bankAccountDAO.findByAccountNumber(accountNumber);
     }
 
-    private String getIban(boolean isUnique) {
+    private String getIban() {
+        boolean isUnique = false;
         String iban;
         do {
             iban = Iban.random().getAccountNumber();

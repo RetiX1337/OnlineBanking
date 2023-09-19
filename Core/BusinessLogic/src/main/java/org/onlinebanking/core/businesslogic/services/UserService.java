@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    boolean registerUser(UserDTO userDTO);
+    User registerUser(UserDTO userDTO);
     /*
     boolean loginUser(UserDTO userDTO);
      */

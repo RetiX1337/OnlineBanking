@@ -6,7 +6,6 @@ import org.hibernate.query.Query;
 import org.onlinebanking.core.dataaccess.dao.interfaces.DAOInterface;
 import org.onlinebanking.core.domain.models.Identifiable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,8 +20,10 @@ public abstract class DAOHibernateImpl<T extends Identifiable> implements DAOInt
     }
 
     @Override
-    public void save(T t) {
+    public T save(T t) {
         sessionFactory.getCurrentSession().save(t);
+        sessionFactory.getCurrentSession().refresh(t);
+        return t;
     }
 
     @Override

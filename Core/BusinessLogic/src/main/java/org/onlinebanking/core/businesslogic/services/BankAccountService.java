@@ -7,7 +7,7 @@ import org.onlinebanking.core.domain.models.Customer;
 import java.util.List;
 
 public interface BankAccountService {
-    void openBankAccount(Customer customer);
+    BankAccount openBankAccount(Customer customer);
     boolean activateBankAccount(BankAccount bankAccount);
     boolean deactivateBankAccount(BankAccount bankAccount);
     BankAccount updateBankAccount(BankAccount bankAccount);
