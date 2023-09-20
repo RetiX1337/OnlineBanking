@@ -1,33 +1,33 @@
 package org.onlinebankingweb.wrappers;
 
-import org.onlinebanking.core.domain.dto.CustomerDTO;
-import org.onlinebanking.core.domain.dto.UserDTO;
+import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
+import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 
 public class UserCustomerWrapper {
-    private UserDTO userDTO;
-    private CustomerDTO customerDTO;
+    private UserRegistrationRequest userRegistrationRequest;
+    private CustomerRegistrationRequest customerRegistrationRequest;
 
-    public UserCustomerWrapper(UserDTO userDTO, CustomerDTO customerDTO) {
-        this.userDTO = userDTO;
-        this.customerDTO = customerDTO;
+    public UserCustomerWrapper(UserRegistrationRequest userRegistrationRequest, CustomerRegistrationRequest customerRegistrationRequest) {
+        this.userRegistrationRequest = userRegistrationRequest;
+        this.customerRegistrationRequest = customerRegistrationRequest;
     }
 
     public UserCustomerWrapper() {
     }
 
-    public CustomerDTO getCustomerDTO() {
-        return customerDTO;
+    public CustomerRegistrationRequest getCustomerDTO() {
+        return customerRegistrationRequest;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public UserRegistrationRequest getUserDTO() {
+        return userRegistrationRequest;
     }
 
-    public void setCustomerDTO(CustomerDTO customerDTO) {
-        this.customerDTO = customerDTO;
+    public void setCustomerDTO(CustomerRegistrationRequest customerRegistrationRequest) {
+        this.customerRegistrationRequest = customerRegistrationRequest;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setUserDTO(UserRegistrationRequest userRegistrationRequest) {
+        this.userRegistrationRequest = userRegistrationRequest;
     }
 }

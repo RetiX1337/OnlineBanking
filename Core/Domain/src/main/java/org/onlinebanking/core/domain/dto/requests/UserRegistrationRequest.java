@@ -1,11 +1,11 @@
-package org.onlinebanking.core.domain.dto;
+package org.onlinebanking.core.domain.dto.requests;
 
-public class UserDTO {
+public class UserRegistrationRequest {
     private String username;
     private String email;
     private String password;
 
-    public UserDTO() {
+    public UserRegistrationRequest() {
 
     }
 

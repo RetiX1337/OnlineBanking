@@ -1,6 +1,5 @@
 package org.onlinebanking.core.businesslogic.services;
 
-import org.onlinebanking.core.domain.dto.TransactionDTO;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
 

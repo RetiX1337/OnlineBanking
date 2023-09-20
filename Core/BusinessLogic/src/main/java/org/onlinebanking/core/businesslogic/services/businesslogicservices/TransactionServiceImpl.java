@@ -4,7 +4,8 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.dto.TransactionDTO;
+import org.onlinebanking.core.domain.dto.requests.TransactionRequest;
+import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.transactions.Transaction;
@@ -17,10 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+    private static final String FAILED_TRANSACTION_EXCEPTION_MESSAGE_INACTIVE_ACCOUNT
+            = "Transaction couldn't be processed for sender %s, receiver %s";
+    private static final String FAILED_TRANSACTION_EXCEPTION_MESSAGE
+            = "Transaction couldn't be processed for sender %s";
     private final TransactionDAO transactionDAO;
     private final BankAccountService bankAccountService;
     private final PaymentInstrumentService paymentInstrumentService;
@@ -35,14 +39,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Transactional
     @Override
-    public boolean processPayment(TransactionDTO transactionDTO) {
-        BankAccount sender = transactionDTO.getSender();
-        BankAccount receiver = transactionDTO.getReceiver();
-        BigDecimal amount = transactionDTO.getAmount();
-        PaymentInstrument paymentInstrument = transactionDTO.getPaymentInstrument();
+    public Transaction processPayment(TransactionRequest transactionRequest) {
+        BankAccount sender = transactionRequest.getSender();
+        BankAccount receiver = transactionRequest.getReceiver();
+        BigDecimal amount = transactionRequest.getAmount();
+        PaymentInstrument paymentInstrument = transactionRequest.getPaymentInstrument();
 
-        if (!(sender.isActive() && receiver.isActive())) {
-            return false;
+        if (!sender.isActive() || !receiver.isActive()) {
+            throw new FailedTransactionException(
+                    String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE_INACTIVE_ACCOUNT, sender.getAccountNumber(),
+                            receiver.getAccountNumber()));
         }
 
         if (paymentInstrument.withdraw(amount)) {
@@ -53,14 +59,13 @@ public class TransactionServiceImpl implements TransactionService {
 
             paymentInstrumentService.updatePaymentInstrument(paymentInstrument);
 
-            Transaction transaction = createTransaction(transactionDTO);
+            Transaction transaction = createTransaction(transactionRequest);
 
-            transactionDAO.save(transaction);
-
-            return true;
+            return transactionDAO.save(transaction);
+        } else {
+            throw new FailedTransactionException(
+                    String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE, sender.getAccountNumber()));
         }
-
-        return false;
     }
 
     @Transactional(readOnly = true)
@@ -75,17 +80,17 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionDAO.update(transaction);
     }
 
-    private Transaction createTransaction(TransactionDTO transactionDTO) {
-        BankAccount sender = transactionDTO.getSender();
-        BankAccount receiver = transactionDTO.getReceiver();
+    private Transaction createTransaction(TransactionRequest transactionRequest) {
+        BankAccount sender = transactionRequest.getSender();
+        BankAccount receiver = transactionRequest.getReceiver();
 
         Transaction transaction = new Transaction();
-        transaction.setPaymentInstrument(transactionDTO.getPaymentInstrument());
+        transaction.setPaymentInstrument(transactionRequest.getPaymentInstrument());
         transaction.setSender(sender);
         transaction.setReceiver(receiver);
         transaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
         transaction.setTransactionName(createTransactionName(sender, receiver));
-        transaction.setAmount(transactionDTO.getAmount());
+        transaction.setAmount(transactionRequest.getAmount());
         transaction.setTransactionStatus(TransactionStatus.COMPLETED);
         transaction.setTransactionType(TransactionType.TRANSFER);
 

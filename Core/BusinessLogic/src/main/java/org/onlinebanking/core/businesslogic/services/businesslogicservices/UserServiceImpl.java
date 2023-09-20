@@ -2,7 +2,7 @@ package org.onlinebanking.core.businesslogic.services.businesslogicservices;
 
 import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.UserDAO;
-import org.onlinebanking.core.domain.dto.UserDTO;
+import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 import org.onlinebanking.core.domain.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +20,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean registerUser(UserDTO userDTO) {
-        if (userDAO.findByEmail(userDTO.getEmail()) != null) {
-            return false;
+    public User registerUser(UserRegistrationRequest userRegistrationRequest) {
+        if (userDAO.findByEmail(userRegistrationRequest.getEmail()) != null) {
+            // throw exception here
         }
         User user = new User();
-        user.setPasswordHash(userDTO.getPassword());
-        user.setEmail(userDTO.getEmail());
-        user.setUsername(userDTO.getUsername());
-        userDAO.save(user);
-        return true;
+        user.setPasswordHash(userRegistrationRequest.getPassword());
+        user.setEmail(userRegistrationRequest.getEmail());
+        user.setUsername(userRegistrationRequest.getUsername());
+        return userDAO.save(user);
     }
 
     /*

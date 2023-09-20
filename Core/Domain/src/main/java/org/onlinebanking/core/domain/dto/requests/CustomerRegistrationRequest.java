@@ -1,14 +1,12 @@
-package org.onlinebanking.core.domain.dto;
+package org.onlinebanking.core.domain.dto.requests;
 
-import org.onlinebanking.core.domain.models.user.User;
-
-public class CustomerDTO {
+public class CustomerRegistrationRequest {
     private String firstName;
     private String lastName;
     private String address;
     private String taxPayerId;
 
-    public CustomerDTO() {
+    public CustomerRegistrationRequest() {
 
     }
 

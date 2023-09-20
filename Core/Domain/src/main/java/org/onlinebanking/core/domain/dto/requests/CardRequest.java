@@ -1,14 +1,14 @@
-package org.onlinebanking.core.domain.dto;
+package org.onlinebanking.core.domain.dto.requests;
 
 import java.util.Date;
 
-public abstract class CardDTO extends PaymentInstrumentDTO {
+public abstract class CardRequest extends PaymentInstrumentRequest {
     protected String CVVHash;
     protected String PINHash;
     protected Date expiryDate;
     protected String cardNumber;
 
-    public CardDTO() {
+    public CardRequest() {
 
     }
 

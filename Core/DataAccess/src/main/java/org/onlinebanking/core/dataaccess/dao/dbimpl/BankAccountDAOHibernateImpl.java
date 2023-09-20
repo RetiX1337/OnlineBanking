@@ -9,13 +9,13 @@ import org.onlinebanking.core.domain.models.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class BankAccountDAOHibernateImpl extends DAOHibernateImpl<BankAccount> implements BankAccountDAO {
 
-    public BankAccountDAOHibernateImpl(@Autowired SessionFactory sessionFactory) {
+    @Autowired
+    public BankAccountDAOHibernateImpl(SessionFactory sessionFactory) {
         super(sessionFactory, BankAccount.class);
     }
 

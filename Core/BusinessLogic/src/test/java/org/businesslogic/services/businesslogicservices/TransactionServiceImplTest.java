@@ -8,10 +8,13 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.businesslogicservices.TransactionServiceImpl;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.dto.TransactionDTO;
+import org.onlinebanking.core.domain.dto.requests.TransactionRequest;
+import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
 
 import static junit.framework.Assert.*;
+import static org.junit.Assert.assertThrows;
+
 public class TransactionServiceImplTest {
     @Mock
     private TransactionDAO transactionDAO;
@@ -23,22 +26,20 @@ public class TransactionServiceImplTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         transactionService = new TransactionServiceImpl(transactionDAO, bankAccountService, paymentInstrumentService);
     }
 
     // logic is the same for receiver i.e. if receiver has been deactivated instead of sender, the result would be the same
-    @Test
-    public void processPayment_whenSenderIsDeactivated_thenFalse() {
+    @Test(expected = FailedTransactionException.class)
+    public void processPayment_whenSenderIsDeactivated_thenThrows_FailedTransactionException() {
         BankAccount sender = new BankAccount();
         BankAccount receiver = new BankAccount();
         sender.deactivateBankAccount();
         receiver.activateBankAccount();
-        TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setSender(sender);
-        transactionDTO.setReceiver(receiver);
-
-        assertFalse(transactionService.processPayment(transactionDTO));
+        TransactionRequest transactionRequest = new TransactionRequest();
+        transactionRequest.setSender(sender);
+        transactionRequest.setReceiver(receiver);
+        transactionService.processPayment(transactionRequest);
     }
 
 }

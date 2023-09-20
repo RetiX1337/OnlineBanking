@@ -2,8 +2,8 @@ package org.onlinebankingweb.security.services;
 
 import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.businesslogic.services.UserService;
-import org.onlinebanking.core.domain.dto.CustomerDTO;
-import org.onlinebanking.core.domain.dto.UserDTO;
+import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
+import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 import org.onlinebanking.core.domain.models.user.UserRole;
 import org.onlinebankingweb.security.models.LoginResponse;
 import org.onlinebankingweb.security.services.jwt.JWTService;
@@ -35,7 +35,7 @@ public class AuthService {
 
     //TODO
     @Transactional
-    public boolean attemptRegisterCustomer(UserDTO userDTO, CustomerDTO customerDTO) {
+    public boolean attemptRegisterCustomer(UserRegistrationRequest userRegistrationRequest, CustomerRegistrationRequest customerRegistrationRequest) {
 
         return false;
     }

@@ -1,7 +1,7 @@
 package org.onlinebankingweb.controllers;
 
-import org.onlinebanking.core.domain.dto.CustomerDTO;
-import org.onlinebanking.core.domain.dto.UserDTO;
+import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
+import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 import org.onlinebankingweb.security.services.AuthService;
 import org.onlinebankingweb.wrappers.UserCustomerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,9 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
-        UserDTO userDTO = new UserDTO();
-        CustomerDTO customerDTO = new CustomerDTO();
-        UserCustomerWrapper userCustomerWrapper = new UserCustomerWrapper(userDTO, customerDTO);
+        UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest();
+        CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest();
+        UserCustomerWrapper userCustomerWrapper = new UserCustomerWrapper(userRegistrationRequest, customerRegistrationRequest);
         model.addAttribute("userCustomerWrapper", userCustomerWrapper);
         return "auth/register";
     }

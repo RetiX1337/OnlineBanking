@@ -7,7 +7,7 @@ import org.iban4j.Iban;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.BankAccountDAO;
-import org.onlinebanking.core.domain.dto.BankTransferDTO;
+import org.onlinebanking.core.domain.dto.requests.BankTransferRequest;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.EntityNotSavedException;
 import org.onlinebanking.core.domain.exceptions.EntityNotUpdatedException;
@@ -23,11 +23,11 @@ import java.util.List;
 
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
-    private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final static String ENTITY_NOT_SAVED_EXCEPTION_MESSAGE = "The BankAccount couldn't be saved";
     private final static String ENTITY_NOT_UPDATED_EXCEPTION_MESSAGE = "The BankAccount couldn't be updated";
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The BankAccount couldn't be found by %s";
     private final static String ENTITY_NOT_FOUND_ERROR = "Error finding BankAccounts for the given Customer %s";
+    private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final BankAccountDAO bankAccountDAO;
     private final PaymentInstrumentService paymentInstrumentService;
 
@@ -48,7 +48,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             logger.error(e);
             throw new EntityNotSavedException(ENTITY_NOT_SAVED_EXCEPTION_MESSAGE, e);
         }
-        paymentInstrumentService.openPaymentInstrument(initBankTransfer(savedBankAccount));
+        paymentInstrumentService.openPaymentInstrument(new BankTransferRequest(), bankAccount);
         return savedBankAccount;
     }
 
@@ -129,12 +129,6 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     private boolean isPresent(BankAccount bankAccount) {
         return findByAccountNumber(bankAccount.getAccountNumber()) != null;
-    }
-
-    private BankTransferDTO initBankTransfer(BankAccount bankAccount) {
-        BankTransferDTO bankTransferDTO = new BankTransferDTO();
-        bankTransferDTO.setBankAccount(bankAccount);
-        return bankTransferDTO;
     }
 
     private BankAccount initBankAccount(Customer customer) {

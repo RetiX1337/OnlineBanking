@@ -15,15 +15,15 @@
         <h2>Registration Form</h2>
         <form action="#" th:action="@{/auth/register}" th:object="${userCustomerWrapper}" method="post">
             <div>
-                <p>Email: <input type="text" th:field="*{userDTO.email}" required/></p>
-                <p>Username: <input type="text" th:field="*{userDTO.username}" required/></p>
-                <p>Password: <input type="text" th:field="*{userDTO.password}" required/></p>
+                <p>Email: <input type="text" th:field="*{userRegistrationRequest.email}" required/></p>
+                <p>Username: <input type="text" th:field="*{userRegistrationRequest.username}" required/></p>
+                <p>Password: <input type="text" th:field="*{userRegistrationRequest.password}" required/></p>
             </div>
             <div>
-                <p>First Name: <input type="text" th:field="*{customerDTO.firstName}" required/></p>
-                <p>Last Name: <input type="text" th:field="*{customerDTO.lastName}" required/></p>
-                <p>Address: <input type="text" th:field="*{customerDTO.address}" required/></p>
-                <p>Tax Payer ID: <input type="text" th:field="*{customerDTO.taxPayerId}" required/></p>
+                <p>First Name: <input type="text" th:field="*{customerRegistrationRequest.firstName}" required/></p>
+                <p>Last Name: <input type="text" th:field="*{customerRegistrationRequest.lastName}" required/></p>
+                <p>Address: <input type="text" th:field="*{customerRegistrationRequest.address}" required/></p>
+                <p>Tax Payer ID: <input type="text" th:field="*{customerRegistrationRequest.taxPayerId}" required/></p>
             </div>
             <input type="submit" value="Submit" />
         </form>
