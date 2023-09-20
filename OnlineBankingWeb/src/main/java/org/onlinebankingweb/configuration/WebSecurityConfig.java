@@ -44,8 +44,11 @@ public class WebSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .exceptionHandling(h -> h.authenticationEntryPoint(unauthorizedHandler))
                 .authorizeRequests(registry -> registry
+                        .antMatchers("/static/css/**").permitAll()
                         .antMatchers("/").permitAll()
+                        .antMatchers("/main/**").permitAll()
                         .antMatchers("/auth/login").permitAll()
+                        .antMatchers("/auth/register").permitAll()
                         .antMatchers("/a").hasRole("ADMIN_ROLE")
                         .anyRequest().authenticated()
                 );

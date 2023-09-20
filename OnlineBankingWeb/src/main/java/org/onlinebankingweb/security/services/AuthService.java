@@ -1,5 +1,9 @@
 package org.onlinebankingweb.security.services;
 
+import org.onlinebanking.core.businesslogic.services.CustomerService;
+import org.onlinebanking.core.businesslogic.services.UserService;
+import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
+import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 import org.onlinebanking.core.domain.models.user.UserRole;
 import org.onlinebankingweb.security.models.LoginResponse;
 import org.onlinebankingweb.security.services.jwt.JWTService;
@@ -11,16 +15,29 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class AuthService {
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final CustomerService customerService;
 
     @Autowired
-    public AuthService(JWTService jwtService, AuthenticationManager authenticationManager) {
+    public AuthService(JWTService jwtService, AuthenticationManager authenticationManager,
+                       UserService userService, CustomerService customerService) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
+        this.customerService = customerService;
+    }
+
+    //TODO
+    @Transactional
+    public boolean attemptRegisterCustomer(UserRegistrationRequest userRegistrationRequest, CustomerRegistrationRequest customerRegistrationRequest) {
+
+        return false;
     }
 
     public LoginResponse attemptLogin(String email, String password) {

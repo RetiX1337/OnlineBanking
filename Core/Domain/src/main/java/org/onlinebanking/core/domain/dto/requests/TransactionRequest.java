@@ -1,4 +1,4 @@
-package org.onlinebanking.core.domain.dto;
+package org.onlinebanking.core.domain.dto.requests;
 
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
@@ -7,7 +7,7 @@ import org.onlinebanking.core.domain.models.transactions.TransactionType;
 
 import java.math.BigDecimal;
 
-public class TransactionDTO {
+public class TransactionRequest {
     private TransactionType transactionType;
     private TransactionStatus transactionStatus;
     private PaymentInstrument paymentInstrument;
@@ -15,7 +15,7 @@ public class TransactionDTO {
     private BankAccount receiver;
     private BigDecimal amount;
 
-    public TransactionDTO() {
+    public TransactionRequest() {
 
     }
 

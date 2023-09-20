@@ -2,6 +2,7 @@ package org.onlinebanking.core.businesslogic.services.businesslogicservices;
 
 import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.CustomerDAO;
+import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
 import org.onlinebanking.core.domain.models.Customer;
 import org.onlinebanking.core.domain.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean registerCustomer() {
-        return false;
+    public Customer registerCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
+        return null;
     }
 
     @Override

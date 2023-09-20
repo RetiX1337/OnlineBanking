@@ -1,0 +1,89 @@
+body {
+    background-color: #ffffff;
+    font-family: Georgia, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: Georgia, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.custom-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    text-decoration: none;
+    color: #000000;
+    background-color: white;
+    margin-right: 20px;
+}
+
+.custom-btn:hover {
+    background-color: #3f3f3f;
+    color: white;
+    transition: 0.2s;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.container .custom-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #000000;
+    margin-right: 20px;
+}
+
+.container .custom-btn:hover {
+    background-color: #3f3f3f;
+    color: #ffffff;
+    transition: 0.2s;
+}
+
+
+.content {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #3f3f3f; /* Darker shade on hover */
+}

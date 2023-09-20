@@ -1,11 +1,11 @@
-package org.onlinebanking.core.domain.dto;
+package org.onlinebanking.core.domain.dto.requests;
 
 import java.math.BigDecimal;
 
-public class CreditCardDTO extends CardDTO {
+public class CreditCardRequest extends CardRequest {
     protected BigDecimal creditLimit;
 
-    public CreditCardDTO() {
+    public CreditCardRequest() {
 
     }
 

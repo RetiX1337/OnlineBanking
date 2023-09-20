@@ -1,7 +1,7 @@
 package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 
-import org.onlinebanking.core.domain.dto.DebitCardDTO;
-import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrumentType;
+import org.onlinebanking.core.domain.dto.requests.DebitCardRequest;
+import org.onlinebanking.core.domain.models.BankAccount;
 
 import javax.persistence.*;
 
@@ -25,14 +25,14 @@ public class DebitCard extends Card {
 
     }
 
-    public DebitCard(DebitCardDTO debitCardDTO) {
-        this.bankAccount = debitCardDTO.getBankAccount();
-        this.expiryDate = debitCardDTO.getExpiryDate();
-        this.cardNumber = debitCardDTO.getCardNumber();
-        this.PINHash = debitCardDTO.getPINHash();
-        this.CVVHash = debitCardDTO.getCVVHash();
-        this.dailyWithdrawalLimit = debitCardDTO.getDailyWithdrawalLimit();
-        this.dailyTransactionLimit = debitCardDTO.getDailyTransactionLimit();
+    public DebitCard(DebitCardRequest debitCardRequest, BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+        this.expiryDate = debitCardRequest.getExpiryDate();
+        this.cardNumber = debitCardRequest.getCardNumber();
+        this.PINHash = debitCardRequest.getPINHash();
+        this.CVVHash = debitCardRequest.getCVVHash();
+        this.dailyWithdrawalLimit = debitCardRequest.getDailyWithdrawalLimit();
+        this.dailyTransactionLimit = debitCardRequest.getDailyTransactionLimit();
     }
 
     @Override
@@ -55,11 +55,6 @@ public class DebitCard extends Card {
         }
 
         return true;
-    }
-
-    @Override
-    public PaymentInstrumentType getPaymentInstrumentType() {
-        return PaymentInstrumentType.DEBIT_CARD;
     }
 
     public void setDailyWithdrawalLimit(BigDecimal dailyWithdrawalLimit) {

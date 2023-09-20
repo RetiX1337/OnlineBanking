@@ -1,12 +1,12 @@
-package org.onlinebanking.core.domain.dto;
+package org.onlinebanking.core.domain.dto.requests;
 
 import java.math.BigDecimal;
 
-public class DebitCardDTO extends CardDTO {
+public class DebitCardRequest extends CardRequest {
     protected BigDecimal dailyWithdrawalLimit;
     protected Integer dailyTransactionLimit;
 
-    public DebitCardDTO() {
+    public DebitCardRequest() {
 
     }
 

@@ -1,12 +1,13 @@
 package org.businesslogic.factories;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.onlinebanking.core.businesslogic.factories.PaymentInstrumentFactory;
-import org.onlinebanking.core.domain.dto.CreditCardDTO;
-import org.onlinebanking.core.domain.dto.DebitCardDTO;
-import org.onlinebanking.core.domain.dto.PaymentInstrumentDTO;
+import org.onlinebanking.core.domain.dto.requests.CreditCardRequest;
+import org.onlinebanking.core.domain.dto.requests.DebitCardRequest;
+import org.onlinebanking.core.domain.dto.requests.PaymentInstrumentRequest;
+import org.onlinebanking.core.domain.exceptions.PaymentInstrumentTypeNotFoundException;
+import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.paymentinstruments.cards.CreditCard;
 import org.onlinebanking.core.domain.models.paymentinstruments.cards.DebitCard;
@@ -22,32 +23,38 @@ public class PaymentInstrumentFactoryTest {
 
     @Test
     public void createPaymentInstrument_whenPaymentInstrumentDTO_isDebitCardDTO_thenReturnDebitCard() {
-        PaymentInstrumentDTO paymentInstrumentDTO = new DebitCardDTO();
+        PaymentInstrumentRequest paymentInstrumentRequest = new DebitCardRequest();
+        BankAccount bankAccount = new BankAccount();
 
-        PaymentInstrument paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentDTO);
+        PaymentInstrument paymentInstrument = paymentInstrumentFactory
+                .createPaymentInstrument(paymentInstrumentRequest, bankAccount);
 
         assertEquals(paymentInstrument.getClass(), DebitCard.class);
     }
 
     @Test
     public void createPaymentInstrument_whenPaymentInstrumentDTO_isCreditCardDTO_thenReturnCreditCard() {
-        PaymentInstrumentDTO paymentInstrumentDTO = new CreditCardDTO();
+        PaymentInstrumentRequest paymentInstrumentRequest = new CreditCardRequest();
+        BankAccount bankAccount = new BankAccount();
 
-        PaymentInstrument paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentDTO);
+        PaymentInstrument paymentInstrument = paymentInstrumentFactory
+                .createPaymentInstrument(paymentInstrumentRequest, bankAccount);
 
         assertEquals(paymentInstrument.getClass(), CreditCard.class);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = PaymentInstrumentTypeNotFoundException.class)
     public void createPaymentInstrument_whenPaymentInstrumentDTO_isNull_thenExceptionIsThrown() {
-        PaymentInstrumentDTO paymentInstrumentDTO = null;
-        paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentDTO);
+        PaymentInstrumentRequest paymentInstrumentRequest = null;
+        BankAccount bankAccount = null;
+        paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentRequest, bankAccount);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = PaymentInstrumentTypeNotFoundException.class)
     public void createPaymentInstrument_whenPaymentInstrumentDTO_isNotInFactory_thenExceptionIsThrown() {
-        PaymentInstrumentDTO mockedPaymentInstrumentDTO = new PaymentInstrumentDTO() {
+        PaymentInstrumentRequest mockedPaymentInstrumentRequest = new PaymentInstrumentRequest() {
         };
-        paymentInstrumentFactory.createPaymentInstrument(mockedPaymentInstrumentDTO);
+        BankAccount bankAccount = new BankAccount();
+        paymentInstrumentFactory.createPaymentInstrument(mockedPaymentInstrumentRequest, bankAccount);
     }
 }

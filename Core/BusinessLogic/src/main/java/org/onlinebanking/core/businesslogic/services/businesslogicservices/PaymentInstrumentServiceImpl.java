@@ -1,21 +1,24 @@
 package org.onlinebanking.core.businesslogic.services.businesslogicservices;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.factories.PaymentInstrumentFactory;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
-import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.PaymentInstrumentDAO;
-import org.onlinebanking.core.domain.dto.CardDTO;
-import org.onlinebanking.core.domain.dto.CreditCardDTO;
-import org.onlinebanking.core.domain.dto.DebitCardDTO;
-import org.onlinebanking.core.domain.dto.PaymentInstrumentDTO;
-import org.onlinebanking.core.domain.dto.TransactionDTO;
+import org.onlinebanking.core.domain.dto.requests.CardRequest;
+import org.onlinebanking.core.domain.dto.requests.PaymentInstrumentRequest;
+import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
+import org.onlinebanking.core.domain.exceptions.EntityNotSavedException;
+import org.onlinebanking.core.domain.exceptions.EntityNotUpdatedException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.math.BigDecimal;
+
+import javax.persistence.PersistenceException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,11 +26,17 @@ import java.util.Random;
 
 @Service
 public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
+    private final static String ENTITY_NOT_SAVED_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be saved";
+    private final static String ENTITY_NOT_UPDATED_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be updated";
+    private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be found by %s";
+    private final static String ENTITY_NOT_FOUND_ERROR = "Error finding PaymentInstrument by %s";
+    private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final PaymentInstrumentDAO paymentInstrumentDAO;
     private final PaymentInstrumentFactory paymentInstrumentFactory;
 
-    public PaymentInstrumentServiceImpl(@Autowired PaymentInstrumentDAO paymentInstrumentDAO,
-                                        @Autowired PaymentInstrumentFactory paymentInstrumentFactory) {
+    @Autowired
+    public PaymentInstrumentServiceImpl(PaymentInstrumentDAO paymentInstrumentDAO,
+                                        PaymentInstrumentFactory paymentInstrumentFactory) {
         this.paymentInstrumentDAO = paymentInstrumentDAO;
         this.paymentInstrumentFactory = paymentInstrumentFactory;
     }
@@ -35,28 +44,34 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 
     @Transactional
     @Override
-    public boolean openPaymentInstrument(PaymentInstrumentDTO paymentInstrumentDTO) {
+    public PaymentInstrument openPaymentInstrument(PaymentInstrumentRequest paymentInstrumentRequest,
+                                                   BankAccount bankAccount) {
         PaymentInstrument paymentInstrument;
 
-        if (paymentInstrumentDTO instanceof CardDTO) {
-            paymentInstrumentDTO = initCardDTO(paymentInstrumentDTO);
+        if (paymentInstrumentRequest instanceof CardRequest) {
+            paymentInstrumentRequest = initCardDTO(paymentInstrumentRequest);
         }
 
+        paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentRequest, bankAccount);
         try {
-            paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentDTO);
-        } catch (IllegalArgumentException e) {
-            return false;
+            paymentInstrumentDAO.save(paymentInstrument);
+        } catch (PersistenceException e) {
+            logger.error(e);
+            throw new EntityNotSavedException(ENTITY_NOT_SAVED_EXCEPTION_MESSAGE, e);
         }
 
-        paymentInstrumentDAO.save(paymentInstrument);
-
-        return true;
+        return paymentInstrument;
     }
 
     @Transactional
     @Override
     public PaymentInstrument updatePaymentInstrument(PaymentInstrument paymentInstrument) {
-        return paymentInstrumentDAO.update(paymentInstrument);
+        try {
+            return paymentInstrumentDAO.update(paymentInstrument);
+        } catch (PersistenceException e) {
+            logger.error(e);
+            throw new EntityNotUpdatedException(ENTITY_NOT_UPDATED_EXCEPTION_MESSAGE, e);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -68,12 +83,23 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional(readOnly = true)
     @Override
     public PaymentInstrument findById(Long id) {
-        return paymentInstrumentDAO.findById(id);
+        PaymentInstrument paymentInstrument;
+        try {
+            paymentInstrument = paymentInstrumentDAO.findById(id);
+        } catch (PersistenceException e) {
+            logger.error(e);
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_ERROR, "ID " + id), e);
+        }
+
+        if (paymentInstrument == null) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
+        }
+        return paymentInstrument;
     }
 
-    private CardDTO initCardDTO(PaymentInstrumentDTO paymentInstrumentDTO) {
-        String cardNumber = "";
-        CardDTO cardDTO = (CardDTO) paymentInstrumentDTO;
+    private CardRequest initCardDTO(PaymentInstrumentRequest paymentInstrumentRequest) {
+        String cardNumber;
+        CardRequest cardDTO = (CardRequest) paymentInstrumentRequest;
         cardDTO.setExpiryDate(generateExpiryDate());
         do {
             cardNumber = generateCardNumber();
@@ -92,8 +118,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         Random rand = new Random();
         long leftLimit = 1000000000000000L;
         long rightLimit = 9999999999999999L;
-        String s = String.valueOf((leftLimit + (long) (rand.nextDouble() * (rightLimit - leftLimit))));
-        System.out.println(s);
-        return s;
+        return String.valueOf((leftLimit + (rand.nextLong(rightLimit - leftLimit + 1))));
     }
 }

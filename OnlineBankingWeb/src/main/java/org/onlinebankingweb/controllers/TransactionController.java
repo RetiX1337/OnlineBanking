@@ -5,7 +5,7 @@ import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.businesslogic.services.UserService;
-import org.onlinebanking.core.domain.dto.TransactionDTO;
+import org.onlinebanking.core.domain.dto.requests.TransactionRequest;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.transactions.Transaction;
@@ -53,15 +53,15 @@ public class TransactionController {
                                       @ModelAttribute("receiverBankAccountNumber") String receiverBankAccountNumber,
                                       @ModelAttribute("amount") BigDecimal amount,
                                      Model model) {
-        TransactionDTO transactionDTO = new TransactionDTO();
+        TransactionRequest transactionRequest = new TransactionRequest();
         PaymentInstrument paymentInstrument = paymentInstrumentService.findById(paymentInstrumentId);
         BankAccount sender = paymentInstrument.getBankAccount();
         BankAccount receiver = bankAccountService.findByAccountNumber(receiverBankAccountNumber);
 
-        transactionDTO.setPaymentInstrument(paymentInstrument);
-        transactionDTO.setSender(sender);
-        transactionDTO.setReceiver(receiver);
-        transactionDTO.setAmount(amount);
+        transactionRequest.setPaymentInstrument(paymentInstrument);
+        transactionRequest.setSender(sender);
+        transactionRequest.setReceiver(receiver);
+        transactionRequest.setAmount(amount);
 
         model.addAttribute("bankAccountNumber", sender.getAccountNumber());
 

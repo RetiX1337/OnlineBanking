@@ -5,7 +5,7 @@ import org.onlinebanking.core.domain.models.Identifiable;
 import java.util.List;
 
 public interface DAOInterface<T extends Identifiable> {
-    void save(T t);
+    T save(T t);
     T findById(Long id);
     void delete(T t);
     void deleteById(Long id);

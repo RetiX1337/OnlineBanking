@@ -39,8 +39,6 @@ public abstract class PaymentInstrument implements Identifiable {
         return bankAccount;
     }
 
-    public abstract PaymentInstrumentType getPaymentInstrumentType();
-
     public abstract String getDescription();
 
     @Override

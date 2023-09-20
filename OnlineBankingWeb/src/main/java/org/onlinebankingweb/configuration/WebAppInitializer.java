@@ -7,8 +7,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.Filter;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
-
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] {SpringConfig.class};
@@ -25,7 +23,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     }
 
     @Override
-    protected Filter[] getServletFilters() { 
+    protected Filter[] getServletFilters() {
         OpenSessionInViewFilter openSessionInViewFilter = new OpenSessionInViewFilter();
         DelegatingFilterProxy securityFilterChain = new DelegatingFilterProxy("springSecurityFilterChain");
         return new Filter[]{openSessionInViewFilter, securityFilterChain};
