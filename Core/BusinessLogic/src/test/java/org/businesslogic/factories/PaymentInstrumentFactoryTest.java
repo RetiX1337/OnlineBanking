@@ -6,7 +6,7 @@ import org.onlinebanking.core.businesslogic.factories.PaymentInstrumentFactory;
 import org.onlinebanking.core.domain.dto.requests.CreditCardRequest;
 import org.onlinebanking.core.domain.dto.requests.DebitCardRequest;
 import org.onlinebanking.core.domain.dto.requests.PaymentInstrumentRequest;
-import org.onlinebanking.core.domain.exceptions.PaymentInstrumentTypeNotFoundException;
+import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.paymentinstruments.cards.CreditCard;
@@ -43,14 +43,17 @@ public class PaymentInstrumentFactoryTest {
         assertEquals(paymentInstrument.getClass(), CreditCard.class);
     }
 
-    @Test(expected = PaymentInstrumentTypeNotFoundException.class)
+    @Test(expected = PaymentInstrumentFactoryException.class)
     public void createPaymentInstrument_whenPaymentInstrumentDTO_isNull_thenExceptionIsThrown() {
-        PaymentInstrumentRequest paymentInstrumentRequest = null;
-        BankAccount bankAccount = null;
-        paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentRequest, bankAccount);
+        paymentInstrumentFactory.createPaymentInstrument(null, new BankAccount());
     }
 
-    @Test(expected = PaymentInstrumentTypeNotFoundException.class)
+    @Test(expected = PaymentInstrumentFactoryException.class)
+    public void createPaymentInstrument_whenBankAccount_isNull_thenExceptionIsThrown() {
+        paymentInstrumentFactory.createPaymentInstrument(new PaymentInstrumentRequest() {}, null);
+    }
+
+    @Test(expected = PaymentInstrumentFactoryException.class)
     public void createPaymentInstrument_whenPaymentInstrumentDTO_isNotInFactory_thenExceptionIsThrown() {
         PaymentInstrumentRequest mockedPaymentInstrumentRequest = new PaymentInstrumentRequest() {
         };

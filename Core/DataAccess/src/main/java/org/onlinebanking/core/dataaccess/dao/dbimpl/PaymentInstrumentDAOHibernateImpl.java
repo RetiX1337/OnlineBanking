@@ -34,6 +34,6 @@ public class PaymentInstrumentDAOHibernateImpl extends DAOHibernateImpl<PaymentI
         String hql = "FROM Card WHERE cardNumber = :cardNumber";
         Query query = session.createQuery(hql);
         query.setParameter("cardNumber", cardNumber);
-        return (Card) query.uniqueResult();
+        return (Card) query.getSingleResult();
     }
 }

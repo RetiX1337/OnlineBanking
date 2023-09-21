@@ -21,6 +21,6 @@ public class UserDAOHibernateImpl extends DAOHibernateImpl<User> implements User
         String hql = "FROM User WHERE email = :email";
         Query query = session.createQuery(hql);
         query.setParameter("email", email);
-        return (User) query.uniqueResult();
+        return (User) query.getSingleResult();
     }
 }

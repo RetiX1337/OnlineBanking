@@ -1,10 +1,14 @@
-package org.onlinebanking.core.businesslogic.services.businesslogicservices;
+package org.onlinebanking.core.businesslogic.services.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
 import org.onlinebanking.core.domain.dto.requests.TransactionRequest;
+import org.onlinebanking.core.domain.exceptions.DAOException;
+import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
@@ -15,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -25,6 +30,8 @@ public class TransactionServiceImpl implements TransactionService {
             = "Transaction couldn't be processed for sender %s, receiver %s";
     private static final String FAILED_TRANSACTION_EXCEPTION_MESSAGE
             = "Transaction couldn't be processed for sender %s";
+    private static final String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "Transactions couldn't be found for %s";
+    private final static Logger logger = LogManager.getLogger(TransactionServiceImpl.class);
     private final TransactionDAO transactionDAO;
     private final BankAccountService bankAccountService;
     private final PaymentInstrumentService paymentInstrumentService;
@@ -53,15 +60,16 @@ public class TransactionServiceImpl implements TransactionService {
 
         if (paymentInstrument.withdraw(amount)) {
             receiver.deposit(amount);
-
             bankAccountService.updateBankAccount(sender);
             bankAccountService.updateBankAccount(receiver);
-
             paymentInstrumentService.updatePaymentInstrument(paymentInstrument);
-
             Transaction transaction = createTransaction(transactionRequest);
-
-            return transactionDAO.save(transaction);
+            try {
+                return transactionDAO.save(transaction);
+            } catch (PersistenceException e) {
+                logger.error(e);
+                throw new DAOException();
+            }
         } else {
             throw new FailedTransactionException(
                     String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE, sender.getAccountNumber()));
@@ -71,7 +79,18 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
-        return transactionDAO.findBySenderBankAccount(bankAccount);
+        List<Transaction> paymentInstruments;
+        try {
+            paymentInstruments = transactionDAO.findBySenderBankAccount(bankAccount);
+        } catch (PersistenceException e) {
+            logger.error(e);
+            throw new DAOException();
+        }
+        if (paymentInstruments.isEmpty()) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
+                    "Bank Account " + bankAccount.getAccountNumber()));
+        }
+        return paymentInstruments;
     }
 
     @Transactional

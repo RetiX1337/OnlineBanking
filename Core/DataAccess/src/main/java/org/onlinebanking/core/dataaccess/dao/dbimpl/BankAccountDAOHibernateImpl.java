@@ -34,6 +34,6 @@ public class BankAccountDAOHibernateImpl extends DAOHibernateImpl<BankAccount> i
         String hql = "FROM BankAccount WHERE accountNumber = :accountNumber";
         Query query = session.createQuery(hql);
         query.setParameter("accountNumber", accountNumber);
-        return (BankAccount) query.uniqueResult();
+        return (BankAccount) query.getSingleResult();
     }
 }
