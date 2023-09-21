@@ -21,6 +21,6 @@ public class CustomerDAOHibernateImpl extends DAOHibernateImpl<Customer> impleme
         String hql = "FROM Customer WHERE taxPayerId = :taxPayerId";
         Query query = session.createQuery(hql);
         query.setParameter("taxPayerId", taxPayerId);
-        return (Customer) query.uniqueResult();
+        return (Customer) query.getSingleResult();
     }
 }

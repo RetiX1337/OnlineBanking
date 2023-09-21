@@ -1,4 +1,4 @@
-package org.onlinebanking.core.businesslogic.services.businesslogicservices;
+package org.onlinebanking.core.businesslogic.services.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,6 +7,7 @@ import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.PaymentInstrumentDAO;
 import org.onlinebanking.core.domain.dto.requests.CardRequest;
 import org.onlinebanking.core.domain.dto.requests.PaymentInstrumentRequest;
+import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.EntityNotSavedException;
 import org.onlinebanking.core.domain.exceptions.EntityNotUpdatedException;
@@ -15,9 +16,9 @@ import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,10 +27,7 @@ import java.util.Random;
 
 @Service
 public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
-    private final static String ENTITY_NOT_SAVED_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be saved";
-    private final static String ENTITY_NOT_UPDATED_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be updated";
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be found by %s";
-    private final static String ENTITY_NOT_FOUND_ERROR = "Error finding PaymentInstrument by %s";
     private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final PaymentInstrumentDAO paymentInstrumentDAO;
     private final PaymentInstrumentFactory paymentInstrumentFactory;
@@ -57,7 +55,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
             paymentInstrumentDAO.save(paymentInstrument);
         } catch (PersistenceException e) {
             logger.error(e);
-            throw new EntityNotSavedException(ENTITY_NOT_SAVED_EXCEPTION_MESSAGE, e);
+            throw new DAOException();
         }
 
         return paymentInstrument;
@@ -70,31 +68,48 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
             return paymentInstrumentDAO.update(paymentInstrument);
         } catch (PersistenceException e) {
             logger.error(e);
-            throw new EntityNotUpdatedException(ENTITY_NOT_UPDATED_EXCEPTION_MESSAGE, e);
+            throw new DAOException();
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<PaymentInstrument> findByBankAccount(BankAccount bankAccount) {
-        return paymentInstrumentDAO.findByBankAccount(bankAccount);
+        List<PaymentInstrument> paymentInstruments;
+        try {
+            paymentInstruments = paymentInstrumentDAO.findByBankAccount(bankAccount);
+        } catch (PersistenceException e) {
+            logger.error(e);
+            throw new DAOException();
+        }
+        if (paymentInstruments.isEmpty()) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
+                    "Bank Account " + bankAccount.getAccountNumber()));
+        }
+        return paymentInstruments;
     }
 
     @Transactional(readOnly = true)
     @Override
     public PaymentInstrument findById(Long id) {
-        PaymentInstrument paymentInstrument;
         try {
-            paymentInstrument = paymentInstrumentDAO.findById(id);
+            return paymentInstrumentDAO.findById(id);
+        } catch (NoResultException e) {
+            logger.error(e);
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
         } catch (PersistenceException e) {
             logger.error(e);
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_ERROR, "ID " + id), e);
+            throw new DAOException();
         }
+    }
 
-        if (paymentInstrument == null) {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
+    private PaymentInstrument findByCardNumber(String cardNumber) {
+        try {
+            return paymentInstrumentDAO.findByCardNumber(cardNumber);
+        } catch (PersistenceException e) {
+            logger.error(e);
+            throw new DAOException();
         }
-        return paymentInstrument;
     }
 
     private CardRequest initCardDTO(PaymentInstrumentRequest paymentInstrumentRequest) {
@@ -103,7 +118,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         cardDTO.setExpiryDate(generateExpiryDate());
         do {
             cardNumber = generateCardNumber();
-        } while (paymentInstrumentDAO.findByCardNumber(cardNumber) != null);
+        } while (findByCardNumber(cardNumber) != null);
         cardDTO.setCardNumber(cardNumber);
         return cardDTO;
     }

@@ -8,14 +8,8 @@ import java.util.List;
 public interface UserService {
 
     User registerUser(UserRegistrationRequest userRegistrationRequest);
-    /*
-    boolean loginUser(UserDTO userDTO);
-     */
     User findById(Long id);
-    void save(User user);
     User update(User user);
-    void deleteById(Long id);
     void delete(User user);
-    List<User> findAll();
     User findByEmail(String email);
 }

@@ -4,7 +4,7 @@ import org.onlinebanking.core.domain.dto.requests.BankTransferRequest;
 import org.onlinebanking.core.domain.dto.requests.CreditCardRequest;
 import org.onlinebanking.core.domain.dto.requests.DebitCardRequest;
 import org.onlinebanking.core.domain.dto.requests.PaymentInstrumentRequest;
-import org.onlinebanking.core.domain.exceptions.PaymentInstrumentTypeNotFoundException;
+import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @Component
 public class PaymentInstrumentFactory {
@@ -40,13 +39,13 @@ public class PaymentInstrumentFactory {
     public PaymentInstrument createPaymentInstrument(PaymentInstrumentRequest paymentInstrumentRequest,
                                                      BankAccount bankAccount) {
         if (paymentInstrumentRequest == null || bankAccount == null) {
-            throw new PaymentInstrumentTypeNotFoundException(ARGUMENT_IS_NULL_EXCEPTION_MESSAGE);
+            throw new PaymentInstrumentFactoryException(ARGUMENT_IS_NULL_EXCEPTION_MESSAGE);
         }
 
         BiFunction<PaymentInstrumentRequest, BankAccount, ? extends PaymentInstrument> supplierFunction =
                 paymentInstrumentMap.get(paymentInstrumentRequest.getClass());
         if (supplierFunction == null) {
-            throw new PaymentInstrumentTypeNotFoundException(String.format(ARGUMENT_IS_INVALID_EXCEPTION_MESSAGE,
+            throw new PaymentInstrumentFactoryException(String.format(ARGUMENT_IS_INVALID_EXCEPTION_MESSAGE,
                     paymentInstrumentRequest.getClass().getSimpleName()));
         } else {
             return supplierFunction.apply(paymentInstrumentRequest, bankAccount);

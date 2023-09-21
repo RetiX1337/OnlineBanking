@@ -3,16 +3,14 @@ package org.businesslogic.services.businesslogicservices;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
-import org.onlinebanking.core.businesslogic.services.businesslogicservices.TransactionServiceImpl;
+import org.onlinebanking.core.businesslogic.services.impl.TransactionServiceImpl;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
 import org.onlinebanking.core.domain.dto.requests.TransactionRequest;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
 
-import static junit.framework.Assert.*;
 import static org.junit.Assert.assertThrows;
 
 public class TransactionServiceImplTest {
