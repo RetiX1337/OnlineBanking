@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {

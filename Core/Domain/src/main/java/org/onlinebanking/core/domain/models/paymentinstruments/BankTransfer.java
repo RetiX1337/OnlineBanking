@@ -1,6 +1,6 @@
 package org.onlinebanking.core.domain.models.paymentinstruments;
 
-import org.onlinebanking.core.domain.dto.requests.BankTransferRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.BankTransferRequest;
 import org.onlinebanking.core.domain.models.BankAccount;
 
 import javax.persistence.*;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class BankTransfer extends PaymentInstrument {
 
     public BankTransfer(BankTransferRequest bankTransferRequest, BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
+        setBankAccount(bankAccount);
     }
 
     public BankTransfer() {

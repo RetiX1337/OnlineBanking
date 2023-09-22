@@ -2,16 +2,13 @@ package org.onlinebanking.core.businesslogic.services.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.iban4j.Iban;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.BankAccountDAO;
-import org.onlinebanking.core.domain.dto.requests.BankTransferRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.BankTransferRequest;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
-import org.onlinebanking.core.domain.exceptions.EntityNotSavedException;
-import org.onlinebanking.core.domain.exceptions.EntityNotUpdatedException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +22,6 @@ import java.util.List;
 
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
-    private final static String ENTITY_NOT_SAVED_EXCEPTION_MESSAGE = "The BankAccount couldn't be saved";
-    private final static String ENTITY_NOT_UPDATED_EXCEPTION_MESSAGE = "The BankAccount couldn't be updated";
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The BankAccount couldn't be found by %s";
     private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final BankAccountDAO bankAccountDAO;
@@ -47,7 +42,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             savedBankAccount = bankAccountDAO.save(bankAccount);
         } catch (PersistenceException e) {
             logger.error(e);
-            throw new EntityNotSavedException(ENTITY_NOT_SAVED_EXCEPTION_MESSAGE, e);
+            throw new DAOException();
         }
         paymentInstrumentService.openPaymentInstrument(new BankTransferRequest(), bankAccount);
         return savedBankAccount;
@@ -82,7 +77,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             return bankAccountDAO.update(bankAccount);
         } catch (PersistenceException e) {
             logger.error(e);
-            throw new EntityNotUpdatedException(ENTITY_NOT_UPDATED_EXCEPTION_MESSAGE, e);
+            throw new DAOException();
         }
     }
 

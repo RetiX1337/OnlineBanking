@@ -1,4 +1,4 @@
-package org.onlinebankingweb.wrappers;
+package org.onlinebankingweb.dto.wrappers;
 
 import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
 import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;

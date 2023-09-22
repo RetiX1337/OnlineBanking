@@ -5,7 +5,7 @@ import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
 import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 import org.onlinebanking.core.domain.models.user.UserRole;
-import org.onlinebankingweb.security.models.LoginResponse;
+import org.onlinebankingweb.dto.responses.LoginResponse;
 import org.onlinebankingweb.security.services.jwt.JWTService;
 import org.onlinebankingweb.security.userprincipal.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;

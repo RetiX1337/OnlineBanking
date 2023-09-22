@@ -1,4 +1,6 @@
-package org.onlinebanking.core.domain.dto.requests;
+package org.onlinebanking.core.domain.dto.requests.paymentinstruments.cards;
+
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.PaymentInstrumentRequest;
 
 import java.util.Date;
 

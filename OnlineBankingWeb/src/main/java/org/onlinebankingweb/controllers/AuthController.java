@@ -3,7 +3,7 @@ package org.onlinebankingweb.controllers;
 import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
 import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 import org.onlinebankingweb.security.services.AuthService;
-import org.onlinebankingweb.wrappers.UserCustomerWrapper;
+import org.onlinebankingweb.dto.wrappers.UserCustomerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

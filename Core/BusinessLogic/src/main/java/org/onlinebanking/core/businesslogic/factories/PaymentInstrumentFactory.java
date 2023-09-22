@@ -1,9 +1,9 @@
 package org.onlinebanking.core.businesslogic.factories;
 
-import org.onlinebanking.core.domain.dto.requests.BankTransferRequest;
-import org.onlinebanking.core.domain.dto.requests.CreditCardRequest;
-import org.onlinebanking.core.domain.dto.requests.DebitCardRequest;
-import org.onlinebanking.core.domain.dto.requests.PaymentInstrumentRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.BankTransferRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.cards.CreditCardRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.cards.DebitCardRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.PaymentInstrumentRequest;
 import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;

@@ -1,4 +1,4 @@
-package org.onlinebankingweb.security.models;
+package org.onlinebankingweb.dto.responses;
 
 public class LoginResponse {
     private final String token;
