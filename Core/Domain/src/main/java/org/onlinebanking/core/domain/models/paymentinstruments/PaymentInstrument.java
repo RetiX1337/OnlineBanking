@@ -14,10 +14,10 @@ public abstract class PaymentInstrument implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_instrument_id")
-    protected Long id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "bank_account_id")
-    protected BankAccount bankAccount;
+    private BankAccount bankAccount;
 
     public PaymentInstrument() {
 

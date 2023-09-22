@@ -10,13 +10,13 @@ import java.util.Date;
 @PrimaryKeyJoinColumn(name = "payment_instrument_id")
 public abstract class Card extends PaymentInstrument {
     @Column(name = "card_number")
-    protected String cardNumber;
+    private String cardNumber;
     @Column(name = "expiry_date")
-    protected Date expiryDate;
+    private Date expiryDate;
     @Column(name = "cvv_hash")
-    protected String CVVHash;
+    private String CVVHash;
     @Column(name = "pin_hash")
-    protected String PINHash;
+    private String PINHash;
 
     public Card() {
 

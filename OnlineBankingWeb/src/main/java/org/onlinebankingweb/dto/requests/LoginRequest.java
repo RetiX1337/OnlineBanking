@@ -1,4 +1,4 @@
-package org.onlinebankingweb.security.models;
+package org.onlinebankingweb.dto.requests;
 
 public class LoginRequest {
     private String email;

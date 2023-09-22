@@ -1,6 +1,6 @@
 package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 
-import org.onlinebanking.core.domain.dto.requests.DebitCardRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.cards.DebitCardRequest;
 import org.onlinebanking.core.domain.models.BankAccount;
 
 import javax.persistence.*;
@@ -13,11 +13,11 @@ import java.math.BigDecimal;
 @PrimaryKeyJoinColumn(name = "payment_instrument_id")
 public class DebitCard extends Card {
     @Column(name = "daily_withdrawal_limit")
-    protected BigDecimal dailyWithdrawalLimit;
+    private BigDecimal dailyWithdrawalLimit;
     @Column(name = "withdrawal_counter")
     private BigDecimal withdrawalCounter;
     @Column(name = "daily_transaction_limit")
-    protected Integer dailyTransactionLimit;
+    private Integer dailyTransactionLimit;
     @Column(name = "transaction_counter")
     private Integer transactionCounter;
 
@@ -26,11 +26,11 @@ public class DebitCard extends Card {
     }
 
     public DebitCard(DebitCardRequest debitCardRequest, BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
-        this.expiryDate = debitCardRequest.getExpiryDate();
-        this.cardNumber = debitCardRequest.getCardNumber();
-        this.PINHash = debitCardRequest.getPINHash();
-        this.CVVHash = debitCardRequest.getCVVHash();
+        setBankAccount(bankAccount);
+        setCVVHash(debitCardRequest.getCVVHash());
+        setPINHash(debitCardRequest.getPINHash());
+        setExpiryDate(debitCardRequest.getExpiryDate());
+        setCardNumber(debitCardRequest.getCardNumber());
         this.dailyWithdrawalLimit = debitCardRequest.getDailyWithdrawalLimit();
         this.dailyTransactionLimit = debitCardRequest.getDailyTransactionLimit();
     }
@@ -55,6 +55,14 @@ public class DebitCard extends Card {
         }
 
         return true;
+    }
+
+    public BigDecimal getWithdrawalCounter() {
+        return withdrawalCounter;
+    }
+
+    public Integer getTransactionCounter() {
+        return transactionCounter;
     }
 
     public void setDailyWithdrawalLimit(BigDecimal dailyWithdrawalLimit) {

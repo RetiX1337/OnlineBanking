@@ -5,12 +5,11 @@ import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.factories.PaymentInstrumentFactory;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.PaymentInstrumentDAO;
-import org.onlinebanking.core.domain.dto.requests.CardRequest;
-import org.onlinebanking.core.domain.dto.requests.PaymentInstrumentRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.cards.CardRequest;
+import org.onlinebanking.core.domain.dto.requests.paymentinstruments.PaymentInstrumentRequest;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
-import org.onlinebanking.core.domain.exceptions.EntityNotSavedException;
-import org.onlinebanking.core.domain.exceptions.EntityNotUpdatedException;
+import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,13 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
             paymentInstrumentRequest = initCardDTO(paymentInstrumentRequest);
         }
 
-        paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentRequest, bankAccount);
+        try {
+            paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentRequest, bankAccount);
+        } catch (PaymentInstrumentFactoryException e) {
+            logger.error(e);
+            throw new DAOException();
+        }
+
         try {
             paymentInstrumentDAO.save(paymentInstrument);
         } catch (PersistenceException e) {

@@ -1,6 +1,5 @@
-package org.onlinebanking.core.domain.dto.requests;
+package org.onlinebanking.core.domain.dto.requests.paymentinstruments;
 
-import org.onlinebanking.core.domain.models.BankAccount;
 
 public abstract class PaymentInstrumentRequest {
     protected String bankAccountNumber;
