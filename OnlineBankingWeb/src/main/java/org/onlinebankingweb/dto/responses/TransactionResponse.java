@@ -4,7 +4,7 @@ import org.onlinebanking.core.domain.models.transactions.Transaction;
 import org.onlinebanking.core.domain.models.transactions.TransactionStatus;
 import org.onlinebanking.core.domain.models.transactions.TransactionType;
 import org.onlinebankingweb.dto.responses.paymentinstruments.PaymentInstrumentResponse;
-import org.onlinebankingweb.dto.responses.paymentinstruments.PaymentInstrumentResponseFactory;
+import org.onlinebankingweb.factories.PaymentInstrumentResponseFactory;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

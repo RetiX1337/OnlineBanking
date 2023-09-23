@@ -19,7 +19,7 @@ import javax.persistence.PersistenceException;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private final static String FAILED_CUSTOMER_REGISTRATION_EXCEPTION_MESSAGE = "Failed registration for Customer %s";
+    private final static String FAILED_CUSTOMER_REGISTRATION_EXCEPTION_MESSAGE = "Customer for Tax Payer ID %s already exists";
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "Entity not found for %s";
     private final static Logger logger = LogManager.getLogger(CustomerServiceImpl.class);
     private final CustomerDAO customerDAO;

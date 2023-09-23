@@ -2,18 +2,24 @@ package org.onlinebankingweb.controllers;
 
 import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
 import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
+import org.onlinebanking.core.domain.exceptions.FailedCustomerRegistrationException;
+import org.onlinebanking.core.domain.exceptions.FailedUserRegistrationException;
 import org.onlinebankingweb.security.services.AuthService;
 import org.onlinebankingweb.dto.wrappers.UserCustomerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+
+@Validated
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -36,11 +42,22 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@Validated @ModelAttribute("userCustomerWrapper") UserCustomerWrapper userCustomerWrapper) {
-        String password = userCustomerWrapper.getUserDTO().getPassword();
+    public String register(@Valid @ModelAttribute("userCustomerWrapper") UserCustomerWrapper userCustomerWrapper,
+                           BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "auth/register";
+        }
+        String password = userCustomerWrapper.getUserRegistrationRequest().getPassword();
         String passwordHash = passwordEncoder.encode(password);
-        userCustomerWrapper.getUserDTO().setPassword(passwordHash);
-        authService.attemptRegisterCustomer(userCustomerWrapper.getUserDTO(), userCustomerWrapper.getCustomerDTO());
-        return null;
+        userCustomerWrapper.getUserRegistrationRequest().setPassword(passwordHash);
+        try {
+            authService.attemptRegister(userCustomerWrapper.getUserRegistrationRequest(),
+                    userCustomerWrapper.getCustomerRegistrationRequest());
+        } catch (FailedCustomerRegistrationException e) {
+            model.addAttribute("customerRegistrationExceptionMessage", e.getMessage());
+        } catch (FailedUserRegistrationException e) {
+            model.addAttribute("userRegistrationExceptionMessage", e.getMessage());
+        }
+        return "auth/register";
     }
 }

@@ -4,6 +4,8 @@ import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
 import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
+import org.onlinebanking.core.domain.models.Customer;
+import org.onlinebanking.core.domain.models.user.User;
 import org.onlinebanking.core.domain.models.user.UserRole;
 import org.onlinebankingweb.dto.responses.LoginResponse;
 import org.onlinebankingweb.security.services.jwt.JWTService;
@@ -33,11 +35,13 @@ public class AuthService {
         this.customerService = customerService;
     }
 
-    //TODO
+    // if registration goes wrong exception is thrown
     @Transactional
-    public boolean attemptRegisterCustomer(UserRegistrationRequest userRegistrationRequest, CustomerRegistrationRequest customerRegistrationRequest) {
-
-        return false;
+    public void attemptRegister(UserRegistrationRequest userRegistrationRequest,
+                                   CustomerRegistrationRequest customerRegistrationRequest) {
+        User user = userService.registerUser(userRegistrationRequest);
+        Customer customer = customerService.registerCustomer(customerRegistrationRequest);
+        customerService.assignCustomerToUser(customer, user);
     }
 
     public LoginResponse attemptLogin(String email, String password) {

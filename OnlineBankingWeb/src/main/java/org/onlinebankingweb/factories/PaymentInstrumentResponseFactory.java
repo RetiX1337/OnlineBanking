@@ -1,10 +1,14 @@
-package org.onlinebankingweb.dto.responses.paymentinstruments;
+package org.onlinebankingweb.factories;
 
 import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
 import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.paymentinstruments.cards.CreditCard;
 import org.onlinebanking.core.domain.models.paymentinstruments.cards.DebitCard;
+import org.onlinebankingweb.dto.responses.paymentinstruments.BankTransferResponse;
+import org.onlinebankingweb.dto.responses.paymentinstruments.CreditCardResponse;
+import org.onlinebankingweb.dto.responses.paymentinstruments.DebitCardResponse;
+import org.onlinebankingweb.dto.responses.paymentinstruments.PaymentInstrumentResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

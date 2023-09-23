@@ -35,7 +35,7 @@ h1 {
     transition: 0.2s;
 }
 
-.container {
+.custom-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -46,7 +46,7 @@ h1 {
     background-color: #ffffff;
 }
 
-.container .custom-btn {
+.custom-container .custom-btn {
     padding: 10px 20px;
     font-size: 18px;
     text-decoration: none;
@@ -55,7 +55,7 @@ h1 {
     margin-right: 20px;
 }
 
-.container .custom-btn:hover {
+.custom-container .custom-btn:hover {
     background-color: #3f3f3f;
     color: #ffffff;
     transition: 0.2s;

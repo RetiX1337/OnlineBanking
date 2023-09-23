@@ -3,8 +3,12 @@ package org.onlinebankingweb.dto.wrappers;
 import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
 import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
 
+import javax.validation.Valid;
+
 public class UserCustomerWrapper {
+    @Valid
     private UserRegistrationRequest userRegistrationRequest;
+    @Valid
     private CustomerRegistrationRequest customerRegistrationRequest;
 
     public UserCustomerWrapper(UserRegistrationRequest userRegistrationRequest, CustomerRegistrationRequest customerRegistrationRequest) {
@@ -15,19 +19,20 @@ public class UserCustomerWrapper {
     public UserCustomerWrapper() {
     }
 
-    public CustomerRegistrationRequest getCustomerDTO() {
+    public CustomerRegistrationRequest getCustomerRegistrationRequest() {
         return customerRegistrationRequest;
     }
 
-    public UserRegistrationRequest getUserDTO() {
+    public UserRegistrationRequest getUserRegistrationRequest() {
         return userRegistrationRequest;
     }
 
-    public void setCustomerDTO(CustomerRegistrationRequest customerRegistrationRequest) {
+    public void setCustomerRegistrationRequest(CustomerRegistrationRequest customerRegistrationRequest) {
         this.customerRegistrationRequest = customerRegistrationRequest;
     }
 
-    public void setUserDTO(UserRegistrationRequest userRegistrationRequest) {
+    public void setUserRegistrationRequest(UserRegistrationRequest userRegistrationRequest) {
         this.userRegistrationRequest = userRegistrationRequest;
     }
+
 }

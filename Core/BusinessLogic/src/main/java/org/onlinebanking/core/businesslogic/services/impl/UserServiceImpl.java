@@ -19,7 +19,8 @@ import javax.persistence.PersistenceException;
 @Service
 public class UserServiceImpl implements UserService {
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "User couldn't be found by %s";
-    private final static String FAILED_CUSTOMER_REGISTRATION_EXCEPTION_MESSAGE = "Failed registration for User %s";
+    private final static String FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE
+            = "User for email address %s already exists";
     private final static Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private final UserDAO userDAO;
 
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
         try {
             findByEmail(email);
             throw new FailedUserRegistrationException(
-                    String.format(FAILED_CUSTOMER_REGISTRATION_EXCEPTION_MESSAGE, " email " + email));
+                    String.format(FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE, email));
         } catch (EntityNotFoundException ignored) {}
 
         User user = initUser(userRegistrationRequest);

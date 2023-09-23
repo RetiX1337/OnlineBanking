@@ -2,32 +2,86 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.thymeleaf.org" lang="en">
 <head>
-    <link th:href="@{~/static/css/style.css}" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
     <title>Online Banking</title>
+    <style>
+        input:focus::placeholder {
+            color: transparent;
+        }
+    </style>
 </head>
-<body>
-<header>
-    <h1>Online Banking</h1>
-    <a class="custom-btn" href="#">Login</a>
-</header>
-<div class="container">
-    <div class="content">
-        <h2>Registration Form</h2>
-        <form action="#" th:action="@{/auth/register}" th:object="${userCustomerWrapper}" method="post">
-            <div>
-                <p>Email: <input type="text" th:field="*{userRegistrationRequest.email}" required/></p>
-                <p>Username: <input type="text" th:field="*{userRegistrationRequest.username}" required/></p>
-                <p>Password: <input type="text" th:field="*{userRegistrationRequest.password}" required/></p>
-            </div>
-            <div>
-                <p>First Name: <input type="text" th:field="*{customerRegistrationRequest.firstName}" required/></p>
-                <p>Last Name: <input type="text" th:field="*{customerRegistrationRequest.lastName}" required/></p>
-                <p>Address: <input type="text" th:field="*{customerRegistrationRequest.address}" required/></p>
-                <p>Tax Payer ID: <input type="text" th:field="*{customerRegistrationRequest.taxPayerId}" required/></p>
-            </div>
-            <input type="submit" value="Submit" />
-        </form>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header.html :: header"></header>
+<main role="main" class="flex-shrink-0">
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="bg-light p-5 border rounded-3">
+            <h2 class="display-4 d-flex justify-content-center">Registration</h2>
+            <form action="#" th:action="@{/auth/register}" th:object="${userCustomerWrapper}" method="post">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="firstNameInput" class="form-label">First name</label>
+                        <input type="text" class="form-control" th:field="*{customerRegistrationRequest.firstName}"
+                               id="firstNameInput" th:required="required" placeholder="John">
+                        <p th:if="${#fields.hasErrors('customerRegistrationRequest.firstName')}"
+                           th:errors="*{customerRegistrationRequest.firstName}" class="text-danger"></p>
+                    </div>
+                    <div class="col">
+                        <label for="lastNameInput" class="form-label">Last name</label>
+                        <input type="text" class="form-control" th:field="*{customerRegistrationRequest.lastName}"
+                               id="lastNameInput" th:required="required" placeholder="Doe">
+                        <p th:if="${#fields.hasErrors('customerRegistrationRequest.lastName')}"
+                           th:errors="*{customerRegistrationRequest.lastName}" class="text-danger"></p>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="emailInput" class="form-label">Email address</label>
+                    <input type="email" class="form-control" th:field="*{userRegistrationRequest.email}" id="emailInput"
+                           th:required="required" placeholder="example@gmail.com">
+                    <p th:if="${#fields.hasErrors('userRegistrationRequest.email')}"
+                       th:errors="*{userRegistrationRequest.email}" class="text-danger"></p>
+                    <p th:if="${userRegistrationExceptionMessage != null}"
+                       th:text="${userRegistrationExceptionMessage}" class="text-danger"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="passwordInput" class="form-label">Password</label>
+                    <input type="password" class="form-control" th:field="*{userRegistrationRequest.password}"
+                           id="passwordInput" th:required="required" placeholder="Password">
+                    <p th:if="${#fields.hasErrors('userRegistrationRequest.password')}"
+                       th:errors="*{userRegistrationRequest.password}" class="text-danger"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="usernameInput" class="form-label">Username</label>
+                    <input type="text" class="form-control" th:field="*{userRegistrationRequest.username}"
+                           id="usernameInput" th:required="required" placeholder="Username">
+                    <p th:if="${#fields.hasErrors('userRegistrationRequest.username')}"
+                       th:errors="*{userRegistrationRequest.username}" class="text-danger"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="addressInput" class="form-label">Address</label>
+                    <input type="text" class="form-control" th:field="*{customerRegistrationRequest.address}"
+                           id="addressInput" th:required="required" placeholder="Address">
+                    <p th:if="${#fields.hasErrors('customerRegistrationRequest.address')}"
+                       th:errors="*{customerRegistrationRequest.address}" class="text-danger"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="taxPayerIdInput" class="form-label">Tax Payer ID</label>
+                    <input type="text" class="form-control" th:field="*{customerRegistrationRequest.taxPayerId}"
+                           id="taxPayerIdInput" th:required="required" placeholder="Tax Payer Id">
+                    <p th:if="${#fields.hasErrors('customerRegistrationRequest.taxPayerId')}"
+                       th:errors="*{customerRegistrationRequest.taxPayerId}" class="text-danger"></p>
+                    <p th:if="${customerRegistrationExceptionMessage != null}"
+                       th:text="${customerRegistrationExceptionMessage}" class="text-danger"></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-md btn-outline-light border">Submit</button>
+            </form>
+        </div>
     </div>
-</div>
+</main>
+<div th:replace="fragments/footer.html :: footer"></div>
 </body>
 </html>
