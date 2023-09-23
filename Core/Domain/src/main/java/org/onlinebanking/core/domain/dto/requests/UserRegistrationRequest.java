@@ -1,8 +1,15 @@
 package org.onlinebanking.core.domain.dto.requests;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class UserRegistrationRequest {
+    @NotBlank(message = "Username can't be blank")
     private String username;
+    @NotBlank(message = "Email can't be blank")
+    @Email(regexp = ".+[@].+[\\.].+", message = "Please provide correct email address (example@test.com)")
     private String email;
+    @NotBlank(message = "Password can't be blank")
     private String password;
 
     public UserRegistrationRequest() {
