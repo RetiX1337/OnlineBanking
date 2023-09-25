@@ -10,6 +10,7 @@ public class UserPrincipal implements UserDetails {
     private Long userId;
     private String email;
     private String passwordHash;
+    private String username;
     private List<? extends GrantedAuthority> authorities;
 
     public UserPrincipal() {
@@ -27,6 +28,10 @@ public class UserPrincipal implements UserDetails {
         this.passwordHash = passwordHash;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -38,6 +43,10 @@ public class UserPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public String getLoggedUsername() {
+        return username;
     }
 
     @Override
