@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                         .antMatchers("/main/**").permitAll()
                         .antMatchers("/auth/login").permitAll()
                         .antMatchers("/auth/register").permitAll()
+                        .antMatchers("/auth/check-login").permitAll()
                         .antMatchers("/a").hasRole("ADMIN_ROLE")
                         .anyRequest().authenticated()
                 );
