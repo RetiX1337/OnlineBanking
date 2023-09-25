@@ -2,6 +2,7 @@ package org.onlinebankingweb.security.filters;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.onlinebankingweb.security.services.jwt.JWTService;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Component
@@ -32,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        extractTokenFromRequest(request)
+        extractTokenFromCookies(request)
                 .map(jwtService::decodeToken)
                 .map(jwtService::convertToPrincipal)
                 .map(UserPrincipalAuthenticationToken::new)
@@ -46,5 +48,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return Optional.of(token.substring(7));
         }
         return Optional.empty();
+    }
+
+    private Optional<String> extractTokenFromCookies(HttpServletRequest request) {
+        return Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals("jwt"))
+                .map(Cookie::getValue)
+                .findFirst();
     }
 }

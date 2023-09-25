@@ -9,12 +9,14 @@ import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedUserRegistrationException;
 import org.onlinebanking.core.domain.models.user.User;
+import org.onlinebanking.core.domain.models.user.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -104,6 +106,7 @@ public class UserServiceImpl implements UserService {
 
     private User initUser(UserRegistrationRequest userRegistrationRequest) {
         User user = new User();
+        user.setRoles(List.of(UserRole.USER_ROLE));
         user.setPasswordHash(userRegistrationRequest.getPassword());
         user.setEmail(userRegistrationRequest.getEmail());
         user.setUsername(userRegistrationRequest.getUsername());
