@@ -25,55 +25,55 @@
                 <div class="row mb-3">
                     <div class="col">
                         <label for="firstNameInput" class="form-label">First name</label>
-                        <input type="text" class="form-control" th:field="*{customerRegistrationRequest.firstName}"
+                        <input type="text" class="form-control" th:field="*{customerServiceDTO.firstName}"
                                id="firstNameInput" th:required="required" placeholder="John">
-                        <p th:if="${#fields.hasErrors('customerRegistrationRequest.firstName')}"
-                           th:errors="*{customerRegistrationRequest.firstName}" class="text-danger"></p>
+                        <p th:if="${#fields.hasErrors('customerServiceDTO.firstName')}"
+                           th:errors="*{customerServiceDTO.firstName}" class="text-danger"></p>
                     </div>
                     <div class="col">
                         <label for="lastNameInput" class="form-label">Last name</label>
-                        <input type="text" class="form-control" th:field="*{customerRegistrationRequest.lastName}"
+                        <input type="text" class="form-control" th:field="*{customerServiceDTO.lastName}"
                                id="lastNameInput" th:required="required" placeholder="Doe">
-                        <p th:if="${#fields.hasErrors('customerRegistrationRequest.lastName')}"
-                           th:errors="*{customerRegistrationRequest.lastName}" class="text-danger"></p>
+                        <p th:if="${#fields.hasErrors('customerServiceDTO.lastName')}"
+                           th:errors="*{customerServiceDTO.lastName}" class="text-danger"></p>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="emailInput" class="form-label">Email address</label>
-                    <input type="email" class="form-control" th:field="*{userRegistrationRequest.email}" id="emailInput"
+                    <input type="email" class="form-control" th:field="*{userServiceDTO.email}" id="emailInput"
                            th:required="required" placeholder="example@gmail.com">
-                    <p th:if="${#fields.hasErrors('userRegistrationRequest.email')}"
-                       th:errors="*{userRegistrationRequest.email}" class="text-danger"></p>
+                    <p th:if="${#fields.hasErrors('userServiceDTO.email')}"
+                       th:errors="*{userServiceDTO.email}" class="text-danger"></p>
                     <p th:if="${userRegistrationExceptionMessage != null}"
                        th:text="${userRegistrationExceptionMessage}" class="text-danger"></p>
                 </div>
                 <div class="mb-3">
                     <label for="passwordInput" class="form-label">Password</label>
-                    <input type="password" class="form-control" th:field="*{userRegistrationRequest.password}"
+                    <input type="password" class="form-control" th:field="*{userServiceDTO.password}"
                            id="passwordInput" th:required="required" placeholder="Password">
-                    <p th:if="${#fields.hasErrors('userRegistrationRequest.password')}"
-                       th:errors="*{userRegistrationRequest.password}" class="text-danger"></p>
+                    <p th:if="${#fields.hasErrors('userServiceDTO.password')}"
+                       th:errors="*{userServiceDTO.password}" class="text-danger"></p>
                 </div>
                 <div class="mb-3">
                     <label for="usernameInput" class="form-label">Username</label>
-                    <input type="text" class="form-control" th:field="*{userRegistrationRequest.username}"
+                    <input type="text" class="form-control" th:field="*{userServiceDTO.username}"
                            id="usernameInput" th:required="required" placeholder="Username">
-                    <p th:if="${#fields.hasErrors('userRegistrationRequest.username')}"
-                       th:errors="*{userRegistrationRequest.username}" class="text-danger"></p>
+                    <p th:if="${#fields.hasErrors('userServiceDTO.username')}"
+                       th:errors="*{userServiceDTO.username}" class="text-danger"></p>
                 </div>
                 <div class="mb-3">
                     <label for="addressInput" class="form-label">Address</label>
-                    <input type="text" class="form-control" th:field="*{customerRegistrationRequest.address}"
+                    <input type="text" class="form-control" th:field="*{customerServiceDTO.address}"
                            id="addressInput" th:required="required" placeholder="Address">
-                    <p th:if="${#fields.hasErrors('customerRegistrationRequest.address')}"
-                       th:errors="*{customerRegistrationRequest.address}" class="text-danger"></p>
+                    <p th:if="${#fields.hasErrors('customerServiceDTO.address')}"
+                       th:errors="*{customerServiceDTO.address}" class="text-danger"></p>
                 </div>
                 <div class="mb-3">
                     <label for="taxPayerIdInput" class="form-label">Tax Payer ID</label>
-                    <input type="text" class="form-control" th:field="*{customerRegistrationRequest.taxPayerId}"
+                    <input type="text" class="form-control" th:field="*{customerServiceDTO.taxPayerId}"
                            id="taxPayerIdInput" th:required="required" placeholder="Tax Payer Id">
-                    <p th:if="${#fields.hasErrors('customerRegistrationRequest.taxPayerId')}"
-                       th:errors="*{customerRegistrationRequest.taxPayerId}" class="text-danger"></p>
+                    <p th:if="${#fields.hasErrors('customerServiceDTO.taxPayerId')}"
+                       th:errors="*{customerServiceDTO.taxPayerId}" class="text-danger"></p>
                     <p th:if="${customerRegistrationExceptionMessage != null}"
                        th:text="${customerRegistrationExceptionMessage}" class="text-danger"></p>
                 </div>
