@@ -1,9 +1,9 @@
-package org.onlinebanking.core.domain.dto.requests;
+package org.onlinebanking.core.domain.servicedto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class UserRegistrationRequest {
+public class UserServiceDTO {
     @NotBlank(message = "Username can't be blank")
     private String username;
     @NotBlank(message = "Email can't be blank")
@@ -12,7 +12,7 @@ public class UserRegistrationRequest {
     @NotBlank(message = "Password can't be blank")
     private String password;
 
-    public UserRegistrationRequest() {
+    public UserServiceDTO() {
 
     }
 

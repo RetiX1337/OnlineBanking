@@ -1,6 +1,6 @@
 package org.onlinebanking.core.domain.models.paymentinstruments;
 
-import org.onlinebanking.core.domain.dto.requests.paymentinstruments.BankTransferRequest;
+import org.onlinebanking.core.domain.servicedto.paymentinstruments.BankTransferServiceDTO;
 import org.onlinebanking.core.domain.models.BankAccount;
 
 import javax.persistence.*;
@@ -11,8 +11,8 @@ import javax.persistence.*;
 @PrimaryKeyJoinColumn(name = "payment_instrument_id")
 public class BankTransfer extends PaymentInstrument {
 
-    public BankTransfer(BankTransferRequest bankTransferRequest, BankAccount bankAccount) {
-        setBankAccount(bankAccount);
+    public BankTransfer(BankTransferServiceDTO bankTransferServiceDTO) {
+        setBankAccount(bankTransferServiceDTO.getBankAccount());
     }
 
     public BankTransfer() {

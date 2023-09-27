@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.UserDAO;
-import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
+import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedUserRegistrationException;
@@ -32,15 +32,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User registerUser(UserRegistrationRequest userRegistrationRequest) {
-        String email = userRegistrationRequest.getEmail();
+    public User registerUser(UserServiceDTO userServiceDTO) {
+        String email = userServiceDTO.getEmail();
         try {
             findByEmail(email);
             throw new FailedUserRegistrationException(
                     String.format(FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE, email));
         } catch (EntityNotFoundException ignored) {}
 
-        User user = initUser(userRegistrationRequest);
+        User user = initUser(userServiceDTO);
 
         try {
             return userDAO.save(user);
@@ -104,12 +104,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private User initUser(UserRegistrationRequest userRegistrationRequest) {
+    private User initUser(UserServiceDTO userServiceDTO) {
         User user = new User();
         user.setRoles(List.of(UserRole.USER_ROLE));
-        user.setPasswordHash(userRegistrationRequest.getPassword());
-        user.setEmail(userRegistrationRequest.getEmail());
-        user.setUsername(userRegistrationRequest.getUsername());
+        user.setPasswordHash(userServiceDTO.getPassword());
+        user.setEmail(userServiceDTO.getEmail());
+        user.setUsername(userServiceDTO.getUsername());
         return user;
     }
 }

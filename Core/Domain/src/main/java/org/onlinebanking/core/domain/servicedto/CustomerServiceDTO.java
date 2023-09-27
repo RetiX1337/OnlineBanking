@@ -1,10 +1,10 @@
-package org.onlinebanking.core.domain.dto.requests;
+package org.onlinebanking.core.domain.servicedto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class CustomerRegistrationRequest {
+public class CustomerServiceDTO {
     @NotBlank(message = "First name can't be blank")
     private String firstName;
     @NotBlank(message = "Last name can't be blank")
@@ -16,7 +16,7 @@ public class CustomerRegistrationRequest {
     @Pattern(regexp = "\\b\\d+\\b", message = "The Tax Payer ID can only contain digits")
     private String taxPayerId;
 
-    public CustomerRegistrationRequest() {
+    public CustomerServiceDTO() {
 
     }
 

@@ -1,4 +1,4 @@
-package org.onlinebanking.core.domain.dto.requests.paymentinstruments.cards;
+package org.onlinebankingweb.dto.requests.paymentinstruments.cards;
 
 import java.math.BigDecimal;
 

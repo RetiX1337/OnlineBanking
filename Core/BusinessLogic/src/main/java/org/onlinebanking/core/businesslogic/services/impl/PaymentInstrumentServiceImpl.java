@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.factories.PaymentInstrumentFactory;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.PaymentInstrumentDAO;
-import org.onlinebanking.core.domain.dto.requests.paymentinstruments.cards.CardRequest;
-import org.onlinebanking.core.domain.dto.requests.paymentinstruments.PaymentInstrumentRequest;
+import org.onlinebanking.core.domain.servicedto.paymentinstruments.cards.CardServiceDTO;
+import org.onlinebanking.core.domain.servicedto.paymentinstruments.PaymentInstrumentServiceDTO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
@@ -41,16 +41,15 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 
     @Transactional
     @Override
-    public PaymentInstrument openPaymentInstrument(PaymentInstrumentRequest paymentInstrumentRequest,
-                                                   BankAccount bankAccount) {
+    public PaymentInstrument openPaymentInstrument(PaymentInstrumentServiceDTO paymentInstrumentServiceDTO) {
         PaymentInstrument paymentInstrument;
 
-        if (paymentInstrumentRequest instanceof CardRequest) {
-            paymentInstrumentRequest = initCardDTO(paymentInstrumentRequest);
+        if (paymentInstrumentServiceDTO instanceof CardServiceDTO) {
+            paymentInstrumentServiceDTO = initCardDTO(paymentInstrumentServiceDTO);
         }
 
         try {
-            paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentRequest, bankAccount);
+            paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentServiceDTO);
         } catch (PaymentInstrumentFactoryException e) {
             logger.error(e);
             throw new DAOException();
@@ -117,9 +116,9 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         }
     }
 
-    private CardRequest initCardDTO(PaymentInstrumentRequest paymentInstrumentRequest) {
+    private CardServiceDTO initCardDTO(PaymentInstrumentServiceDTO paymentInstrumentServiceDTO) {
         String cardNumber;
-        CardRequest cardDTO = (CardRequest) paymentInstrumentRequest;
+        CardServiceDTO cardDTO = (CardServiceDTO) paymentInstrumentServiceDTO;
         cardDTO.setExpiryDate(generateExpiryDate());
         do {
             cardNumber = generateCardNumber();
