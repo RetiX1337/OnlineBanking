@@ -6,7 +6,6 @@ import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
-import org.onlinebanking.core.domain.models.transactions.Transaction;
 import org.onlinebanking.core.domain.models.user.User;
 import org.onlinebankingweb.dto.responses.BankAccountResponse;
 import org.onlinebankingweb.dto.responses.CustomerResponse;
@@ -41,23 +40,39 @@ public class UserController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping
+    @GetMapping("/profile")
     public String getUserPage(@AuthenticationPrincipal UserPrincipal userPrincipal, Model model) {
         User user = userService.findByEmail(userPrincipal.getUsername());
         Customer customer = customerService.findByUser(user);
         UserResponse userResponse = new UserResponse(user);
         CustomerResponse customerResponse = new CustomerResponse(customer);
+
         List<BankAccount> bankAccountList = bankAccountService.findByCustomer(customer);
-        List<BankAccountResponse> bankAccountResponseList = bankAccountList.stream()
+
+        List<BankAccountResponse> bankAccountResponses = bankAccountList.stream()
                 .map(BankAccountResponse::new)
                 .toList();
-        List<Transaction> transactions = bankAccountList.stream()
+
+        List<TransactionResponse> transactionResponses = bankAccountList.stream()
                 .map(transactionService::findByBankAccount)
                 .flatMap(List::stream)
-                .toList();
-        List<TransactionResponse> transactionResponses = transactions.stream()
                 .map(TransactionResponse::new)
                 .toList();
-        return "";
+
+        List<TransactionResponse> incomingTransactions = transactionResponses.stream()
+                .filter(t -> bankAccountResponses.contains(t.getReceiver()))
+                .toList();
+
+        List<TransactionResponse> outgoingTransactions = transactionResponses.stream()
+                .filter(t -> bankAccountResponses.contains(t.getSender()))
+                .toList();
+
+        model.addAttribute("userResponse", userResponse);
+        model.addAttribute("customerResponse", customerResponse);
+        model.addAttribute("bankAccountResponses", bankAccountResponses);
+        model.addAttribute("transactionResponses", transactionResponses);
+        model.addAttribute("incomingTransactions", incomingTransactions);
+        model.addAttribute("outgoingTransactions", outgoingTransactions);
+        return "user/user-profile";
     }
 }

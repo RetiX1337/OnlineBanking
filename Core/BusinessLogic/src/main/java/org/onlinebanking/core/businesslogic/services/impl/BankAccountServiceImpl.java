@@ -93,10 +93,6 @@ public class BankAccountServiceImpl implements BankAccountService {
             logger.error(e);
             throw new DAOException();
         }
-        if (accounts.isEmpty()) {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
-                    customer.getTaxPayerId()));
-        }
         return accounts;
     }
 

@@ -2,6 +2,8 @@ package org.onlinebankingweb.dto.responses;
 
 import org.onlinebanking.core.domain.models.Customer;
 
+import java.util.Objects;
+
 public class CustomerResponse {
     private final Long id;
     private final UserResponse userResponse;
@@ -41,5 +43,18 @@ public class CustomerResponse {
 
     public UserResponse getUserResponse() {
         return userResponse;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomerResponse that = (CustomerResponse) o;
+        return Objects.equals(id, that.id) && Objects.equals(userResponse, that.userResponse) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(address, that.address) && Objects.equals(taxPayerId, that.taxPayerId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userResponse, firstName, lastName, address, taxPayerId);
     }
 }

@@ -44,6 +44,7 @@ public class AuthService {
         customerService.assignCustomerToUser(customer, user);
     }
 
+    @Transactional
     public LoginResponse attemptLogin(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
@@ -58,8 +59,6 @@ public class AuthService {
                                 .map(UserRole::valueOf)
                                 .toList());
 
-        String token = jwtService.issueToken(request);
-
-        return new LoginResponse(token);
+        return new LoginResponse(jwtService.issueToken(request));
     }
 }

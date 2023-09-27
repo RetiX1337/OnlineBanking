@@ -96,6 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Transactional
     @Override
     public Customer findByUser(User user) {
         try {

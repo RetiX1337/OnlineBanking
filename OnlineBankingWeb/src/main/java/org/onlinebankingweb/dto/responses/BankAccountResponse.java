@@ -3,6 +3,7 @@ package org.onlinebankingweb.dto.responses;
 import org.onlinebanking.core.domain.models.BankAccount;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class BankAccountResponse {
     private final String accountNumber;
@@ -31,5 +32,18 @@ public class BankAccountResponse {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankAccountResponse that = (BankAccountResponse) o;
+        return isActive == that.isActive && Objects.equals(accountNumber, that.accountNumber) && Objects.equals(accountBalance, that.accountBalance) && Objects.equals(accountHolder, that.accountHolder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountNumber, accountBalance, accountHolder, isActive);
     }
 }

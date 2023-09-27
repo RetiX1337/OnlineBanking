@@ -79,18 +79,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
-        List<Transaction> paymentInstruments;
+        List<Transaction> transactions;
         try {
-            paymentInstruments = transactionDAO.findBySenderBankAccount(bankAccount);
+            transactions = transactionDAO.findBySenderBankAccount(bankAccount);
         } catch (PersistenceException e) {
             logger.error(e);
             throw new DAOException();
         }
-        if (paymentInstruments.isEmpty()) {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
-                    "Bank Account " + bankAccount.getAccountNumber()));
-        }
-        return paymentInstruments;
+        return transactions;
     }
 
     @Transactional

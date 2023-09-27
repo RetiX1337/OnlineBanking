@@ -15,7 +15,7 @@ public abstract class PaymentInstrument implements Identifiable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_instrument_id")
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bank_account_id")
     private BankAccount bankAccount;
 
