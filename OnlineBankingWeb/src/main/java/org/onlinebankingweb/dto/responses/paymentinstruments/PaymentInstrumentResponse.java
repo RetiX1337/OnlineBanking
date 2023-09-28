@@ -20,4 +20,8 @@ public abstract class PaymentInstrumentResponse {
         return bankAccountResponse;
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + ", ID: " + id;
+    }
 }

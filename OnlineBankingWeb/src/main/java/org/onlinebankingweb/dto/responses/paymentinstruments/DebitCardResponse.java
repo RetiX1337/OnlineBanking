@@ -33,4 +33,9 @@ public class DebitCardResponse extends CardResponse {
     public Integer getTransactionCounter() {
         return transactionCounter;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

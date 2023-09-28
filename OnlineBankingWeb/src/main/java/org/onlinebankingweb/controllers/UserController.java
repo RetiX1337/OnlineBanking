@@ -59,20 +59,10 @@ public class UserController {
                 .map(TransactionResponse::new)
                 .toList();
 
-        List<TransactionResponse> incomingTransactions = transactionResponses.stream()
-                .filter(t -> bankAccountResponses.contains(t.getReceiver()))
-                .toList();
-
-        List<TransactionResponse> outgoingTransactions = transactionResponses.stream()
-                .filter(t -> bankAccountResponses.contains(t.getSender()))
-                .toList();
-
         model.addAttribute("userResponse", userResponse);
         model.addAttribute("customerResponse", customerResponse);
         model.addAttribute("bankAccountResponses", bankAccountResponses);
         model.addAttribute("transactionResponses", transactionResponses);
-        model.addAttribute("incomingTransactions", incomingTransactions);
-        model.addAttribute("outgoingTransactions", outgoingTransactions);
         return "user/user-profile";
     }
 }

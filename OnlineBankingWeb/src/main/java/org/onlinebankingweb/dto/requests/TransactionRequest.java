@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 
 public class TransactionRequest {
     private TransactionType transactionType;
-    private TransactionStatus transactionStatus;
-    private PaymentInstrument paymentInstrument;
+    private Long paymentInstrumentId;
     private String senderBankAccountNumber;
     private String receiverBankAccountNumber;
     private BigDecimal amount;
@@ -19,16 +18,12 @@ public class TransactionRequest {
 
     }
 
-    public void setPaymentInstrument(PaymentInstrument paymentInstrument) {
-        this.paymentInstrument = paymentInstrument;
+    public void setPaymentInstrument(Long paymentInstrumentId) {
+        this.paymentInstrumentId = paymentInstrumentId;
     }
 
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
-    }
-
-    public void setTransactionStatus(TransactionStatus transactionStatus) {
-        this.transactionStatus = transactionStatus;
     }
 
     public void setReceiverBankAccountNumber(String receiverBankAccountNumber) {
@@ -43,16 +38,12 @@ public class TransactionRequest {
         this.amount = amount;
     }
 
-    public PaymentInstrument getPaymentInstrument() {
-        return paymentInstrument;
+    public Long getPaymentInstrumentId() {
+        return paymentInstrumentId;
     }
 
     public TransactionType getTransactionType() {
         return transactionType;
-    }
-
-    public TransactionStatus getTransactionStatus() {
-        return transactionStatus;
     }
 
     public String getReceiverBankAccountNumber() {

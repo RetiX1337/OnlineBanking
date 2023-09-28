@@ -34,11 +34,12 @@
                 No bank accounts yet...
             </div>
             <div th:unless="${bankAccountResponses.isEmpty()}" class="p-2" style="max-height: 200px; overflow-y: scroll">
-                <div th:each="bankAccount:${bankAccountResponses}"
+                <a th:each="bankAccount:${bankAccountResponses}"
+                     th:href="@{/bank-account/account(accNumber=${bankAccount.getAccountNumber()})}"
                      class="row d-flex rounded border p-2 m-1 btn btn-light border-top justify-content-center align-self-center">
-                    <p class="mb-auto mr-auto" th:text="${bankAccount.getAccountNumber()}"></p>
-                    <p class="mt-auto ml-auto" th:text="${bankAccount.getAccountBalance()}"></p>
-                </div>
+                    <p class="mb-auto mr-auto" th:text="${bankAccount.getAccountNumber()}">E</p>
+                    <p class="mt-auto ml-auto" th:text="${bankAccount.getAccountBalance()}">T</p>
+                </a>
             </div>
             <a th:href="@{/bank-account/open-account}"
                class="row d-flex rounded border p-3 m-1 btn btn-primary border-top justify-content-center align-self-center">
