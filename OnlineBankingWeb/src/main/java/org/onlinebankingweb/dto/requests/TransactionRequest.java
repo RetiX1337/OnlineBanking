@@ -1,4 +1,4 @@
-package org.onlinebanking.core.domain.dto.requests;
+package org.onlinebankingweb.dto.requests;
 
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
@@ -11,8 +11,8 @@ public class TransactionRequest {
     private TransactionType transactionType;
     private TransactionStatus transactionStatus;
     private PaymentInstrument paymentInstrument;
-    private BankAccount sender;
-    private BankAccount receiver;
+    private String senderBankAccountNumber;
+    private String receiverBankAccountNumber;
     private BigDecimal amount;
 
     public TransactionRequest() {
@@ -31,12 +31,12 @@ public class TransactionRequest {
         this.transactionStatus = transactionStatus;
     }
 
-    public void setSender(BankAccount sender) {
-        this.sender = sender;
+    public void setReceiverBankAccountNumber(String receiverBankAccountNumber) {
+        this.receiverBankAccountNumber = receiverBankAccountNumber;
     }
 
-    public void setReceiver(BankAccount receiver) {
-        this.receiver = receiver;
+    public void setSenderBankAccountNumber(String senderBankAccountNumber) {
+        this.senderBankAccountNumber = senderBankAccountNumber;
     }
 
     public void setAmount(BigDecimal amount) {
@@ -55,12 +55,12 @@ public class TransactionRequest {
         return transactionStatus;
     }
 
-    public BankAccount getSender() {
-        return sender;
+    public String getReceiverBankAccountNumber() {
+        return receiverBankAccountNumber;
     }
 
-    public BankAccount getReceiver() {
-        return receiver;
+    public String getSenderBankAccountNumber() {
+        return senderBankAccountNumber;
     }
 
     public BigDecimal getAmount() {

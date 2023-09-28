@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.onlinebanking.core.dataaccess.dao.interfaces.CustomerDAO;
 import org.onlinebanking.core.domain.models.Customer;
+import org.onlinebanking.core.domain.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +22,15 @@ public class CustomerDAOHibernateImpl extends DAOHibernateImpl<Customer> impleme
         String hql = "FROM Customer WHERE taxPayerId = :taxPayerId";
         Query query = session.createQuery(hql);
         query.setParameter("taxPayerId", taxPayerId);
+        return (Customer) query.getSingleResult();
+    }
+
+    @Override
+    public Customer findByUser(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM Customer WHERE user = :user";
+        Query query = session.createQuery(hql);
+        query.setParameter("user", user);
         return (Customer) query.getSingleResult();
     }
 }

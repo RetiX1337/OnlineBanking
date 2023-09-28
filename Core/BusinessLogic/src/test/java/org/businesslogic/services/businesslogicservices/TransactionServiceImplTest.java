@@ -7,7 +7,7 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.impl.TransactionServiceImpl;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.dto.requests.TransactionRequest;
+import org.onlinebanking.core.domain.servicedto.TransactionServiceDTO;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
 
@@ -34,10 +34,10 @@ public class TransactionServiceImplTest {
         BankAccount receiver = new BankAccount();
         sender.deactivateBankAccount();
         receiver.activateBankAccount();
-        TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setSender(sender);
-        transactionRequest.setReceiver(receiver);
-        transactionService.processPayment(transactionRequest);
+        TransactionServiceDTO transactionServiceDTO = new TransactionServiceDTO();
+        transactionServiceDTO.setSender(sender);
+        transactionServiceDTO.setReceiver(receiver);
+        transactionService.processPayment(transactionServiceDTO);
     }
 
 }

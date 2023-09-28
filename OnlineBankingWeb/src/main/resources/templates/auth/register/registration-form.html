@@ -15,10 +15,10 @@
         }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 justify-content-center">
 <header th:replace="fragments/header.html :: header"></header>
 <main role="main" class="flex-shrink-0">
-    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="container d-flex justify-content-center align-items-center">
         <div class="bg-light p-5 border rounded-3">
             <h2 class="display-4 d-flex justify-content-center">Registration</h2>
             <form action="#" th:action="@{/auth/register}" th:object="${userCustomerWrapper}" method="post">

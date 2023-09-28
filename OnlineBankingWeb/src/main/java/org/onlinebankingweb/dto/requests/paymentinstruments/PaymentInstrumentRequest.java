@@ -1,4 +1,4 @@
-package org.onlinebanking.core.domain.dto.requests.paymentinstruments;
+package org.onlinebankingweb.dto.requests.paymentinstruments;
 
 
 public abstract class PaymentInstrumentRequest {

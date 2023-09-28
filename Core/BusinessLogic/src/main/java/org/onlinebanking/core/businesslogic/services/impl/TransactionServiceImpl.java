@@ -6,7 +6,7 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.dto.requests.TransactionRequest;
+import org.onlinebanking.core.domain.servicedto.TransactionServiceDTO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
@@ -46,11 +46,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Transactional
     @Override
-    public Transaction processPayment(TransactionRequest transactionRequest) {
-        BankAccount sender = transactionRequest.getSender();
-        BankAccount receiver = transactionRequest.getReceiver();
-        BigDecimal amount = transactionRequest.getAmount();
-        PaymentInstrument paymentInstrument = transactionRequest.getPaymentInstrument();
+    public Transaction processPayment(TransactionServiceDTO transactionServiceDTO) {
+        BankAccount sender = transactionServiceDTO.getSender();
+        BankAccount receiver = transactionServiceDTO.getReceiver();
+        BigDecimal amount = transactionServiceDTO.getAmount();
+        PaymentInstrument paymentInstrument = transactionServiceDTO.getPaymentInstrument();
 
         if (!sender.isActive() || !receiver.isActive()) {
             throw new FailedTransactionException(
@@ -63,7 +63,7 @@ public class TransactionServiceImpl implements TransactionService {
             bankAccountService.updateBankAccount(sender);
             bankAccountService.updateBankAccount(receiver);
             paymentInstrumentService.updatePaymentInstrument(paymentInstrument);
-            Transaction transaction = createTransaction(transactionRequest);
+            Transaction transaction = createTransaction(transactionServiceDTO);
             try {
                 return transactionDAO.save(transaction);
             } catch (PersistenceException e) {
@@ -79,18 +79,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
-        List<Transaction> paymentInstruments;
+        List<Transaction> transactions;
         try {
-            paymentInstruments = transactionDAO.findBySenderBankAccount(bankAccount);
+            transactions = transactionDAO.findBySenderBankAccount(bankAccount);
         } catch (PersistenceException e) {
             logger.error(e);
             throw new DAOException();
         }
-        if (paymentInstruments.isEmpty()) {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
-                    "Bank Account " + bankAccount.getAccountNumber()));
-        }
-        return paymentInstruments;
+        return transactions;
     }
 
     @Transactional
@@ -99,17 +95,17 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionDAO.update(transaction);
     }
 
-    private Transaction createTransaction(TransactionRequest transactionRequest) {
-        BankAccount sender = transactionRequest.getSender();
-        BankAccount receiver = transactionRequest.getReceiver();
+    private Transaction createTransaction(TransactionServiceDTO transactionServiceDTO) {
+        BankAccount sender = transactionServiceDTO.getSender();
+        BankAccount receiver = transactionServiceDTO.getReceiver();
 
         Transaction transaction = new Transaction();
-        transaction.setPaymentInstrument(transactionRequest.getPaymentInstrument());
+        transaction.setPaymentInstrument(transactionServiceDTO.getPaymentInstrument());
         transaction.setSender(sender);
         transaction.setReceiver(receiver);
         transaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
         transaction.setTransactionName(createTransactionName(sender, receiver));
-        transaction.setAmount(transactionRequest.getAmount());
+        transaction.setAmount(transactionServiceDTO.getAmount());
         transaction.setTransactionStatus(TransactionStatus.COMPLETED);
         transaction.setTransactionType(TransactionType.TRANSFER);
 

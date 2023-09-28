@@ -1,7 +1,7 @@
 package org.onlinebankingweb.controllers;
 
-import org.onlinebanking.core.domain.dto.requests.CustomerRegistrationRequest;
-import org.onlinebanking.core.domain.dto.requests.UserRegistrationRequest;
+import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
+import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedCustomerRegistrationException;
 import org.onlinebanking.core.domain.exceptions.FailedUserRegistrationException;
@@ -85,9 +85,9 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
-        UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest();
-        CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest();
-        UserCustomerWrapper userCustomerWrapper = new UserCustomerWrapper(userRegistrationRequest, customerRegistrationRequest);
+        UserServiceDTO userServiceDTO = new UserServiceDTO();
+        CustomerServiceDTO customerServiceDTO = new CustomerServiceDTO();
+        UserCustomerWrapper userCustomerWrapper = new UserCustomerWrapper(userServiceDTO, customerServiceDTO);
         model.addAttribute("userCustomerWrapper", userCustomerWrapper);
         return "auth/register/registration-form";
     }

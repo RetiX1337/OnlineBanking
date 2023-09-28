@@ -6,7 +6,9 @@ import org.iban4j.Iban;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.BankAccountDAO;
-import org.onlinebanking.core.domain.dto.requests.paymentinstruments.BankTransferRequest;
+import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;
+import org.onlinebanking.core.domain.servicedto.BankAccountServiceDTO;
+import org.onlinebanking.core.domain.servicedto.paymentinstruments.BankTransferServiceDTO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.models.BankAccount;
@@ -35,8 +37,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Transactional
     @Override
-    public BankAccount openBankAccount(Customer customer) {
-        BankAccount bankAccount = initBankAccount(customer);
+    public BankAccount openBankAccount(BankAccountServiceDTO bankAccountServiceDTO) {
+        BankAccount bankAccount = initBankAccount(bankAccountServiceDTO);
         BankAccount savedBankAccount;
         try {
             savedBankAccount = bankAccountDAO.save(bankAccount);
@@ -44,7 +46,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             logger.error(e);
             throw new DAOException();
         }
-        paymentInstrumentService.openPaymentInstrument(new BankTransferRequest(), bankAccount);
+        paymentInstrumentService.openPaymentInstrument(initBankTransfer(savedBankAccount));
         return savedBankAccount;
     }
 
@@ -91,10 +93,6 @@ public class BankAccountServiceImpl implements BankAccountService {
             logger.error(e);
             throw new DAOException();
         }
-        if (accounts.isEmpty()) {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
-                    customer.getTaxPayerId()));
-        }
         return accounts;
     }
 
@@ -118,7 +116,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         String iban;
         do {
             iban = Iban.random().getAccountNumber();
-            if (findByAccountNumber(iban) == null) {
+            try {
+                findByAccountNumber(iban);
+            } catch (EntityNotFoundException ignored) {
                 isUnique = true;
             }
         } while (!isUnique);
@@ -129,13 +129,19 @@ public class BankAccountServiceImpl implements BankAccountService {
         return findByAccountNumber(bankAccount.getAccountNumber()) != null;
     }
 
-    private BankAccount initBankAccount(Customer customer) {
+    private BankAccount initBankAccount(BankAccountServiceDTO bankAccountServiceDTO) {
         String iban = getUniqueIban();
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountBalance(BigDecimal.ZERO);
         bankAccount.setAccountNumber(iban);
-        bankAccount.setAccountHolder(customer);
+        bankAccount.setAccountHolder(bankAccountServiceDTO.getCustomer());
         bankAccount.activateBankAccount();
         return bankAccount;
+    }
+
+    private BankTransferServiceDTO initBankTransfer(BankAccount bankAccount) {
+        BankTransferServiceDTO bankTransferServiceDTO = new BankTransferServiceDTO();
+        bankTransferServiceDTO.setBankAccount(bankAccount);
+        return bankTransferServiceDTO;
     }
 }
