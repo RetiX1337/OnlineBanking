@@ -116,7 +116,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         String iban;
         do {
             iban = Iban.random().getAccountNumber();
-            if (findByAccountNumber(iban) == null) {
+            try {
+                findByAccountNumber(iban);
+            } catch (EntityNotFoundException ignored) {
                 isUnique = true;
             }
         } while (!isUnique);
