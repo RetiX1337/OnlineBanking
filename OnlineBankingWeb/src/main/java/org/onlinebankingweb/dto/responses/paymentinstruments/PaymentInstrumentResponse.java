@@ -4,24 +4,19 @@ import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument
 import org.onlinebankingweb.dto.responses.BankAccountResponse;
 
 public abstract class PaymentInstrumentResponse {
-    private final Long id;
+    private final String id;
     private final BankAccountResponse bankAccountResponse;
 
     public PaymentInstrumentResponse(PaymentInstrument paymentInstrument) {
-        this.id = paymentInstrument.getId();
+        this.id = String.valueOf(paymentInstrument.getId());
         this.bankAccountResponse = new BankAccountResponse(paymentInstrument.getBankAccount());
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     public BankAccountResponse getBankAccountResponse() {
         return bankAccountResponse;
-    }
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + ", ID: " + id;
     }
 }

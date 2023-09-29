@@ -6,4 +6,9 @@ public class BankTransferResponse extends PaymentInstrumentResponse {
     public BankTransferResponse(BankTransfer bankTransfer) {
         super(bankTransfer);
     }
+
+    @Override
+    public String toString() {
+        return "Bank Transfer";
+    }
 }

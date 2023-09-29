@@ -21,7 +21,7 @@
     <div class="container d-flex justify-content-center align-items-center">
         <div class="bg-light p-5 border rounded-3">
             <h2 class="display-4 d-flex justify-content-center">Bank Account Creation</h2>
-            <form action="#" th:action="@{/bank-account/open-account}" th:object="${bankAccountCreationRequest}" method="post">
+            <form th:action="@{/bank-account/open-account}" th:object="${bankAccountCreationRequest}" method="post">
                 <button type="submit" class="btn btn-primary btn-md btn-outline-light border">Create an account</button>
             </form>
         </div>

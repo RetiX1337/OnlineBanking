@@ -1,24 +1,28 @@
 package org.onlinebankingweb.dto.requests;
 
-import org.onlinebanking.core.domain.models.BankAccount;
-import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
-import org.onlinebanking.core.domain.models.transactions.TransactionStatus;
 import org.onlinebanking.core.domain.models.transactions.TransactionType;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class TransactionRequest {
+    @NotNull(message = "Transaction Type can't be null")
     private TransactionType transactionType;
-    private Long paymentInstrumentId;
+    private String paymentInstrumentId;
     private String senderBankAccountNumber;
+    @NotBlank(message = "Receiver Bank account can't be blank")
     private String receiverBankAccountNumber;
+    @NotNull(message = "Amount can't be null")
+    @DecimalMin(value = "0", inclusive = false, message = "Amount has to be higher than 0")
     private BigDecimal amount;
 
     public TransactionRequest() {
 
     }
 
-    public void setPaymentInstrument(Long paymentInstrumentId) {
+    public void setPaymentInstrumentId(String paymentInstrumentId) {
         this.paymentInstrumentId = paymentInstrumentId;
     }
 
@@ -38,7 +42,7 @@ public class TransactionRequest {
         this.amount = amount;
     }
 
-    public Long getPaymentInstrumentId() {
+    public String getPaymentInstrumentId() {
         return paymentInstrumentId;
     }
 

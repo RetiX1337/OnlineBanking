@@ -29,7 +29,6 @@ public class BankAccount implements Identifiable {
             accountBalance = accountBalance.subtract(amount);
             return true;
         }
-        byte[] arr;
         return false;
     }
 

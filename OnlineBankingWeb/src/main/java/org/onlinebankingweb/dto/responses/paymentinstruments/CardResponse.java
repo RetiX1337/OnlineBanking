@@ -24,8 +24,7 @@ public abstract class CardResponse extends PaymentInstrumentResponse {
 
     @Override
     public String toString() {
-        return super.toString() +
-                ", Card Number: " + cardNumber +
+        return  "Card Number: " + cardNumber +
                 ", Expiry Date: " + expiryDate;
     }
 }

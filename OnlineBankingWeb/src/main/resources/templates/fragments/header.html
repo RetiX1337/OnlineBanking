@@ -24,7 +24,7 @@
                         </li>
                     </ul>
                 </div>
-                <a sec:authorize="isAuthenticated()" href="#" class="nav-item btn btn-dark btn-outline-light border"
+                <a sec:authorize="isAuthenticated()" th:href="@{~/user/profile}" class="nav-item btn btn-dark btn-outline-light border"
                    th:text="${#authentication.getName()}"></a>
                 <form sec:authorize="isAuthenticated()" method="post" th:action="@{~/auth/logout}">
                     <button type="submit" name="submit" value="value"

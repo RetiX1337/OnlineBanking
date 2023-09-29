@@ -21,39 +21,49 @@
     <div class="container d-flex justify-content-center align-items-center">
         <div class="bg-light p-5 border rounded-3">
             <h2 class="display-4 d-flex justify-content-center">Transaction Form</h2>
-            <form action="#" th:action="@{/auth/register}" th:object="${transactionRequest}" method="post">
+            <form id="form-1" th:action="@{~/tx/payment}" th:object="${transactionRequest}" method="post">
                 <div class="mb-3">
-                    <label for="sender">Choose your account</label>
-                    <select th:field="*{senderBankAccountNumber}" class="form-select" id="sender" name="sender">
-                        <option th:each="bankAccount:${bankAccountPaymentInstrumentResponseMap.keySet()}"
-                                th:value="${bankAccount.getAccountNumber()}"
-                                th:text="${bankAccount.getAccountNumber()}"
+                    <label for="paymentInstrumentId" class="form-label">Payment Instrument</label>
+                    <select form="form-1" th:field="*{paymentInstrumentId}" class="form-select" id="paymentInstrumentId">
+                        <option th:each="paymentIntrumentResponse:${paymentInstrumentResponses}"
+                                th:text="${paymentIntrumentResponse}"
+                                th:value="${paymentIntrumentResponse.id}"
                                 th:required="required"></option>
                     </select>
-                    <p th:if="${#fields.hasErrors('senderBankAccountNumber')}"
-                       th:errors="*{senderBankAccountNumber}" class="text-danger"></p>
+                    <p th:if="${#fields.hasErrors('paymentInstrumentId')}"
+                       th:errors="*{paymentInstrumentId}" class="text-danger"></p>
                 </div>
                 <div class="mb-3">
-                    <label for="receiver" class="form-label">Last name</label>
+                    <label for="receiverBankAccountNumber" class="form-label">Receiver</label>
                     <input type="text" class="form-control" th:field="*{receiverBankAccountNumber}"
-                           id="receiver" th:required="required" placeholder="11111111111111111">
+                           id="receiverBankAccountNumber" th:required="required" placeholder="11111111111111111">
                     <p th:if="${#fields.hasErrors('receiverBankAccountNumber')}"
                        th:errors="*{receiverBankAccountNumber}" class="text-danger"></p>
                 </div>
+                <p th:if="${entityNotFoundExceptionMessage != null}"
+                   th:text="${entityNotFoundExceptionMessage}" class="text-danger"></p>
                 <div class="mb-3">
-                    <label for="amount" class="form-label">Last name</label>
+                    <label for="amount" class="form-label">Amount</label>
                     <input type="text" class="form-control" th:field="*{amount}"
                            id="amount" th:required="required" placeholder="500">
                     <p th:if="${#fields.hasErrors('amount')}"
                        th:errors="*{amount}" class="text-danger"></p>
                 </div>
                 <div class="mb-3">
-                    <label for="paymentInstrumentId" class="form-label">Last name</label>
-                    <input type="text" class="form-control" th:field="*{amount}"
-                           id="paymentInstrumentId" th:required="required" placeholder="500">
-                    <p th:if="${#fields.hasErrors('amount')}"
-                       th:errors="*{amount}" class="text-danger"></p>
+                    <label for="transactionType" class="form-label">Last name</label>
+                    <select form="form-1" th:field="*{transactionType}" class="form-select" id="transactionType">
+                        <option th:each="transactionTypeValue:${T(org.onlinebanking.core.domain.models.transactions.TransactionType).values()}"
+                                th:value="${transactionTypeValue}"
+                                th:text="${transactionTypeValue}"
+                                th:required="required"></option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('transactionType')}"
+                       th:errors="*{transactionType}" class="text-danger"></p>
                 </div>
+                <input type="hidden" th:name="senderBankAccountNumber"
+                       th:value="${bankAccountResponse.getAccountNumber()}">
+                <p th:if="${failedTransactionExceptionMessage != null}"
+                   th:text="${failedTransactionExceptionMessage}" class="text-danger"></p>
                 <button type="submit" class="btn btn-primary btn-md btn-outline-light border">Submit</button>
             </form>
         </div>

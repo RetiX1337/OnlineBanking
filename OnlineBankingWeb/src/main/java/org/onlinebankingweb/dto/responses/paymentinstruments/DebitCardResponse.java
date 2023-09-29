@@ -36,6 +36,6 @@ public class DebitCardResponse extends CardResponse {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Debit Card, " + super.toString();
     }
 }

@@ -14,44 +14,59 @@
 <header th:replace="fragments/header.html :: header"></header>
 <main role="main" class="flex-shrink-0">
     <div class="container d-flex justify-content-around align-items-center">
-        <div class="p-4 m-3 col-md-4 bg-white border rounded" style="min-height: 400px; max-height: 400px;">
-            <h6 class="display-6 d-flex justify-content-center">
-                Bank Account
-            </h6>
-            <p class="fw-bold p-3 m-2 d-flex justify-content-center" th:text="${bankAccountResponse.getAccountNumber()}">
-                ORIOI235358OROER
-            </p>
-            <p class="text-primary d-flex justify-content-center">
-                Account balance: <span th:text="${bankAccountResponse.getAccountBalance()}">500</span>
-            </p>
-            <div th:if="${paymentInstrumentResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
-                No payment instruments... how weird
+        <div class="p-4 m-3 col-md-4 bg-white border rounded d-flex flex-column"
+             style="min-height: 400px; max-height: 400px;">
+            <div class="flex-grow-1">
+                <h6 class="display-6 d-flex justify-content-center">
+                    Bank Account
+                </h6>
+                <p class="fw-bold m-2 d-flex justify-content-center"
+                   th:text="${bankAccountResponse.getAccountNumber()}">
+                    Some number
+                </p>
+                <p class="text-primary d-flex justify-content-center">
+                    Account balance: <span th:text="${bankAccountResponse.getAccountBalance()}"></span>
+                </p>
             </div>
-            <div th:unless="${paymentInstrumentResponses.isEmpty()}" class="p-2" style="max-height: 200px; overflow-y: scroll">
-                <div th:each="paymentInstrument:${paymentInstrumentResponses}"
-                     class="row d-flex p-2 m-1 justify-content-center justify-content-center
+            <div>
+                <p class="d-flex justify-content-center text-secondary border-top border-bottom">Payment Instruments</p>
+                <div th:if="${paymentInstrumentResponses.isEmpty()}"
+                     class="text-secondary d-flex justify-content-center">
+                    No payment instruments... how weird
+                </div>
+                <div th:unless="${paymentInstrumentResponses.isEmpty()}" class="p-2"
+                     style="max-height: 150px; overflow-y: scroll">
+                    <div th:each="paymentInstrument:${paymentInstrumentResponses}"
+                         class="row d-flex p-2 m-1 justify-content-center justify-content-center
                         btn btn-light border-top border-bottom">
-                    <p class="mr-auto" th:text="${paymentInstrument}"></p>
+                        <p class="mr-auto" th:text="${paymentInstrument}"></p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="p-4 m-3 col-md-8 bg-white border rounded" style="min-height: 400px; max-height: 400px;">
+        <div class="p-4 m-3 col-md-8 bg-white border rounded d-flex flex-column"
+             style="min-height: 400px; max-height: 400px;">
             <h6 class="display-6 d-flex justify-content-center">Transactions</h6>
-            <div th:if="${transactionResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
-                There is no transactions... so empty
-            </div>
-            <div th:unless="${transactionResponses.isEmpty()}" class="p-2" style="max-height: 200px; overflow-y: scroll">
-                <div th:each="transaction:${transactionResponses}"
-                     class="row d-flex p-2 m-1 justify-content-center justify-content-center
+            <div class="flex-grow-1">
+                <div th:if="${transactionResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
+                    There is no transactions... so empty
+                </div>
+                <div th:unless="${transactionResponses.isEmpty()}" class="p-2"
+                     style="max-height: 200px; overflow-y: scroll">
+                    <div th:each="transaction:${transactionResponses}"
+                         class="row d-flex p-2 m-1 justify-content-center justify-content-center
                         btn btn-light border-top border-bottom">
-                    <p class="mr-auto" th:text="${transaction.getId()}"></p>
-                    <p class="mr-auto" th:text="${transaction.getTransactionName()}"></p>
-                    <p class="mr-auto" th:text="${transaction.getTransactionDate()}"></p>
-                    <p class="mr-auto" th:text="${transaction.getAmount()}"></p>
+                        <p class="mr-auto" th:text="${transaction.getId()}"></p>
+                        <p class="mr-auto" th:text="${transaction.getTransactionName()}"></p>
+                        <p class="mr-auto" th:text="${transaction.getTransactionDate()}"></p>
+                        <p class="mr-auto" th:text="${transaction.getAmount()}"></p>
+                    </div>
                 </div>
             </div>
-            <a th:href="@{/tx/payment}"
-               class="row d-flex rounded border p-3 m-1 btn btn-primary border-top justify-content-center align-self-center">
+
+            <a th:href="@{~/tx/payment(accNumber=${bankAccountResponse.getAccountNumber()})}"
+               class="row d-flex rounded border p-3 m-1 btn btn-primary justify-content-center align-self-center"
+               style="width: 100%">
                 Transaction
             </a>
         </div>
