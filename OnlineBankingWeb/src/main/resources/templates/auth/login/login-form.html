@@ -20,7 +20,7 @@
 <main role="main" class="flex-shrink-0">
     <div class="container d-flex justify-content-center align-items-center">
         <div class="bg-light p-5 border rounded-3">
-            <h2 class="display-4 d-flex justify-content-center">Registration</h2>
+            <h2 class="display-4 d-flex justify-content-center">Login</h2>
             <form action="#" th:action="@{/auth/login}" th:object="${loginRequest}" method="post">
                 <p th:if="${authenticationExceptionMessage != null}"
                    th:text="${authenticationExceptionMessage}" class="text-danger"></p>
