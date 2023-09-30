@@ -41,6 +41,9 @@ Key features of this application include account creation and management, fund t
 Java Core, Spring Framework (Core, MVC, Security), Hibernate, HTML, CSS, Bootstrap 5, Thymeleaf, Maven, MySQL, etc.
 
 ## Usage
+User page:
+![user-page](https://github.com/RetiX1337/OnlineBanking/assets/32012511/3c6a9274-01b6-4112-96e9-c9126cd1f924)
+
 Bank Account page:
 ![bank-account-page](https://github.com/RetiX1337/OnlineBanking/assets/32012511/d262811a-0592-4a71-b608-97d39a6938c4)
 
