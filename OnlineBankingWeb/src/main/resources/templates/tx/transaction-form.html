@@ -50,7 +50,7 @@
                        th:errors="*{amount}" class="text-danger"></p>
                 </div>
                 <div class="mb-3">
-                    <label for="transactionType" class="form-label">Last name</label>
+                    <label for="transactionType" class="form-label">Transaction Type</label>
                     <select form="form-1" th:field="*{transactionType}" class="form-select" id="transactionType">
                         <option th:each="transactionTypeValue:${T(org.onlinebanking.core.domain.models.transactions.TransactionType).values()}"
                                 th:value="${transactionTypeValue}"
