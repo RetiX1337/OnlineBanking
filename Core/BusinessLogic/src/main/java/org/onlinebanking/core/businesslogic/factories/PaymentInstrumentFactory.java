@@ -5,7 +5,6 @@ import org.onlinebanking.core.domain.servicedto.paymentinstruments.cards.CreditC
 import org.onlinebanking.core.domain.servicedto.paymentinstruments.cards.DebitCardServiceDTO;
 import org.onlinebanking.core.domain.servicedto.paymentinstruments.PaymentInstrumentServiceDTO;
 import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
-import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.paymentinstruments.cards.CreditCard;
@@ -13,7 +12,6 @@ import org.onlinebanking.core.domain.models.paymentinstruments.cards.DebitCard;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Component
@@ -26,15 +24,6 @@ public class PaymentInstrumentFactory {
     public PaymentInstrumentFactory() {
         this.paymentInstrumentMap = new HashMap<>();
         paymentInstrumentMapSetUp();
-    }
-
-    private void paymentInstrumentMapSetUp() {
-        this.paymentInstrumentMap.put(BankTransferServiceDTO.class, (request)
-                -> new BankTransfer((BankTransferServiceDTO) request));
-        this.paymentInstrumentMap.put(CreditCardServiceDTO.class, (request)
-                -> new CreditCard((CreditCardServiceDTO) request));
-        this.paymentInstrumentMap.put(DebitCardServiceDTO.class, (request)
-                -> new DebitCard((DebitCardServiceDTO) request));
     }
 
     public PaymentInstrument createPaymentInstrument(PaymentInstrumentServiceDTO paymentInstrumentServiceDTO) {
@@ -50,5 +39,14 @@ public class PaymentInstrumentFactory {
         } else {
             return supplierFunction.apply(paymentInstrumentServiceDTO);
         }
+    }
+
+    private void paymentInstrumentMapSetUp() {
+        this.paymentInstrumentMap.put(BankTransferServiceDTO.class, (request)
+                -> new BankTransfer((BankTransferServiceDTO) request));
+        this.paymentInstrumentMap.put(CreditCardServiceDTO.class, (request)
+                -> new CreditCard((CreditCardServiceDTO) request));
+        this.paymentInstrumentMap.put(DebitCardServiceDTO.class, (request)
+                -> new DebitCard((DebitCardServiceDTO) request));
     }
 }

@@ -2,47 +2,27 @@ package org.onlinebankingweb.dto.requests.paymentinstruments.cards;
 
 import org.onlinebankingweb.dto.requests.paymentinstruments.PaymentInstrumentRequest;
 
-import java.util.Date;
-
 public abstract class CardRequest extends PaymentInstrumentRequest {
-    protected String CVVHash;
-    protected String PINHash;
-    protected Date expiryDate;
-    protected String cardNumber;
+    private String CVV;
+    private String PIN;
 
     public CardRequest() {
 
     }
 
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
+    public String getCVV() {
+        return CVV;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public String getPIN() {
+        return PIN;
     }
 
-    public void setPINHash(String PINHash) {
-        this.PINHash = PINHash;
+    public void setCVV(String CVV) {
+        this.CVV = CVV;
     }
 
-    public void setCVVHash(String CVVHash) {
-        this.CVVHash = CVVHash;
-    }
-
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public String getPINHash() {
-        return PINHash;
-    }
-
-    public String getCVVHash() {
-        return CVVHash;
+    public void setPIN(String PIN) {
+        this.PIN = PIN;
     }
 }

@@ -52,7 +52,7 @@ public class BankAccountController {
     }
 
     @PostMapping("/open-account")
-    @PreAuthorize("isAuthenticated() && hasRole(USER_ROLE)")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public String openBankAccount(@ModelAttribute("bankAccountCreationRequest") BankAccountCreationRequest bankAccountCreationRequest,
                                   @AuthenticationPrincipal UserPrincipal userPrincipal) {
         User user = userService.findByEmail(userPrincipal.getUsername());
@@ -64,14 +64,14 @@ public class BankAccountController {
     }
 
     @GetMapping("/open-account")
-    @PreAuthorize("isAuthenticated() && hasRole(USER_ROLE)")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public String getBankAccountMenu(Model model) {
         model.addAttribute("bankAccountCreationRequest", new BankAccountCreationRequest());
         return "bankaccount/open-bank-account";
     }
 
     @GetMapping("/account")
-    @PreAuthorize("isAuthenticated() && hasRole(USER_ROLE)")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public String getBankAccount(@RequestParam("accNumber") String accountNumber,
                                  Model model) {
         BankAccount bankAccount = bankAccountService.findByAccountNumber(accountNumber);

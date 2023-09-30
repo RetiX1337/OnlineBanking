@@ -16,26 +16,23 @@
     <div class="container d-flex justify-content-around align-items-center">
         <div class="p-4 m-3 col-md-4 bg-white border rounded d-flex flex-column"
              style="min-height: 400px; max-height: 400px;">
-            <div class="flex-grow-1">
+            <div>
                 <h6 class="display-6 d-flex justify-content-center">
                     Bank Account
                 </h6>
-                <p class="fw-bold m-2 d-flex justify-content-center"
-                   th:text="${bankAccountResponse.getAccountNumber()}">
-                    Some number
+                <p class="fw-bold m-2 d-flex justify-content-center" th:text="${bankAccountResponse.getAccountNumber()}">
                 </p>
                 <p class="text-primary d-flex justify-content-center">
                     Account balance: <span th:text="${bankAccountResponse.getAccountBalance()}"></span>
                 </p>
             </div>
-            <div>
+            <div class="flex-grow-1">
                 <p class="d-flex justify-content-center text-secondary border-top border-bottom">Payment Instruments</p>
-                <div th:if="${paymentInstrumentResponses.isEmpty()}"
-                     class="text-secondary d-flex justify-content-center">
+                <div th:if="${paymentInstrumentResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
                     No payment instruments... how weird
                 </div>
                 <div th:unless="${paymentInstrumentResponses.isEmpty()}" class="p-2"
-                     style="max-height: 150px; overflow-y: scroll">
+                     style="max-height: 100px; overflow-y: scroll">
                     <div th:each="paymentInstrument:${paymentInstrumentResponses}"
                          class="row d-flex p-2 m-1 justify-content-center justify-content-center
                         btn btn-light border-top border-bottom">
@@ -43,6 +40,11 @@
                     </div>
                 </div>
             </div>
+            <a th:href="@{~/payment-instrument/choose-type(accNumber=${bankAccountResponse.getAccountNumber()})}"
+               class="row d-flex rounded border p-3 m-1 btn btn-primary justify-content-center align-self-center"
+               style="width: 100%">
+                Open payment instrument
+            </a>
         </div>
         <div class="p-4 m-3 col-md-8 bg-white border rounded d-flex flex-column"
              style="min-height: 400px; max-height: 400px;">
@@ -53,13 +55,16 @@
                 </div>
                 <div th:unless="${transactionResponses.isEmpty()}" class="p-2"
                      style="max-height: 200px; overflow-y: scroll">
-                    <div th:each="transaction:${transactionResponses}"
-                         class="row d-flex p-2 m-1 justify-content-center justify-content-center
+                    <div style="max-height: 100px" th:each="transaction:${transactionResponses}"
+                         class="row d-flex p-2 m-1
                         btn btn-light border-top border-bottom">
-                        <p class="mr-auto" th:text="${transaction.getId()}"></p>
-                        <p class="mr-auto" th:text="${transaction.getTransactionName()}"></p>
-                        <p class="mr-auto" th:text="${transaction.getTransactionDate()}"></p>
-                        <p class="mr-auto" th:text="${transaction.getAmount()}"></p>
+                        <div class="col-md-6">
+                            <p class="row fw-bold" th:text="${transaction.getTransactionName()}"></p>
+                            <p class="row" th:text="${transaction.getTransactionDate()}"></p>
+                        </div>
+                        <p class="col-md-6 d-flex justify-content-end"
+                           th:style="${transaction.senderAccountNumber.equals(bankAccountResponse.getAccountNumber()) ? 'color:red' : 'color:black'}"
+                           th:text="${transaction.senderAccountNumber.equals(bankAccountResponse.getAccountNumber()) ? 'Amount: -' : 'Amount: +'} + ${transaction.amount}"></p>
                     </div>
                 </div>
             </div>

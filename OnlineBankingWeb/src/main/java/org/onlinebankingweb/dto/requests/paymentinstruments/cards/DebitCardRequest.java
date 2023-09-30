@@ -3,8 +3,8 @@ package org.onlinebankingweb.dto.requests.paymentinstruments.cards;
 import java.math.BigDecimal;
 
 public class DebitCardRequest extends CardRequest {
-    protected BigDecimal dailyWithdrawalLimit;
-    protected Integer dailyTransactionLimit;
+    private BigDecimal dailyWithdrawalLimit;
+    private Integer dailyTransactionLimit;
 
     public DebitCardRequest() {
 

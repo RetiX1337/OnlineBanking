@@ -59,29 +59,9 @@ public class TransactionController {
         this.customerService = customerService;
         this.userService = userService;
     }
-//
-//    @GetMapping("/payment")
-//    @PreAuthorize("isAuthenticated() && hasRole(USER_ROLE)")
-//    public String getTransactionForm(@AuthenticationPrincipal UserPrincipal userPrincipal, Model model) {
-//        User user = userService.findByEmail(userPrincipal.getUsername());
-//        Customer customer = customerService.findByUser(user);
-//        List<BankAccount> bankAccounts = bankAccountService.findByCustomer(customer);
-//
-//        Map<BankAccountResponse, List<PaymentInstrumentResponse>> bankAccountPaymentInstrumentResponseMap
-//                = bankAccounts.stream()
-//                .collect(Collectors.toMap(BankAccountResponse::new,
-//                        bankAccount -> paymentInstrumentService.findByBankAccount(bankAccount)
-//                                .stream()
-//                                .map(PaymentInstrumentResponseFactory::createPaymentInstrument)
-//                                .toList()));
-//
-//        model.addAttribute("bankAccountPaymentInstrumentResponseMap", bankAccountPaymentInstrumentResponseMap);
-//        model.addAttribute("transactionRequest", new TransactionRequest());
-//        return "tx/transaction-form";
-//    }
 
     @GetMapping("/payment")
-    @PreAuthorize("isAuthenticated() && hasRole(USER_ROLE)")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public String getTransactionForm(@RequestParam("accNumber") String bankAccountNumber,
                                      Model model) {
         BankAccount bankAccount = bankAccountService.findByAccountNumber(bankAccountNumber);
@@ -92,7 +72,6 @@ public class TransactionController {
                         .map(PaymentInstrumentResponseFactory::createPaymentInstrument)
                         .toList();
 
-        System.out.println(model.getAttribute("entityNotFoundExceptionMessage"));
         model.addAttribute("paymentInstrumentResponses", paymentInstrumentResponses);
         model.addAttribute("bankAccountResponse", new BankAccountResponse(bankAccount));
         model.addAttribute("transactionRequest", new TransactionRequest());
@@ -100,7 +79,7 @@ public class TransactionController {
     }
 
     @PostMapping("/payment")
-    @PreAuthorize("isAuthenticated() && hasRole(USER_ROLE)")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public String processPayment(@ModelAttribute TransactionRequest transactionRequest, BindingResult result,
                                        RedirectAttributes redirectAttributes) {
         String redirectWithRequestParam = "redirect:/tx/payment?accNumber=" + transactionRequest.getSenderBankAccountNumber();

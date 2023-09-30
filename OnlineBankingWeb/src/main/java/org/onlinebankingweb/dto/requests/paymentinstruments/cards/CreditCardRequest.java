@@ -3,7 +3,7 @@ package org.onlinebankingweb.dto.requests.paymentinstruments.cards;
 import java.math.BigDecimal;
 
 public class CreditCardRequest extends CardRequest {
-    protected BigDecimal creditLimit;
+    private BigDecimal creditLimit;
 
     public CreditCardRequest() {
 
