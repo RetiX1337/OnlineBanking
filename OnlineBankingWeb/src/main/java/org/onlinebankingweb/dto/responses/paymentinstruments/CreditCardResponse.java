@@ -16,4 +16,8 @@ public class CreditCardResponse extends CardResponse {
         return creditLimit;
     }
 
+    @Override
+    public String toString() {
+        return "Credit Card, " + super.toString();
+    }
 }

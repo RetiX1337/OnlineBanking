@@ -42,27 +42,17 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional
     @Override
     public PaymentInstrument openPaymentInstrument(PaymentInstrumentServiceDTO paymentInstrumentServiceDTO) {
-        PaymentInstrument paymentInstrument;
-
         if (paymentInstrumentServiceDTO instanceof CardServiceDTO) {
             paymentInstrumentServiceDTO = initCardDTO(paymentInstrumentServiceDTO);
         }
 
         try {
-            paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentServiceDTO);
-        } catch (PaymentInstrumentFactoryException e) {
+            PaymentInstrument paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentServiceDTO);
+            return paymentInstrumentDAO.save(paymentInstrument);
+        } catch (PaymentInstrumentFactoryException | PersistenceException e) {
             logger.error(e);
             throw new DAOException();
         }
-
-        try {
-            paymentInstrumentDAO.save(paymentInstrument);
-        } catch (PersistenceException e) {
-            logger.error(e);
-            throw new DAOException();
-        }
-
-        return paymentInstrument;
     }
 
     @Transactional

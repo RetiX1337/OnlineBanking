@@ -15,8 +15,8 @@ public class TransactionResponse {
     private final String transactionName;
     private final TransactionType transactionType;
     private final TransactionStatus transactionStatus;
-    private final BankAccountResponse sender;
-    private final BankAccountResponse receiver;
+    private final String senderAccountNumber;
+    private final String receiverAccountNumber;
     private final PaymentInstrumentResponse paymentInstrumentResponse;
     private final BigDecimal amount;
 
@@ -26,8 +26,8 @@ public class TransactionResponse {
         this.transactionName = transaction.getTransactionName();
         this.transactionType = transaction.getTransactionType();
         this.transactionStatus = transaction.getTransactionStatus();
-        this.sender = new BankAccountResponse(transaction.getSender());
-        this.receiver = new BankAccountResponse(transaction.getReceiver());
+        this.senderAccountNumber = transaction.getSender().getAccountNumber();
+        this.receiverAccountNumber = transaction.getReceiver().getAccountNumber();
         this.paymentInstrumentResponse = PaymentInstrumentResponseFactory
                 .createPaymentInstrument(transaction.getPaymentInstrument());
         this.amount = transaction.getAmount();
@@ -57,12 +57,12 @@ public class TransactionResponse {
         return amount;
     }
 
-    public BankAccountResponse getReceiver() {
-        return receiver;
+    public String getSenderAccountNumber() {
+        return senderAccountNumber;
     }
 
-    public BankAccountResponse getSender() {
-        return sender;
+    public String getReceiverAccountNumber() {
+        return receiverAccountNumber;
     }
 
     public PaymentInstrumentResponse getPaymentInstrumentResponse() {

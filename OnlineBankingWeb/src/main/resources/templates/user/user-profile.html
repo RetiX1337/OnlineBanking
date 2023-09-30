@@ -26,44 +26,52 @@
         </div>
     </div>
     <div class="container d-flex justify-content-around align-items-center">
-        <div class="p-4 m-3 col-md-4 bg-white border rounded" style="min-height: 400px; max-height: 400px;">
+        <div class="p-4 m-3 col-md-4 bg-white border rounded d-flex flex-column"
+             style="min-height: 400px; max-height: 400px;">
             <h5 class="display-5 d-flex justify-content-center">
                 Accounts
             </h5>
-            <div th:if="${bankAccountResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
-                No bank accounts yet...
-            </div>
-            <div th:unless="${bankAccountResponses.isEmpty()}" class="p-2" style="max-height: 200px; overflow-y: scroll">
-                <div th:each="bankAccount:${bankAccountResponses}"
-                     class="row d-flex rounded border p-2 m-1 btn btn-light border-top justify-content-center align-self-center">
-                    <p class="mb-auto mr-auto" th:text="${bankAccount.getAccountNumber()}"></p>
-                    <p class="mt-auto ml-auto" th:text="${bankAccount.getAccountBalance()}"></p>
+            <div class="flex-grow-1">
+                <div th:if="${bankAccountResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
+                    No bank accounts yet...
+                </div>
+                <div th:unless="${bankAccountResponses.isEmpty()}" class="p-2"
+                     style="max-height: 200px; overflow-y: scroll">
+                    <a th:each="bankAccount:${bankAccountResponses}"
+                       th:href="@{/bank-account/account(accNumber=${bankAccount.getAccountNumber()})}"
+                       class="row d-flex rounded border p-2 m-1 btn btn-light border-top justify-content-center align-self-center">
+                        <p class="mb-auto mr-auto" th:text="${bankAccount.getAccountNumber()}"></p>
+                        <p class="mt-auto ml-auto"
+                           th:text="${'Account Balance: ' + bankAccount.getAccountBalance()}"></p>
+                    </a>
                 </div>
             </div>
             <a th:href="@{/bank-account/open-account}"
-               class="row d-flex rounded border p-3 m-1 btn btn-primary border-top justify-content-center align-self-center">
+               class="row d-flex rounded border p-3 m-1 btn btn-primary justify-content-center align-self-center"
+               style="width: 100%">
                 Open an account
             </a>
         </div>
-        <div class="p-4 m-3 col-md-8 bg-white border rounded" style="min-height: 400px; max-height: 400px;">
+        <div class="p-4 m-3 col-md-8 bg-white border rounded d-flex flex-column"
+             style="min-height: 400px; max-height: 400px;">
             <h6 class="display-6 d-flex justify-content-center">Transactions</h6>
-            <div th:if="${transactionResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
-                There is no transactions... so empty
-            </div>
-            <div th:unless="${transactionResponses.isEmpty()}" class="p-2" style="max-height: 200px; overflow-y: scroll">
-                <div th:each="transaction:${transactionResponses}"
-                     class="row d-flex p-2 m-1 justify-content-center justify-content-center
+            <div class="flex-grow-1">
+                <div th:if="${transactionResponses.isEmpty()}" class="text-secondary d-flex justify-content-center">
+                    There is no transactions... so empty
+                </div>
+                <div th:unless="${transactionResponses.isEmpty()}" class="p-2"
+                     style="max-height: 250px; overflow-y: scroll">
+                    <div style="max-height: 100px" th:each="transaction:${transactionResponses}"
+                         class="row d-flex p-2 m-1
                         btn btn-light border-top border-bottom">
-                    <p class="mr-auto" th:text="${transaction.getId()}"></p>
-                    <p class="mr-auto" th:text="${transaction.getTransactionName()}"></p>
-                    <p class="mr-auto" th:text="${transaction.getTransactionDate()}"></p>
-                    <p class="mr-auto" th:text="${transaction.getAmount()}"></p>
+                        <div class="col-md-6">
+                            <p class="row fw-bold" th:text="${transaction.getTransactionName()}"></p>
+                            <p class="row" th:text="${transaction.getTransactionDate()}"></p>
+                        </div>
+                        <p class="col-md-6 d-flex justify-content-end" th:text="${'Amount: ' + transaction.getAmount()}"></p>
+                    </div>
                 </div>
             </div>
-            <a th:href="@{#}"
-               class="row d-flex rounded border p-3 m-1 btn btn-primary border-top justify-content-center align-self-center">
-                Transaction
-            </a>
         </div>
     </div>
 </main>

@@ -2,7 +2,7 @@ package org.onlinebankingweb.dto.requests.paymentinstruments;
 
 
 public abstract class PaymentInstrumentRequest {
-    protected String bankAccountNumber;
+    private String bankAccountNumber;
 
     public PaymentInstrumentRequest() {
 

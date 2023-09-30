@@ -113,11 +113,4 @@ public class AuthController {
         }
         return "redirect:/";
     }
-
-    @GetMapping("/check-login")
-    public String check(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        System.out.println(userPrincipal.getUsername());
-        System.out.println(userPrincipal.getAuthorities());
-        return "main/main-page";
-    }
 }

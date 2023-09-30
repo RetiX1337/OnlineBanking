@@ -1,5 +1,6 @@
 package org.onlinebankingweb.configuration;
 
+import org.onlinebankingweb.converters.PaymentInstrumentRequestConverter;
 import org.onlinebankingweb.security.services.jwt.JWTProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -31,7 +33,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan(basePackages = {"org.onlinebankingweb.controllers",
         "org.onlinebanking.core",
-        "org.onlinebankingweb.security"})
+        "org.onlinebankingweb"})
 @PropertySources({
         @PropertySource("classpath:hibernate.properties"),
         @PropertySource("classpath:jwt.properties")
@@ -65,14 +67,6 @@ public class SpringConfig implements WebMvcConfigurer {
         dataSource.setPassword(environment.getRequiredProperty("hibernate.connection.password"));
 
         return dataSource;
-    }
-
-    private Properties hibernateProperties() {
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
-
-        return properties;
     }
 
     @Bean
@@ -127,6 +121,18 @@ public class SpringConfig implements WebMvcConfigurer {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new PaymentInstrumentRequestConverter());
+    }
+
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        return properties;
     }
 
 }

@@ -107,7 +107,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setTransactionName(createTransactionName(sender, receiver));
         transaction.setAmount(transactionServiceDTO.getAmount());
         transaction.setTransactionStatus(TransactionStatus.COMPLETED);
-        transaction.setTransactionType(TransactionType.TRANSFER);
+        transaction.setTransactionType(transactionServiceDTO.getTransactionType());
 
         return transaction;
     }

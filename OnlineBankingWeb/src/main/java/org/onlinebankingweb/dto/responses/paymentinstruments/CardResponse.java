@@ -21,4 +21,10 @@ public abstract class CardResponse extends PaymentInstrumentResponse {
     public Date getExpiryDate() {
         return expiryDate;
     }
+
+    @Override
+    public String toString() {
+        return  "Card Number: " + cardNumber +
+                ", Expiry Date: " + expiryDate;
+    }
 }
