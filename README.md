@@ -9,11 +9,6 @@
     <a href="https://github.com/RetiX1337/OnlineBanking"><strong>Explore the docs »</strong></a>
     <br/>
     <br/>
-    <a href="https://github.com/RetiX1337/OnlineBanking">View Demo</a>
-    .
-    <a href="https://github.com/RetiX1337/OnlineBanking/issues">Report Bug</a>
-    .
-    <a href="https://github.com/RetiX1337/OnlineBanking/issues">Request Feature</a>
   </p>
 </p>
 
