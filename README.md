@@ -54,10 +54,11 @@ Logged out:
 ![main-page-logged-out](https://github.com/RetiX1337/OnlineBanking/assets/32012511/6e380dce-785e-4516-a275-15575795e79d)
 
 Authentication with incorrect credentials:
-![log-in-incorrect-creds](https://github.com/RetiX1337/OnlineBanking/assets/32012511/4fcddc17-9a22-43d7-8f66-99514ec2d5b0)
+![image](https://github.com/RetiX1337/OnlineBanking/assets/32012511/b1839227-8ec3-462d-9736-b7a2cecaae11)
 
 Registration with used credentials:
-![registration-used-creds](https://github.com/RetiX1337/OnlineBanking/assets/32012511/bf4a401b-d9a6-4ab0-ada8-4fb5a06c2a57)
+![image](https://github.com/RetiX1337/OnlineBanking/assets/32012511/be96a844-3f2e-4d8e-9ef6-5c7599625ab2)
+
 
 ## Authors
 
