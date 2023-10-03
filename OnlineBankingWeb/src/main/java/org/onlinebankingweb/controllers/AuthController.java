@@ -5,8 +5,12 @@ import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedCustomerRegistrationException;
 import org.onlinebanking.core.domain.exceptions.FailedUserRegistrationException;
+import org.onlinebankingweb.dto.requests.CustomerRegistrationRequest;
 import org.onlinebankingweb.dto.requests.LoginRequest;
+import org.onlinebankingweb.dto.requests.UserRegistrationRequest;
 import org.onlinebankingweb.dto.responses.LoginResponse;
+import org.onlinebankingweb.mappers.CustomerMapper;
+import org.onlinebankingweb.mappers.UserMapper;
 import org.onlinebankingweb.security.services.AuthService;
 import org.onlinebankingweb.dto.wrappers.UserCustomerWrapper;
 import org.onlinebankingweb.security.userprincipal.UserPrincipal;
@@ -34,12 +38,14 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
-    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+    private final CustomerMapper customerMapper;
 
     @Autowired
-    public AuthController(AuthService authService, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthService authService, UserMapper userMapper, CustomerMapper customerMapper) {
         this.authService = authService;
-        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+        this.customerMapper = customerMapper;
     }
 
     @GetMapping("/login")
@@ -85,9 +91,8 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
-        UserServiceDTO userServiceDTO = new UserServiceDTO();
-        CustomerServiceDTO customerServiceDTO = new CustomerServiceDTO();
-        UserCustomerWrapper userCustomerWrapper = new UserCustomerWrapper(userServiceDTO, customerServiceDTO);
+        UserCustomerWrapper userCustomerWrapper
+                = new UserCustomerWrapper(new UserRegistrationRequest(), new CustomerRegistrationRequest());
         model.addAttribute("userCustomerWrapper", userCustomerWrapper);
         return "auth/register/registration-form";
     }
@@ -98,12 +103,11 @@ public class AuthController {
         if (result.hasErrors()) {
             return "auth/register/registration-form";
         }
-        String password = userCustomerWrapper.getUserRegistrationRequest().getPassword();
-        String passwordHash = passwordEncoder.encode(password);
-        userCustomerWrapper.getUserRegistrationRequest().setPassword(passwordHash);
+        UserServiceDTO userServiceDTO = userMapper.registrationRequestToServiceDTO(userCustomerWrapper.getUserRegistrationRequest());
+        CustomerServiceDTO customerServiceDTO = customerMapper.registrationRequestToServiceDTO(userCustomerWrapper.getCustomerRegistrationRequest());
+
         try {
-            authService.attemptRegister(userCustomerWrapper.getUserRegistrationRequest(),
-                    userCustomerWrapper.getCustomerRegistrationRequest());
+            authService.attemptRegister(userServiceDTO, customerServiceDTO);
         } catch (FailedCustomerRegistrationException e) {
             model.addAttribute("customerRegistrationExceptionMessage", e.getMessage());
             return "auth/register/registration-form";

@@ -37,11 +37,12 @@ public class AuthService {
 
     // if registration goes wrong exception is thrown
     @Transactional
-    public void attemptRegister(UserServiceDTO userServiceDTO,
+    public boolean attemptRegister(UserServiceDTO userServiceDTO,
                                 CustomerServiceDTO customerServiceDTO) {
         User user = userService.registerUser(userServiceDTO);
         Customer customer = customerService.registerCustomer(customerServiceDTO);
         customerService.assignCustomerToUser(customer, user);
+        return true;
     }
 
     @Transactional
