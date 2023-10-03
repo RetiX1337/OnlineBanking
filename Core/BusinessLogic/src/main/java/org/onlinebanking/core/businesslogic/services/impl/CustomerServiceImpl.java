@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.CustomerDAO;
-import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedCustomerRegistrationException;
@@ -31,15 +30,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public Customer registerCustomer(CustomerServiceDTO customerServiceDTO) {
-        String taxPayerId = customerServiceDTO.getTaxPayerId();
+    public Customer registerCustomer(Customer customer) {
+        String taxPayerId = customer.getTaxPayerId();
         try {
             findByTaxPayerId(taxPayerId);
             throw new FailedCustomerRegistrationException(
                     String.format(FAILED_CUSTOMER_REGISTRATION_EXCEPTION_MESSAGE, taxPayerId));
         } catch (EntityNotFoundException ignored) {}
-
-        Customer customer = initCustomer(customerServiceDTO);
 
         try {
             return customerDAO.save(customer);
@@ -108,14 +105,5 @@ public class CustomerServiceImpl implements CustomerService {
             logger.error(e);
             throw new DAOException();
         }
-    }
-
-    private Customer initCustomer(CustomerServiceDTO customerServiceDTO) {
-        Customer customer = new Customer();
-        customer.setFirstName(customerServiceDTO.getFirstName());
-        customer.setLastName(customerServiceDTO.getLastName());
-        customer.setAddress(customerServiceDTO.getAddress());
-        customer.setTaxPayerId(customerServiceDTO.getTaxPayerId());
-        return customer;
     }
 }

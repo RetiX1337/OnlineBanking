@@ -1,18 +1,12 @@
 package org.onlinebankingweb.controllers.mvc;
 
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
-import org.onlinebanking.core.businesslogic.services.CustomerService;
-import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
-import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
-import org.onlinebanking.core.domain.servicedto.TransactionServiceDTO;
 import org.onlinebankingweb.dto.requests.TransactionRequest;
 import org.onlinebankingweb.dto.responses.BankAccountResponse;
-import org.onlinebankingweb.dto.responses.paymentinstruments.PaymentInstrumentResponse;
-import org.onlinebankingweb.factories.PaymentInstrumentResponseFactory;
 import org.onlinebankingweb.mappers.PaymentInstrumentMapper;
 import org.onlinebankingweb.mappers.TransactionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 
 @Validated
@@ -71,7 +63,7 @@ public class TransactionController {
             return redirectWithRequestParam;
         }
         try {
-            transactionService.processPayment(transactionMapper.requestToServiceDTO(transactionRequest));
+            transactionService.processPayment(transactionMapper.requestToDomain(transactionRequest));
         } catch (FailedTransactionException e) {
             redirectAttributes.addFlashAttribute("failedTransactionExceptionMessage", e.getMessage());
             return redirectWithRequestParam;

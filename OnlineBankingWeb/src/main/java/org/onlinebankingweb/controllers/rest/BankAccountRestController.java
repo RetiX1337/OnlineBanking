@@ -3,7 +3,6 @@ package org.onlinebankingweb.controllers.rest;
 import com.google.common.base.Preconditions;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.domain.models.BankAccount;
-import org.onlinebanking.core.domain.servicedto.BankAccountServiceDTO;
 import org.onlinebankingweb.dto.requests.BankAccountCreationRequest;
 import org.onlinebankingweb.dto.responses.BankAccountResponse;
 import org.onlinebankingweb.mappers.BankAccountMapper;
@@ -49,8 +48,7 @@ public class BankAccountRestController {
                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Preconditions.checkNotNull(bankAccountCreationRequest);
 
-        BankAccountServiceDTO bankAccountServiceDTO
-                = bankAccountMapper.creationRequestToServiceDTO(bankAccountCreationRequest, userPrincipal);
-        return new BankAccountResponse(bankAccountService.openBankAccount(bankAccountServiceDTO));
+        BankAccount bankAccount = bankAccountMapper.creationRequestToDomain(bankAccountCreationRequest, userPrincipal);
+        return new BankAccountResponse(bankAccountService.openBankAccount(bankAccount));
     }
 }

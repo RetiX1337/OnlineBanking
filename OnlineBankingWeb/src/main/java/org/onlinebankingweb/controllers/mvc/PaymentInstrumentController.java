@@ -10,7 +10,7 @@ import org.onlinebankingweb.dto.requests.paymentinstruments.BankTransferRequest;
 import org.onlinebankingweb.dto.requests.paymentinstruments.PaymentInstrumentRequest;
 import org.onlinebankingweb.dto.requests.paymentinstruments.cards.CreditCardRequest;
 import org.onlinebankingweb.dto.requests.paymentinstruments.cards.DebitCardRequest;
-import org.onlinebankingweb.factories.PaymentInstrumentServiceDTOFactory;
+import org.onlinebankingweb.factories.PaymentInstrumentFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -29,15 +29,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PaymentInstrumentController {
     private final BankAccountService bankAccountService;
     private final PaymentInstrumentService paymentInstrumentService;
-    private final PaymentInstrumentServiceDTOFactory paymentInstrumentServiceDTOFactory;
+    private final PaymentInstrumentFactory paymentInstrumentFactory;
 
     @Autowired
     public PaymentInstrumentController(BankAccountService bankAccountService,
                                        PaymentInstrumentService paymentInstrumentService,
-                                       PaymentInstrumentServiceDTOFactory paymentInstrumentServiceDTOFactory) {
+                                       PaymentInstrumentFactory paymentInstrumentFactory) {
         this.bankAccountService = bankAccountService;
         this.paymentInstrumentService = paymentInstrumentService;
-        this.paymentInstrumentServiceDTOFactory = paymentInstrumentServiceDTOFactory;
+        this.paymentInstrumentFactory = paymentInstrumentFactory;
     }
 
     @GetMapping("/choose-type")
@@ -64,8 +64,8 @@ public class PaymentInstrumentController {
                 = "redirect:/payment-instrument/open-payment-instrument?accNumber=" + paymentInstrumentRequest.getBankAccountNumber();
         try {
             BankAccount bankAccount = bankAccountService.findByAccountNumber(paymentInstrumentRequest.getBankAccountNumber());
-            paymentInstrumentService.openPaymentInstrument(paymentInstrumentServiceDTOFactory
-                                    .createPaymentInstrument(paymentInstrumentRequest, bankAccount));
+            paymentInstrumentService.openPaymentInstrument(paymentInstrumentFactory
+                    .createPaymentInstrument(paymentInstrumentRequest, bankAccount));
         } catch (PaymentInstrumentFactoryException e) {
             redirectAttributes.addFlashAttribute("failedTransactionExceptionMessage", e.getMessage());
             return redirectWithRequestParam;

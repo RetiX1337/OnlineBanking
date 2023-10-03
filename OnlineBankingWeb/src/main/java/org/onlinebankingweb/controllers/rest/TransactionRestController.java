@@ -52,7 +52,7 @@ public class TransactionRestController {
         Preconditions.checkNotNull(transactionRequest);
 
         return new TransactionResponse(transactionService.processPayment(
-                transactionMapper.requestToServiceDTO(transactionRequest)
+                transactionMapper.requestToDomain(transactionRequest)
         ));
     }
 

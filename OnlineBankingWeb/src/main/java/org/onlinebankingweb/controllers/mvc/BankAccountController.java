@@ -1,20 +1,9 @@
 package org.onlinebankingweb.controllers.mvc;
 
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
-import org.onlinebanking.core.businesslogic.services.CustomerService;
-import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
-import org.onlinebanking.core.businesslogic.services.TransactionService;
-import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.models.BankAccount;
-import org.onlinebanking.core.domain.models.Customer;
-import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
-import org.onlinebanking.core.domain.models.user.User;
-import org.onlinebanking.core.domain.servicedto.BankAccountServiceDTO;
 import org.onlinebankingweb.dto.requests.BankAccountCreationRequest;
 import org.onlinebankingweb.dto.responses.BankAccountResponse;
-import org.onlinebankingweb.dto.responses.TransactionResponse;
-import org.onlinebankingweb.dto.responses.paymentinstruments.PaymentInstrumentResponse;
-import org.onlinebankingweb.factories.PaymentInstrumentResponseFactory;
 import org.onlinebankingweb.mappers.BankAccountMapper;
 import org.onlinebankingweb.mappers.PaymentInstrumentMapper;
 import org.onlinebankingweb.mappers.TransactionMapper;
@@ -31,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 
 @Validated
 @Controller
@@ -55,9 +43,8 @@ public class BankAccountController {
     @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public String openBankAccount(@ModelAttribute("bankAccountCreationRequest") BankAccountCreationRequest bankAccountCreationRequest,
                                   @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        BankAccountServiceDTO bankAccountServiceDTO
-                = bankAccountMapper.creationRequestToServiceDTO(bankAccountCreationRequest, userPrincipal);
-        bankAccountService.openBankAccount(bankAccountServiceDTO);
+        BankAccount bankAccount = bankAccountMapper.creationRequestToDomain(bankAccountCreationRequest, userPrincipal);
+        bankAccountService.openBankAccount(bankAccount);
         return "redirect:/user/profile";
     }
 

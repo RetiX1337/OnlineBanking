@@ -2,8 +2,6 @@ package org.onlinebankingweb.security.services;
 
 import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.businesslogic.services.UserService;
-import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
-import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
 import org.onlinebanking.core.domain.models.Customer;
 import org.onlinebanking.core.domain.models.user.User;
 import org.onlinebanking.core.domain.models.user.UserRole;
@@ -37,11 +35,10 @@ public class AuthService {
 
     // if registration goes wrong exception is thrown
     @Transactional
-    public boolean attemptRegister(UserServiceDTO userServiceDTO,
-                                CustomerServiceDTO customerServiceDTO) {
-        User user = userService.registerUser(userServiceDTO);
-        Customer customer = customerService.registerCustomer(customerServiceDTO);
-        customerService.assignCustomerToUser(customer, user);
+    public boolean attemptRegister(User user, Customer customer) {
+        User savedUser = userService.registerUser(user);
+        Customer savedCustomer = customerService.registerCustomer(customer);
+        customerService.assignCustomerToUser(savedCustomer, savedUser);
         return true;
     }
 

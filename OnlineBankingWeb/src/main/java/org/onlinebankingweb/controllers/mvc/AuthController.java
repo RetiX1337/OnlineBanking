@@ -1,7 +1,7 @@
 package org.onlinebankingweb.controllers.mvc;
 
-import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
-import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
+import org.onlinebanking.core.domain.models.Customer;
+import org.onlinebanking.core.domain.models.user.User;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedCustomerRegistrationException;
 import org.onlinebanking.core.domain.exceptions.FailedUserRegistrationException;
@@ -13,12 +13,9 @@ import org.onlinebankingweb.mappers.CustomerMapper;
 import org.onlinebankingweb.mappers.UserMapper;
 import org.onlinebankingweb.security.services.AuthService;
 import org.onlinebankingweb.dto.wrappers.UserCustomerWrapper;
-import org.onlinebankingweb.security.userprincipal.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -102,11 +99,11 @@ public class AuthController {
         if (result.hasErrors()) {
             return "auth/register/registration-form";
         }
-        UserServiceDTO userServiceDTO = userMapper.registrationRequestToServiceDTO(userCustomerWrapper.getUserRegistrationRequest());
-        CustomerServiceDTO customerServiceDTO = customerMapper.registrationRequestToServiceDTO(userCustomerWrapper.getCustomerRegistrationRequest());
+        User user = userMapper.registrationRequestToDomain(userCustomerWrapper.getUserRegistrationRequest());
+        Customer customer = customerMapper.registrationRequestToDomain(userCustomerWrapper.getCustomerRegistrationRequest());
 
         try {
-            authService.attemptRegister(userServiceDTO, customerServiceDTO);
+            authService.attemptRegister(user, customer);
         } catch (FailedCustomerRegistrationException e) {
             model.addAttribute("customerRegistrationExceptionMessage", e.getMessage());
             return "auth/register/registration-form";

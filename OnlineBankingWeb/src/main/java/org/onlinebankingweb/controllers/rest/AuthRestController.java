@@ -1,8 +1,8 @@
 package org.onlinebankingweb.controllers.rest;
 
 import com.google.common.base.Preconditions;
-import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
-import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
+import org.onlinebanking.core.domain.models.Customer;
+import org.onlinebanking.core.domain.models.user.User;
 import org.onlinebankingweb.dto.requests.CustomerRegistrationRequest;
 import org.onlinebankingweb.dto.requests.LoginRequest;
 import org.onlinebankingweb.dto.requests.UserRegistrationRequest;
@@ -48,9 +48,9 @@ public class AuthRestController {
         Preconditions.checkNotNull(userRegistrationRequest);
         Preconditions.checkNotNull(customerRegistrationRequest);
 
-        UserServiceDTO userServiceDTO = userMapper.registrationRequestToServiceDTO(userRegistrationRequest);
-        CustomerServiceDTO customerServiceDTO = customerMapper.registrationRequestToServiceDTO(customerRegistrationRequest);
+        User user = userMapper.registrationRequestToDomain(userRegistrationRequest);
+        Customer customer = customerMapper.registrationRequestToDomain(customerRegistrationRequest);
 
-        return authService.attemptRegister(userServiceDTO, customerServiceDTO);
+        return authService.attemptRegister(user, customer);
     }
 }

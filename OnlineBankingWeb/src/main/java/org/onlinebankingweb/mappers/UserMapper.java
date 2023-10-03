@@ -1,6 +1,6 @@
 package org.onlinebankingweb.mappers;
 
-import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
+import org.onlinebanking.core.domain.models.user.User;
 import org.onlinebankingweb.dto.requests.UserRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,11 +15,11 @@ public class UserMapper {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserServiceDTO registrationRequestToServiceDTO(UserRegistrationRequest userRegistrationRequest) {
-        UserServiceDTO userServiceDTO = new UserServiceDTO();
-        userServiceDTO.setEmail(userRegistrationRequest.getEmail());
-        userServiceDTO.setUsername(userRegistrationRequest.getUsername());
-        userServiceDTO.setPassword(passwordEncoder.encode(userRegistrationRequest.getPassword()));
-        return userServiceDTO;
+    public User registrationRequestToDomain(UserRegistrationRequest userRegistrationRequest) {
+        User user = new User();
+        user.setEmail(userRegistrationRequest.getEmail());
+        user.setUsername(userRegistrationRequest.getUsername());
+        user.setPasswordHash(passwordEncoder.encode(userRegistrationRequest.getPassword()));
+        return user;
     }
 }

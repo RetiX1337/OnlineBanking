@@ -1,7 +1,5 @@
 package org.onlinebankingweb.dto.wrappers;
 
-import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
-import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
 import org.onlinebankingweb.dto.requests.CustomerRegistrationRequest;
 import org.onlinebankingweb.dto.requests.UserRegistrationRequest;
 

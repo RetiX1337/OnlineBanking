@@ -6,7 +6,6 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.servicedto.TransactionServiceDTO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
@@ -14,7 +13,6 @@ import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 import org.onlinebanking.core.domain.models.transactions.Transaction;
 import org.onlinebanking.core.domain.models.transactions.TransactionStatus;
-import org.onlinebanking.core.domain.models.transactions.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,11 +44,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Transactional
     @Override
-    public Transaction processPayment(TransactionServiceDTO transactionServiceDTO) {
-        BankAccount sender = transactionServiceDTO.getSender();
-        BankAccount receiver = transactionServiceDTO.getReceiver();
-        BigDecimal amount = transactionServiceDTO.getAmount();
-        PaymentInstrument paymentInstrument = transactionServiceDTO.getPaymentInstrument();
+    public Transaction processPayment(Transaction transaction) {
+        BankAccount sender = transaction.getSender();
+        BankAccount receiver = transaction.getReceiver();
+        BigDecimal amount = transaction.getAmount();
+        PaymentInstrument paymentInstrument = transaction.getPaymentInstrument();
 
         if (!sender.isActive() || !receiver.isActive()) {
             throw new FailedTransactionException(
@@ -63,7 +61,7 @@ public class TransactionServiceImpl implements TransactionService {
             bankAccountService.updateBankAccount(sender);
             bankAccountService.updateBankAccount(receiver);
             paymentInstrumentService.updatePaymentInstrument(paymentInstrument);
-            Transaction transaction = createTransaction(transactionServiceDTO);
+            populateTransaction(transaction);
             try {
                 return transactionDAO.save(transaction);
             } catch (PersistenceException e) {
@@ -71,8 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
                 throw new DAOException();
             }
         } else {
-            throw new FailedTransactionException(
-                    String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE, sender.getAccountNumber()));
+            throw new FailedTransactionException(String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE, sender.getAccountNumber()));
         }
     }
 
@@ -110,21 +107,10 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionDAO.update(transaction);
     }
 
-    private Transaction createTransaction(TransactionServiceDTO transactionServiceDTO) {
-        BankAccount sender = transactionServiceDTO.getSender();
-        BankAccount receiver = transactionServiceDTO.getReceiver();
-
-        Transaction transaction = new Transaction();
-        transaction.setPaymentInstrument(transactionServiceDTO.getPaymentInstrument());
-        transaction.setSender(sender);
-        transaction.setReceiver(receiver);
+    private void populateTransaction(Transaction transaction) {
         transaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
-        transaction.setTransactionName(createTransactionName(sender, receiver));
-        transaction.setAmount(transactionServiceDTO.getAmount());
+        transaction.setTransactionName(createTransactionName(transaction.getSender(), transaction.getReceiver()));
         transaction.setTransactionStatus(TransactionStatus.COMPLETED);
-        transaction.setTransactionType(transactionServiceDTO.getTransactionType());
-
-        return transaction;
     }
 
     private String createTransactionName(BankAccount sender, BankAccount receiver) {

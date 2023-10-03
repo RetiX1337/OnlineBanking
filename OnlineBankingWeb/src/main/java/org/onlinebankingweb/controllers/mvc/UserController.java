@@ -2,14 +2,12 @@ package org.onlinebankingweb.controllers.mvc;
 
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.CustomerService;
-import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
 import org.onlinebanking.core.domain.models.user.User;
 import org.onlinebankingweb.dto.responses.BankAccountResponse;
 import org.onlinebankingweb.dto.responses.CustomerResponse;
-import org.onlinebankingweb.dto.responses.TransactionResponse;
 import org.onlinebankingweb.dto.responses.UserResponse;
 import org.onlinebankingweb.mappers.TransactionMapper;
 import org.onlinebankingweb.security.userprincipal.UserPrincipal;

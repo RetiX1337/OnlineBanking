@@ -4,7 +4,7 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.domain.models.BankAccount;
-import org.onlinebanking.core.domain.servicedto.TransactionServiceDTO;
+import org.onlinebanking.core.domain.models.transactions.Transaction;
 import org.onlinebankingweb.dto.requests.TransactionRequest;
 import org.onlinebankingweb.dto.responses.TransactionResponse;
 import org.springframework.stereotype.Component;
@@ -24,14 +24,14 @@ public class TransactionMapper {
         this.paymentInstrumentService = paymentInstrumentService;
     }
 
-    public TransactionServiceDTO requestToServiceDTO(TransactionRequest transactionRequest) {
-        TransactionServiceDTO transactionServiceDTO = new TransactionServiceDTO();
-        transactionServiceDTO.setAmount(transactionRequest.getAmount());
-        transactionServiceDTO.setTransactionType(transactionRequest.getTransactionType());
-        transactionServiceDTO.setReceiver(bankAccountService.findByAccountNumber(transactionRequest.getReceiverBankAccountNumber()));
-        transactionServiceDTO.setPaymentInstrument(paymentInstrumentService.findById(Long.valueOf(transactionRequest.getPaymentInstrumentId())));
-        transactionServiceDTO.setSender(transactionServiceDTO.getPaymentInstrument().getBankAccount());
-        return transactionServiceDTO;
+    public Transaction requestToDomain(TransactionRequest transactionRequest) {
+        Transaction transaction = new Transaction();
+        transaction.setAmount(transactionRequest.getAmount());
+        transaction.setTransactionType(transactionRequest.getTransactionType());
+        transaction.setReceiver(bankAccountService.findByAccountNumber(transactionRequest.getReceiverBankAccountNumber()));
+        transaction.setPaymentInstrument(paymentInstrumentService.findById(Long.valueOf(transactionRequest.getPaymentInstrumentId())));
+        transaction.setSender(transaction.getPaymentInstrument().getBankAccount());
+        return transaction;
     }
 
     public List<TransactionResponse> responseListByBankAccountList(List<BankAccount> bankAccountList) {
