@@ -1,29 +1,18 @@
-package org.onlinebankingweb.controllers;
+package org.onlinebankingweb.controllers.mvc;
 
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
-import org.onlinebanking.core.businesslogic.services.CustomerService;
-import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
-import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
-import org.onlinebanking.core.domain.models.Customer;
-import org.onlinebanking.core.domain.models.transactions.TransactionStatus;
-import org.onlinebanking.core.domain.models.transactions.TransactionType;
-import org.onlinebanking.core.domain.models.user.User;
-import org.onlinebanking.core.domain.servicedto.TransactionServiceDTO;
 import org.onlinebankingweb.dto.requests.TransactionRequest;
 import org.onlinebankingweb.dto.responses.BankAccountResponse;
-import org.onlinebankingweb.dto.responses.paymentinstruments.PaymentInstrumentResponse;
-import org.onlinebankingweb.factories.PaymentInstrumentResponseFactory;
-import org.onlinebankingweb.security.userprincipal.UserPrincipal;
+import org.onlinebankingweb.mappers.PaymentInstrumentMapper;
+import org.onlinebankingweb.mappers.TransactionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.FlashMap;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Validated
@@ -47,17 +29,16 @@ import java.util.stream.Collectors;
 public class TransactionController {
     private final TransactionService transactionService;
     private final BankAccountService bankAccountService;
-    private final PaymentInstrumentService paymentInstrumentService;
-    private final CustomerService customerService;
-    private final UserService userService;
+    private final TransactionMapper transactionMapper;
+    private final PaymentInstrumentMapper paymentInstrumentMapper;
 
     @Autowired
-    public TransactionController(TransactionService transactionService, BankAccountService bankAccountService, PaymentInstrumentService paymentInstrumentService, CustomerService customerService, UserService userService) {
+    public TransactionController(TransactionService transactionService, BankAccountService bankAccountService,
+                                 TransactionMapper transactionMapper, PaymentInstrumentMapper paymentInstrumentMapper) {
         this.transactionService = transactionService;
         this.bankAccountService = bankAccountService;
-        this.paymentInstrumentService = paymentInstrumentService;
-        this.customerService = customerService;
-        this.userService = userService;
+        this.transactionMapper = transactionMapper;
+        this.paymentInstrumentMapper = paymentInstrumentMapper;
     }
 
     @GetMapping("/payment")
@@ -66,13 +47,7 @@ public class TransactionController {
                                      Model model) {
         BankAccount bankAccount = bankAccountService.findByAccountNumber(bankAccountNumber);
 
-        List<PaymentInstrumentResponse> paymentInstrumentResponses
-                = paymentInstrumentService.findByBankAccount(bankAccount)
-                        .stream()
-                        .map(PaymentInstrumentResponseFactory::createPaymentInstrument)
-                        .toList();
-
-        model.addAttribute("paymentInstrumentResponses", paymentInstrumentResponses);
+        model.addAttribute("paymentInstrumentResponses", paymentInstrumentMapper.responseListByBankAccount(bankAccount));
         model.addAttribute("bankAccountResponse", new BankAccountResponse(bankAccount));
         model.addAttribute("transactionRequest", new TransactionRequest());
         return "tx/transaction-form";
@@ -88,7 +63,7 @@ public class TransactionController {
             return redirectWithRequestParam;
         }
         try {
-            transactionService.processPayment(initTransactionServiceDTO(transactionRequest));
+            transactionService.processPayment(transactionMapper.requestToDomain(transactionRequest));
         } catch (FailedTransactionException e) {
             redirectAttributes.addFlashAttribute("failedTransactionExceptionMessage", e.getMessage());
             return redirectWithRequestParam;
@@ -100,13 +75,4 @@ public class TransactionController {
         return "redirect:/user/profile";
     }
 
-    private TransactionServiceDTO initTransactionServiceDTO(TransactionRequest transactionRequest) {
-        TransactionServiceDTO transactionServiceDTO = new TransactionServiceDTO();
-        transactionServiceDTO.setAmount(transactionRequest.getAmount());
-        transactionServiceDTO.setTransactionType(transactionRequest.getTransactionType());
-        transactionServiceDTO.setReceiver(bankAccountService.findByAccountNumber(transactionRequest.getReceiverBankAccountNumber()));
-        transactionServiceDTO.setPaymentInstrument(paymentInstrumentService.findById(Long.valueOf(transactionRequest.getPaymentInstrumentId())));
-        transactionServiceDTO.setSender(transactionServiceDTO.getPaymentInstrument().getBankAccount());
-        return transactionServiceDTO;
-    }
 }

@@ -1,38 +1,38 @@
 package org.onlinebankingweb.dto.wrappers;
 
-import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
-import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
+import org.onlinebankingweb.dto.requests.CustomerRegistrationRequest;
+import org.onlinebankingweb.dto.requests.UserRegistrationRequest;
 
 import javax.validation.Valid;
 
 public class UserCustomerWrapper {
     @Valid
-    private UserServiceDTO userServiceDTO;
+    private UserRegistrationRequest userRegistrationRequest;
     @Valid
-    private CustomerServiceDTO customerServiceDTO;
+    private CustomerRegistrationRequest customerRegistrationRequest;
 
-    public UserCustomerWrapper(UserServiceDTO userServiceDTO, CustomerServiceDTO customerServiceDTO) {
-        this.userServiceDTO = userServiceDTO;
-        this.customerServiceDTO = customerServiceDTO;
+    public UserCustomerWrapper(UserRegistrationRequest userRegistrationRequest, CustomerRegistrationRequest customerRegistrationRequest) {
+        this.userRegistrationRequest = userRegistrationRequest;
+        this.customerRegistrationRequest = customerRegistrationRequest;
     }
 
     public UserCustomerWrapper() {
     }
 
-    public CustomerServiceDTO getCustomerRegistrationRequest() {
-        return customerServiceDTO;
+    public CustomerRegistrationRequest getCustomerRegistrationRequest() {
+        return customerRegistrationRequest;
     }
 
-    public UserServiceDTO getUserRegistrationRequest() {
-        return userServiceDTO;
+    public UserRegistrationRequest getUserRegistrationRequest() {
+        return userRegistrationRequest;
     }
 
-    public void setCustomerRegistrationRequest(CustomerServiceDTO customerServiceDTO) {
-        this.customerServiceDTO = customerServiceDTO;
+    public void setCustomerRegistrationRequest(CustomerRegistrationRequest customerRegistrationRequest) {
+        this.customerRegistrationRequest = customerRegistrationRequest;
     }
 
-    public void setUserRegistrationRequest(UserServiceDTO userServiceDTO) {
-        this.userServiceDTO = userServiceDTO;
+    public void setUserRegistrationRequest(UserRegistrationRequest userRegistrationRequest) {
+        this.userRegistrationRequest = userRegistrationRequest;
     }
 
 }

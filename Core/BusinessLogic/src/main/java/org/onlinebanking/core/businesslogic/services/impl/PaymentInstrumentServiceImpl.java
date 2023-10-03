@@ -2,11 +2,9 @@ package org.onlinebanking.core.businesslogic.services.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.onlinebanking.core.businesslogic.factories.PaymentInstrumentFactory;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.PaymentInstrumentDAO;
-import org.onlinebanking.core.domain.servicedto.paymentinstruments.cards.CardServiceDTO;
-import org.onlinebanking.core.domain.servicedto.paymentinstruments.PaymentInstrumentServiceDTO;
+import org.onlinebanking.core.domain.models.paymentinstruments.cards.Card;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
@@ -29,25 +27,21 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be found by %s";
     private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final PaymentInstrumentDAO paymentInstrumentDAO;
-    private final PaymentInstrumentFactory paymentInstrumentFactory;
 
     @Autowired
-    public PaymentInstrumentServiceImpl(PaymentInstrumentDAO paymentInstrumentDAO,
-                                        PaymentInstrumentFactory paymentInstrumentFactory) {
+    public PaymentInstrumentServiceImpl(PaymentInstrumentDAO paymentInstrumentDAO) {
         this.paymentInstrumentDAO = paymentInstrumentDAO;
-        this.paymentInstrumentFactory = paymentInstrumentFactory;
     }
 
 
     @Transactional
     @Override
-    public PaymentInstrument openPaymentInstrument(PaymentInstrumentServiceDTO paymentInstrumentServiceDTO) {
-        if (paymentInstrumentServiceDTO instanceof CardServiceDTO) {
-            paymentInstrumentServiceDTO = initCardDTO(paymentInstrumentServiceDTO);
+    public PaymentInstrument openPaymentInstrument(PaymentInstrument paymentInstrument) {
+        if (paymentInstrument instanceof Card) {
+            populateCard(paymentInstrument);
         }
 
         try {
-            PaymentInstrument paymentInstrument = paymentInstrumentFactory.createPaymentInstrument(paymentInstrumentServiceDTO);
             return paymentInstrumentDAO.save(paymentInstrument);
         } catch (PaymentInstrumentFactoryException | PersistenceException e) {
             logger.error(e);
@@ -106,15 +100,15 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         }
     }
 
-    private CardServiceDTO initCardDTO(PaymentInstrumentServiceDTO paymentInstrumentServiceDTO) {
+    private Card populateCard(PaymentInstrument paymentInstrument) {
         String cardNumber;
-        CardServiceDTO cardDTO = (CardServiceDTO) paymentInstrumentServiceDTO;
-        cardDTO.setExpiryDate(generateExpiryDate());
+        Card card = (Card) paymentInstrument;
+        card.setExpiryDate(generateExpiryDate());
         do {
             cardNumber = generateCardNumber();
         } while (findByCardNumber(cardNumber) != null);
-        cardDTO.setCardNumber(cardNumber);
-        return cardDTO;
+        card.setCardNumber(cardNumber);
+        return card;
     }
 
     private Date generateExpiryDate() {

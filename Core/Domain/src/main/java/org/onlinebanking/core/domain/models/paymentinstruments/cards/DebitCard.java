@@ -1,8 +1,5 @@
 package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 
-import org.onlinebanking.core.domain.servicedto.paymentinstruments.cards.DebitCardServiceDTO;
-import org.onlinebanking.core.domain.models.BankAccount;
-
 import javax.persistence.*;
 
 import java.math.BigDecimal;
@@ -23,16 +20,6 @@ public class DebitCard extends Card {
 
     public DebitCard() {
 
-    }
-
-    public DebitCard(DebitCardServiceDTO debitCardServiceDTO) {
-        setBankAccount(debitCardServiceDTO.getBankAccount());
-        setCVVHash(debitCardServiceDTO.getCVVHash());
-        setPINHash(debitCardServiceDTO.getPINHash());
-        setExpiryDate(debitCardServiceDTO.getExpiryDate());
-        setCardNumber(debitCardServiceDTO.getCardNumber());
-        this.dailyWithdrawalLimit = debitCardServiceDTO.getDailyWithdrawalLimit();
-        this.dailyTransactionLimit = debitCardServiceDTO.getDailyTransactionLimit();
     }
 
     @Override

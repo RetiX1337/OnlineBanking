@@ -7,11 +7,10 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.impl.TransactionServiceImpl;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.servicedto.TransactionServiceDTO;
+import org.onlinebanking.core.domain.models.transactions.Transaction;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
 
-import static org.junit.Assert.assertThrows;
 
 public class TransactionServiceImplTest {
     @Mock
@@ -34,10 +33,10 @@ public class TransactionServiceImplTest {
         BankAccount receiver = new BankAccount();
         sender.deactivateBankAccount();
         receiver.activateBankAccount();
-        TransactionServiceDTO transactionServiceDTO = new TransactionServiceDTO();
-        transactionServiceDTO.setSender(sender);
-        transactionServiceDTO.setReceiver(receiver);
-        transactionService.processPayment(transactionServiceDTO);
+        Transaction transaction = new Transaction();
+        transaction.setSender(sender);
+        transaction.setReceiver(receiver);
+        transactionService.processPayment(transaction);
     }
 
 }

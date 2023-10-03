@@ -7,8 +7,6 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.BankAccountDAO;
 import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;
-import org.onlinebanking.core.domain.servicedto.BankAccountServiceDTO;
-import org.onlinebanking.core.domain.servicedto.paymentinstruments.BankTransferServiceDTO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.models.BankAccount;
@@ -37,8 +35,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Transactional
     @Override
-    public BankAccount openBankAccount(BankAccountServiceDTO bankAccountServiceDTO) {
-        BankAccount bankAccount = initBankAccount(bankAccountServiceDTO);
+    public BankAccount openBankAccount(BankAccount bankAccount) {
+        populateBankAccount(bankAccount);
         BankAccount savedBankAccount;
         try {
             savedBankAccount = bankAccountDAO.save(bankAccount);
@@ -129,19 +127,17 @@ public class BankAccountServiceImpl implements BankAccountService {
         return findByAccountNumber(bankAccount.getAccountNumber()) != null;
     }
 
-    private BankAccount initBankAccount(BankAccountServiceDTO bankAccountServiceDTO) {
+    private void populateBankAccount(BankAccount bankAccount) {
         String iban = getUniqueIban();
-        BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountBalance(BigDecimal.ZERO);
         bankAccount.setAccountNumber(iban);
-        bankAccount.setAccountHolder(bankAccountServiceDTO.getCustomer());
+        bankAccount.setAccountHolder(bankAccount.getAccountHolder());
         bankAccount.activateBankAccount();
-        return bankAccount;
     }
 
-    private BankTransferServiceDTO initBankTransfer(BankAccount bankAccount) {
-        BankTransferServiceDTO bankTransferServiceDTO = new BankTransferServiceDTO();
-        bankTransferServiceDTO.setBankAccount(bankAccount);
-        return bankTransferServiceDTO;
+    private BankTransfer initBankTransfer(BankAccount bankAccount) {
+        BankTransfer bankTransfer = new BankTransfer();
+        bankTransfer.setBankAccount(bankAccount);
+        return bankTransfer;
     }
 }
