@@ -10,5 +10,6 @@ public interface TransactionService {
     Transaction processPayment(TransactionServiceDTO transactionServiceDTO);
     List<Transaction> findByBankAccount(BankAccount bankAccount);
     Transaction updateTransaction(Transaction transaction);
+    Transaction findById(Long id);
 
 }

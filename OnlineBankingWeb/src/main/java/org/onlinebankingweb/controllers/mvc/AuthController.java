@@ -1,4 +1,4 @@
-package org.onlinebankingweb.controllers;
+package org.onlinebankingweb.controllers.mvc;
 
 import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;
 import org.onlinebanking.core.domain.servicedto.UserServiceDTO;
@@ -91,8 +91,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
-        UserCustomerWrapper userCustomerWrapper
-                = new UserCustomerWrapper(new UserRegistrationRequest(), new CustomerRegistrationRequest());
+        UserCustomerWrapper userCustomerWrapper = new UserCustomerWrapper(new UserRegistrationRequest(), new CustomerRegistrationRequest());
         model.addAttribute("userCustomerWrapper", userCustomerWrapper);
         return "auth/register/registration-form";
     }

@@ -1,11 +1,7 @@
-package org.onlinebankingweb.controllers;
+package org.onlinebankingweb.controllers.mvc;
 
-import org.dom4j.rule.Mode;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
-import org.onlinebanking.core.businesslogic.services.CustomerService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
-import org.onlinebanking.core.businesslogic.services.TransactionService;
-import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.PaymentInstrumentFactoryException;
 import org.onlinebanking.core.domain.models.BankAccount;
@@ -19,12 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,21 +28,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/payment-instrument")
 public class PaymentInstrumentController {
     private final BankAccountService bankAccountService;
-    private final CustomerService customerService;
-    private final UserService userService;
-    private final TransactionService transactionService;
     private final PaymentInstrumentService paymentInstrumentService;
     private final PaymentInstrumentServiceDTOFactory paymentInstrumentServiceDTOFactory;
 
     @Autowired
-    public PaymentInstrumentController(BankAccountService bankAccountService, CustomerService customerService,
-                                       UserService userService, TransactionService transactionService,
+    public PaymentInstrumentController(BankAccountService bankAccountService,
                                        PaymentInstrumentService paymentInstrumentService,
                                        PaymentInstrumentServiceDTOFactory paymentInstrumentServiceDTOFactory) {
         this.bankAccountService = bankAccountService;
-        this.customerService = customerService;
-        this.userService = userService;
-        this.transactionService = transactionService;
         this.paymentInstrumentService = paymentInstrumentService;
         this.paymentInstrumentServiceDTOFactory = paymentInstrumentServiceDTOFactory;
     }
@@ -76,10 +63,9 @@ public class PaymentInstrumentController {
         String redirectWithRequestParam
                 = "redirect:/payment-instrument/open-payment-instrument?accNumber=" + paymentInstrumentRequest.getBankAccountNumber();
         try {
-            BankAccount bankAccount = bankAccountService.findByAccountNumber
-                    (paymentInstrumentRequest.getBankAccountNumber());
-            paymentInstrumentService.openPaymentInstrument
-                    (paymentInstrumentServiceDTOFactory.createPaymentInstrument(paymentInstrumentRequest, bankAccount));
+            BankAccount bankAccount = bankAccountService.findByAccountNumber(paymentInstrumentRequest.getBankAccountNumber());
+            paymentInstrumentService.openPaymentInstrument(paymentInstrumentServiceDTOFactory
+                                    .createPaymentInstrument(paymentInstrumentRequest, bankAccount));
         } catch (PaymentInstrumentFactoryException e) {
             redirectAttributes.addFlashAttribute("failedTransactionExceptionMessage", e.getMessage());
             return redirectWithRequestParam;

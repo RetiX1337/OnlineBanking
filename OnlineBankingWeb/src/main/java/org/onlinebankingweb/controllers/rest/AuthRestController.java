@@ -1,4 +1,4 @@
-package org.onlinebankingweb.rest;
+package org.onlinebankingweb.controllers.rest;
 
 import com.google.common.base.Preconditions;
 import org.onlinebanking.core.domain.servicedto.CustomerServiceDTO;

@@ -30,7 +30,7 @@ public class TransactionServiceImpl implements TransactionService {
             = "Transaction couldn't be processed for sender %s, receiver %s";
     private static final String FAILED_TRANSACTION_EXCEPTION_MESSAGE
             = "Transaction couldn't be processed for sender %s";
-    private static final String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "Transactions couldn't be found for %s";
+    private static final String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "Transaction couldn't be found for %s";
     private final static Logger logger = LogManager.getLogger(TransactionServiceImpl.class);
     private final TransactionDAO transactionDAO;
     private final BankAccountService bankAccountService;
@@ -87,6 +87,21 @@ public class TransactionServiceImpl implements TransactionService {
             throw new DAOException();
         }
         return transactions;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Transaction findById(Long id) {
+        try {
+            Transaction transaction = transactionDAO.findById(id);
+            if (transaction == null) {
+                throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
+            }
+            return transaction;
+        } catch (PersistenceException e) {
+            logger.error(e);
+            throw new DAOException();
+        }
     }
 
     @Transactional

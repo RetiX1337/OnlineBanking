@@ -1,4 +1,4 @@
-package org.onlinebankingweb.controllers;
+package org.onlinebankingweb.controllers.mvc;
 
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.CustomerService;
@@ -15,6 +15,9 @@ import org.onlinebankingweb.dto.responses.BankAccountResponse;
 import org.onlinebankingweb.dto.responses.TransactionResponse;
 import org.onlinebankingweb.dto.responses.paymentinstruments.PaymentInstrumentResponse;
 import org.onlinebankingweb.factories.PaymentInstrumentResponseFactory;
+import org.onlinebankingweb.mappers.BankAccountMapper;
+import org.onlinebankingweb.mappers.PaymentInstrumentMapper;
+import org.onlinebankingweb.mappers.TransactionMapper;
 import org.onlinebankingweb.security.userprincipal.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,30 +38,25 @@ import java.util.List;
 @RequestMapping("/bank-account")
 public class BankAccountController {
     private final BankAccountService bankAccountService;
-    private final CustomerService customerService;
-    private final UserService userService;
-    private final TransactionService transactionService;
-    private final PaymentInstrumentService paymentInstrumentService;
+    private final BankAccountMapper bankAccountMapper;
+    private final TransactionMapper transactionMapper;
+    private final PaymentInstrumentMapper paymentInstrumentMapper;
 
     @Autowired
-    public BankAccountController(BankAccountService bankAccountService, CustomerService customerService,
-                                 UserService userService, TransactionService transactionService,
-                                 PaymentInstrumentService paymentInstrumentService) {
+    public BankAccountController(BankAccountService bankAccountService, PaymentInstrumentMapper paymentInstrumentMapper,
+                                 BankAccountMapper bankAccountMapper, TransactionMapper transactionMapper) {
         this.bankAccountService = bankAccountService;
-        this.customerService = customerService;
-        this.userService = userService;
-        this.transactionService = transactionService;
-        this.paymentInstrumentService = paymentInstrumentService;
+        this.paymentInstrumentMapper = paymentInstrumentMapper;
+        this.bankAccountMapper = bankAccountMapper;
+        this.transactionMapper = transactionMapper;
     }
 
     @PostMapping("/open-account")
     @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public String openBankAccount(@ModelAttribute("bankAccountCreationRequest") BankAccountCreationRequest bankAccountCreationRequest,
                                   @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        User user = userService.findByEmail(userPrincipal.getUsername());
-        Customer customer = customerService.findByUser(user);
-        BankAccountServiceDTO bankAccountServiceDTO = new BankAccountServiceDTO();
-        bankAccountServiceDTO.setCustomer(customer);
+        BankAccountServiceDTO bankAccountServiceDTO
+                = bankAccountMapper.creationRequestToServiceDTO(bankAccountCreationRequest, userPrincipal);
         bankAccountService.openBankAccount(bankAccountServiceDTO);
         return "redirect:/user/profile";
     }
@@ -76,21 +74,9 @@ public class BankAccountController {
                                  Model model) {
         BankAccount bankAccount = bankAccountService.findByAccountNumber(accountNumber);
 
-        List<PaymentInstrumentResponse> paymentInstrumentResponses = paymentInstrumentService.findByBankAccount
-                (bankAccount)
-                .stream()
-                .map(PaymentInstrumentResponseFactory::createPaymentInstrument)
-                .toList();
-
-        List<TransactionResponse> transactionResponses = transactionService.findByBankAccount
-                        (bankAccount)
-                .stream()
-                .map(TransactionResponse::new)
-                .toList();
-
         model.addAttribute("bankAccountResponse", new BankAccountResponse(bankAccount));
-        model.addAttribute("paymentInstrumentResponses", paymentInstrumentResponses);
-        model.addAttribute("transactionResponses", transactionResponses);
+        model.addAttribute("paymentInstrumentResponses", paymentInstrumentMapper.responseListByBankAccount(bankAccount));
+        model.addAttribute("transactionResponses", transactionMapper.responseListByBankAccount(bankAccount));
         return "bankaccount/bank-account-page";
     }
 }
