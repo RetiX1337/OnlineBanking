@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         try {
             return customerDAO.save(customer);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteCustomer(Customer customer) {
         try {
             customerDAO.delete(customer);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(Customer customer) {
         try {
             return customerDAO.update(customer);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -87,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (NoResultException e) {
             throw new EntityNotFoundException(
                     String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " taxPayerId " + taxPayerId));
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -101,7 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (NoResultException e) {
             throw new EntityNotFoundException(
                     String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " user " + user.getEmail()));
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }

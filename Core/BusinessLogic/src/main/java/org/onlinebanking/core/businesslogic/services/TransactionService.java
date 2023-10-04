@@ -8,7 +8,6 @@ import java.util.List;
 public interface TransactionService {
     Transaction processPayment(Transaction transaction);
     List<Transaction> findByBankAccount(BankAccount bankAccount);
-    Transaction updateTransaction(Transaction transaction);
     Transaction findById(Long id);
 
 }

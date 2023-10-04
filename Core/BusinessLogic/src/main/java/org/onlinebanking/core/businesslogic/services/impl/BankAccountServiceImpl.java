@@ -40,7 +40,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         BankAccount savedBankAccount;
         try {
             savedBankAccount = bankAccountDAO.save(bankAccount);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -75,7 +75,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public BankAccount updateBankAccount(BankAccount bankAccount) {
         try {
             return bankAccountDAO.update(bankAccount);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -87,7 +87,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         List<BankAccount> accounts;
         try {
             accounts = bankAccountDAO.findByCustomer(customer);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -103,7 +103,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             logger.error(e);
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
                     "Bank Account " + accountNumber));
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }

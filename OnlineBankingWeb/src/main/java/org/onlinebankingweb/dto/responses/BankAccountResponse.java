@@ -33,17 +33,4 @@ public class BankAccountResponse {
     public boolean isActive() {
         return isActive;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BankAccountResponse that = (BankAccountResponse) o;
-        return isActive == that.isActive && Objects.equals(accountNumber, that.accountNumber) && Objects.equals(accountBalance, that.accountBalance) && Objects.equals(accountHolder, that.accountHolder);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(accountNumber, accountBalance, accountHolder, isActive);
-    }
 }

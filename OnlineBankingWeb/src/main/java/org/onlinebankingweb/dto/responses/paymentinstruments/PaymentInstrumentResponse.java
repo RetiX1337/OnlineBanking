@@ -5,6 +5,7 @@ import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument
 public abstract class PaymentInstrumentResponse {
     private final String id;
     private final String bankAccountNumber;
+    protected String description;
 
     public PaymentInstrumentResponse(PaymentInstrument paymentInstrument) {
         this.id = String.valueOf(paymentInstrument.getId());
@@ -17,5 +18,9 @@ public abstract class PaymentInstrumentResponse {
 
     public String getBankAccountNumber() {
         return bankAccountNumber;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

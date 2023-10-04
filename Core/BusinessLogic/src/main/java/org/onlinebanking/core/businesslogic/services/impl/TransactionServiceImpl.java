@@ -64,7 +64,7 @@ public class TransactionServiceImpl implements TransactionService {
             populateTransaction(transaction);
             try {
                 return transactionDAO.save(transaction);
-            } catch (PersistenceException e) {
+            } catch (Exception e) {
                 logger.error(e);
                 throw new DAOException();
             }
@@ -79,7 +79,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactions;
         try {
             transactions = transactionDAO.findBySenderBankAccount(bankAccount);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -95,16 +95,10 @@ public class TransactionServiceImpl implements TransactionService {
                 throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
             }
             return transaction;
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
-    }
-
-    @Transactional
-    @Override
-    public Transaction updateTransaction(Transaction transaction) {
-        return transactionDAO.update(transaction);
     }
 
     private void populateTransaction(Transaction transaction) {
