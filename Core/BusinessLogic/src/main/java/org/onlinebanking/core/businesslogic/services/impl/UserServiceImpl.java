@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLNonTransientException;
 import java.util.List;
 
 @Service
@@ -43,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             return userDAO.save(user);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -55,7 +58,7 @@ public class UserServiceImpl implements UserService {
         User user;
         try {
             user = userDAO.findById(id);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -72,7 +75,7 @@ public class UserServiceImpl implements UserService {
     public User update(User user) {
         try {
             return userDAO.update(user);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -83,7 +86,7 @@ public class UserServiceImpl implements UserService {
     public void delete(User user) {
         try {
             userDAO.delete(user);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -97,7 +100,7 @@ public class UserServiceImpl implements UserService {
         } catch (NoResultException e) {
             throw new EntityNotFoundException(
                     String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " email " + email));
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }

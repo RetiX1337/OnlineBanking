@@ -2,6 +2,7 @@ package org.onlinebankingweb.exceptionhandlers.rest;
 
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
+import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebankingweb.dto.responses.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,11 @@ public class RestExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleDAOException(DAOException e) {
         return new ResponseEntity<>(new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal server error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(FailedTransactionException.class)
+    public ResponseEntity<ExceptionResponse> handleFailedTransactionException(FailedTransactionException e) {
+        return new ResponseEntity<>(new ExceptionResponse(HttpStatus.CONFLICT.value(),
+                "Failed transaction", e.getMessage()), HttpStatus.CONFLICT);
     }
 }

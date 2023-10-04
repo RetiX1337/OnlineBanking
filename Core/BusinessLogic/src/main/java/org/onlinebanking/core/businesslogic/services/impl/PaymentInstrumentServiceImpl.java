@@ -40,10 +40,9 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         if (paymentInstrument instanceof Card) {
             populateCard(paymentInstrument);
         }
-
         try {
             return paymentInstrumentDAO.save(paymentInstrument);
-        } catch (PaymentInstrumentFactoryException | PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -54,7 +53,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     public PaymentInstrument updatePaymentInstrument(PaymentInstrument paymentInstrument) {
         try {
             return paymentInstrumentDAO.update(paymentInstrument);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -66,7 +65,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         List<PaymentInstrument> paymentInstruments;
         try {
             paymentInstruments = paymentInstrumentDAO.findByBankAccount(bankAccount);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -85,7 +84,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         } catch (NoResultException e) {
             logger.error(e);
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
@@ -94,7 +93,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     private PaymentInstrument findByCardNumber(String cardNumber) {
         try {
             return paymentInstrumentDAO.findByCardNumber(cardNumber);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }

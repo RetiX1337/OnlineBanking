@@ -7,13 +7,12 @@ import java.util.Date;
 public abstract class CardResponse extends PaymentInstrumentResponse {
     private final String cardNumber;
     private final Date expiryDate;
-    private final String description;
 
     public CardResponse(Card card) {
         super(card);
         this.cardNumber = card.getCardNumber();
         this.expiryDate = card.getExpiryDate();
-        this.description = "Card Number: " + cardNumber + ", Expiry Date: " + expiryDate;
+        super.description = "Card Number: " + cardNumber + ", Expiry Date: " + expiryDate;
     }
 
     public String getCardNumber() {

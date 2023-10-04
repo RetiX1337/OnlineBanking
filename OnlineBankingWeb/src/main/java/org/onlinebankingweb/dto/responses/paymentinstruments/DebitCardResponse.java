@@ -5,7 +5,6 @@ import org.onlinebanking.core.domain.models.paymentinstruments.cards.DebitCard;
 import java.math.BigDecimal;
 
 public class DebitCardResponse extends CardResponse {
-    private final String description;
     private final BigDecimal dailyWithdrawalLimit;
     private final BigDecimal withdrawalCounter;
     private final Integer dailyTransactionLimit;
@@ -17,7 +16,7 @@ public class DebitCardResponse extends CardResponse {
         this.withdrawalCounter = debitCard.getWithdrawalCounter();
         this.dailyTransactionLimit = debitCard.getDailyTransactionLimit();
         this.transactionCounter = debitCard.getTransactionCounter();
-        this.description = "Debit Card, " + super.toString();
+        super.description = "Debit Card, " + super.toString();
     }
 
     public BigDecimal getDailyWithdrawalLimit() {
