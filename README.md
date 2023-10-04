@@ -47,7 +47,20 @@ Key features of this application include account creation and management, fund t
 
 ## Built With
 
-Java Core, Spring Framework (Core, MVC, Security), Hibernate, HTML, CSS, Bootstrap 5, Thymeleaf, Maven, MySQL, etc.
+<ul>
+<li> Java Core: <a href="https://docs.oracle.com/en/java/"> Oracle Java Documentation </a> </li>
+<li> Spring Framework:
+<ul> <li> Framework: <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/"> Spring Framework Documentation </a> </li>
+     <li> MVC: <a href="https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/mvc.html"> Spring MVC Documentation </a> </li>
+     <li> Security: <a href="https://docs.spring.io/spring-security/reference/index.html"> Spring Security Documentation </a> </li> </ul> </li>
+<li> Hibernate: <a href="https://hibernate.org/orm/documentation/5.3/"> Hibernate Documentation </a> </li>
+<li> HTML: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML"> HTML Documentation </a> </li>
+<li> CSS: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS"> CSS Documentation </a> </li>
+<li> Bootstrap 5: <a href="https://getbootstrap.com/docs/5.0/getting-started/introduction/"> Bootstrap 5 Documentation </a> </li>
+<li> Thymeleaf: <a href="https://www.thymeleaf.org/documentation.html"> Thymeleaf Documentation </a> </li>
+<li> Maven: <a href="https://maven.apache.org/guides/index.html"> Maven Documentation </a> </li>
+<li> MySQL: <a href="https://dev.mysql.com/doc/"> MySQL documentation </a> </li>
+</ul>
 
 ## Usage
 User page:
