@@ -80,10 +80,11 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Override
     public PaymentInstrument findById(Long id) {
         try {
-            return paymentInstrumentDAO.findById(id);
-        } catch (NoResultException e) {
-            logger.error(e);
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
+            PaymentInstrument paymentInstrument = paymentInstrumentDAO.findById(id);
+            if (paymentInstrument == null) {
+                throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
+            }
+            return paymentInstrument;
         } catch (Exception e) {
             logger.error(e);
             throw new DAOException();

@@ -13,13 +13,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BankAccountMapper {
-    private final BankAccountService bankAccountService;
     private final CustomerService customerService;
     private final UserService userService;
 
-    public BankAccountMapper(BankAccountService bankAccountService, CustomerService customerService,
-                                     UserService userService) {
-        this.bankAccountService = bankAccountService;
+    public BankAccountMapper(CustomerService customerService, UserService userService) {
         this.customerService = customerService;
         this.userService = userService;
     }

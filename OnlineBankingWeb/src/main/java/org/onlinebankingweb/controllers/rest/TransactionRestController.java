@@ -46,7 +46,7 @@ public class TransactionRestController {
         this.customerService = customerService;
     }
 
-    @PostMapping("/payment")
+    @PostMapping("/")
     @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public TransactionResponse processPayment(@RequestBody TransactionRequest transactionRequest) {
         Preconditions.checkNotNull(transactionRequest);
