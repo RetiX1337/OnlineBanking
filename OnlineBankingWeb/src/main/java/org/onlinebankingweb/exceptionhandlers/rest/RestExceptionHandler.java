@@ -1,5 +1,6 @@
 package org.onlinebankingweb.exceptionhandlers.rest;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
@@ -34,5 +35,11 @@ public class RestExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleFailedTransactionException(FailedTransactionException e) {
         return new ResponseEntity<>(new ExceptionResponse(HttpStatus.CONFLICT.value(),
                 "Failed transaction", e.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ExceptionResponse> handleTokenExpiredException(TokenExpiredException e) {
+        return new ResponseEntity<>(new ExceptionResponse(HttpStatus.FORBIDDEN.value(),
+                "Token has expired", e.getMessage()), HttpStatus.FORBIDDEN);
     }
 }

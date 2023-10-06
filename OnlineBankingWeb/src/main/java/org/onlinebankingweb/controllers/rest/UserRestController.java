@@ -8,6 +8,7 @@ import org.onlinebankingweb.dto.responses.UserResponse;
 import org.onlinebankingweb.mappers.UserMapper;
 import org.onlinebankingweb.security.userprincipal.UserPrincipal;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,11 +29,13 @@ public class UserRestController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public UserResponse getLoggedInUserResponse(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return new UserResponse(userService.findById(userPrincipal.getUserId()));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public UserResponse updateLoggedInUser(@PathVariable("id") Long id, @RequestBody UserUpdateRequest userUpdateRequest,
                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Preconditions.checkNotNull(userUpdateRequest);

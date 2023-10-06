@@ -9,6 +9,7 @@ import org.onlinebankingweb.mappers.BankAccountMapper;
 import org.onlinebankingweb.security.userprincipal.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/{bankAccountNumber}")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public BankAccountResponse getBankAccount(@PathVariable("bankAccountNumber") String bankAccountNumber,
                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Preconditions.checkNotNull(bankAccountNumber);
@@ -44,6 +46,7 @@ public class BankAccountRestController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
+    @PreAuthorize("isAuthenticated() && hasRole('USER_ROLE')")
     public BankAccountResponse addBankAccount(@RequestBody BankAccountCreationRequest bankAccountCreationRequest,
                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
         Preconditions.checkNotNull(bankAccountCreationRequest);
