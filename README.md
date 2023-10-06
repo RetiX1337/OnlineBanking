@@ -3,7 +3,7 @@
   <h3 align="center">Online Banking</h3>
 
   <p align="center">
-    An Online Banking pet-project built with Spring Framework
+    An Online Banking MVC and REST pet-project built with Spring Framework
     <br/>
     <br/>
     <h3 align="center">Languages and Tools:</h3>
