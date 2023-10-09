@@ -3,7 +3,7 @@
   <h3 align="center">Online Banking</h3>
 
   <p align="center">
-    An Online Banking with UI and REST built with Spring Framework
+    An Online Banking with UI and REST API built with Spring Framework
     <br/>
     <br/>
     <h3 align="center">Languages and Tools:</h3>
