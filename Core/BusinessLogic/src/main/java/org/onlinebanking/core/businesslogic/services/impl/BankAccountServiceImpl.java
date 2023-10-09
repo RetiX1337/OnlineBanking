@@ -12,12 +12,10 @@ import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -37,6 +35,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public BankAccount openBankAccount(BankAccount bankAccount) {
+        if (bankAccount == null || bankAccount.getAccountHolder() == null) {
+            throw new DAOException();
+        }
+
         populateBankAccount(bankAccount);
         BankAccount savedBankAccount;
         try {
@@ -52,7 +54,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public boolean activateBankAccount(BankAccount bankAccount) {
-        if (!isPresent(bankAccount) || bankAccount.isActive()) {
+        if (bankAccount == null || bankAccount.isActive() || !isPresent(bankAccount)) {
             return false;
         }
         bankAccount.activateBankAccount();
@@ -63,7 +65,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public boolean deactivateBankAccount(BankAccount bankAccount) {
-        if (!isPresent(bankAccount) || !bankAccount.isActive()) {
+        if (bankAccount == null || !bankAccount.isActive() || !isPresent(bankAccount) ) {
             return false;
         }
         bankAccount.deactivateBankAccount();
@@ -74,6 +76,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public BankAccount updateBankAccount(BankAccount bankAccount) {
+        if (bankAccount == null) {
+            throw new DAOException();
+        }
+
         try {
             return bankAccountDAO.update(bankAccount);
         } catch (Exception e) {
@@ -85,6 +91,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional(readOnly = true)
     @Override
     public List<BankAccount> findByCustomer(Customer customer) {
+        if (customer == null) {
+            throw new DAOException();
+        }
+
         List<BankAccount> accounts;
         try {
             accounts = bankAccountDAO.findByCustomer(customer);
@@ -98,6 +108,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional(readOnly = true)
     @Override
     public BankAccount findByAccountNumber(String accountNumber) {
+        if (accountNumber == null || accountNumber.isBlank()) {
+            throw new DAOException();
+        }
+
         try {
             return bankAccountDAO.findByAccountNumber(accountNumber);
         } catch (NoResultException e) {
@@ -111,28 +125,30 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     private String getUniqueIban() {
-        boolean isUnique = false;
         String iban;
-        do {
+        while (true) {
             iban = Iban.random().getAccountNumber();
             try {
                 findByAccountNumber(iban);
             } catch (EntityNotFoundException ignored) {
-                isUnique = true;
+                return iban;
             }
-        } while (!isUnique);
-        return iban;
+        }
     }
 
     private boolean isPresent(BankAccount bankAccount) {
-        return findByAccountNumber(bankAccount.getAccountNumber()) != null;
+        try {
+            findByAccountNumber(bankAccount.getAccountNumber());
+            return true;
+        } catch (EntityNotFoundException ignored) {
+            return false;
+        }
     }
 
     private void populateBankAccount(BankAccount bankAccount) {
         String iban = getUniqueIban();
         bankAccount.setAccountBalance(BigDecimal.ZERO);
         bankAccount.setAccountNumber(iban);
-        bankAccount.setAccountHolder(bankAccount.getAccountHolder());
         bankAccount.activateBankAccount();
     }
 

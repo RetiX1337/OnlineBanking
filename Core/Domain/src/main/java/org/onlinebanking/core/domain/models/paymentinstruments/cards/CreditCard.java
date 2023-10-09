@@ -3,6 +3,7 @@ package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "credit_cards")
@@ -31,5 +32,18 @@ public class CreditCard extends Card {
 
     public BigDecimal getCreditLimit() {
         return creditLimit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CreditCard that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(creditLimit, that.creditLimit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), creditLimit);
     }
 }
