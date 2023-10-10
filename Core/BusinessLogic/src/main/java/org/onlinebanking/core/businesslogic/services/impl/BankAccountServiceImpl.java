@@ -95,14 +95,12 @@ public class BankAccountServiceImpl implements BankAccountService {
             throw new DAOException();
         }
 
-        List<BankAccount> accounts;
         try {
-            accounts = bankAccountDAO.findByCustomer(customer);
+            return bankAccountDAO.findByCustomer(customer);
         } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
-        return accounts;
     }
 
     @Transactional(readOnly = true)

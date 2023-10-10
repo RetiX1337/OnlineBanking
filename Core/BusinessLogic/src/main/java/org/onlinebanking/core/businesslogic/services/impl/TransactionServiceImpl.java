@@ -45,6 +45,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     @Override
     public Transaction processPayment(Transaction transaction) {
+        if (isInvalid(transaction)) {
+            throw new DAOException();
+        }
+
         BankAccount sender = transaction.getSender();
         BankAccount receiver = transaction.getReceiver();
         BigDecimal amount = transaction.getAmount();
@@ -61,8 +65,8 @@ public class TransactionServiceImpl implements TransactionService {
             bankAccountService.updateBankAccount(sender);
             bankAccountService.updateBankAccount(receiver);
             paymentInstrumentService.updatePaymentInstrument(paymentInstrument);
-            populateTransaction(transaction);
             try {
+                populateTransaction(transaction);
                 return transactionDAO.save(transaction);
             } catch (Exception e) {
                 logger.error(e);
@@ -76,29 +80,37 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
-        List<Transaction> transactions;
+        if (bankAccount == null) {
+            throw new DAOException();
+        }
+
         try {
-            transactions = transactionDAO.findBySenderBankAccount(bankAccount);
+            return transactionDAO.findBySenderBankAccount(bankAccount);
         } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
-        return transactions;
     }
 
     @Transactional(readOnly = true)
     @Override
     public Transaction findById(Long id) {
+        if (id == null) {
+            throw new DAOException();
+        }
+
+        Transaction transaction;
         try {
-            Transaction transaction = transactionDAO.findById(id);
-            if (transaction == null) {
-                throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
-            }
-            return transaction;
+            transaction = transactionDAO.findById(id);
         } catch (Exception e) {
             logger.error(e);
             throw new DAOException();
         }
+
+        if (transaction == null) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, "ID " + id));
+        }
+        return transaction;
     }
 
     private void populateTransaction(Transaction transaction) {
@@ -109,5 +121,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     private String createTransactionName(BankAccount sender, BankAccount receiver) {
         return sender.getAccountHolder().getFirstName() + " to " + receiver.getAccountHolder().getFirstName() + " " + receiver.getAccountHolder().getAddress();
+    }
+
+    private static boolean isInvalid(Transaction transaction) {
+        return transaction == null || transaction.getSender() == null || transaction.getReceiver() == null || transaction.getAmount() == null || transaction.getPaymentInstrument() == null;
     }
 }
