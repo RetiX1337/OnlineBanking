@@ -5,6 +5,7 @@ import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Identifiable;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -49,5 +50,17 @@ public abstract class PaymentInstrument implements Identifiable {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PaymentInstrument that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(bankAccount, that.bankAccount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bankAccount);
     }
 }

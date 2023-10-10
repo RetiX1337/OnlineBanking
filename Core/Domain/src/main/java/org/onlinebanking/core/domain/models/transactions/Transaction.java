@@ -7,6 +7,7 @@ import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "transactions")
@@ -113,5 +114,18 @@ public class Transaction implements Identifiable {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(id, that.id) && Objects.equals(transactionDate, that.transactionDate) && Objects.equals(transactionName, that.transactionName) && transactionType == that.transactionType && transactionStatus == that.transactionStatus && Objects.equals(sender, that.sender) && Objects.equals(receiver, that.receiver) && Objects.equals(paymentInstrument, that.paymentInstrument) && Objects.equals(amount, that.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, transactionDate, transactionName, transactionType, transactionStatus, sender, receiver, paymentInstrument, amount);
     }
 }

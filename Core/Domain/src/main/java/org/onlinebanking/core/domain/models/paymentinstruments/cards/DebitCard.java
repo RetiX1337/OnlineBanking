@@ -3,6 +3,7 @@ package org.onlinebanking.core.domain.models.paymentinstruments.cards;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "debit_cards")
@@ -65,5 +66,18 @@ public class DebitCard extends Card {
 
     public Integer getDailyTransactionLimit() {
         return dailyTransactionLimit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DebitCard debitCard)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(dailyWithdrawalLimit, debitCard.dailyWithdrawalLimit) && Objects.equals(withdrawalCounter, debitCard.withdrawalCounter) && Objects.equals(dailyTransactionLimit, debitCard.dailyTransactionLimit) && Objects.equals(transactionCounter, debitCard.transactionCounter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), dailyWithdrawalLimit, withdrawalCounter, dailyTransactionLimit, transactionCounter);
     }
 }

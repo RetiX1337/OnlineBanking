@@ -3,6 +3,7 @@ package org.onlinebanking.core.domain.models;
 import org.onlinebanking.core.domain.models.user.User;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "customers")
@@ -71,5 +72,18 @@ public class Customer implements Identifiable {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(id, customer.id) && Objects.equals(user, customer.user) && Objects.equals(firstName, customer.firstName) && Objects.equals(lastName, customer.lastName) && Objects.equals(address, customer.address) && Objects.equals(taxPayerId, customer.taxPayerId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, firstName, lastName, address, taxPayerId);
     }
 }

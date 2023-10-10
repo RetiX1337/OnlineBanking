@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Entity
 @Table(name = "bank_accounts")
@@ -80,5 +81,18 @@ public class BankAccount implements Identifiable {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankAccount that = (BankAccount) o;
+        return isActive == that.isActive && Objects.equals(id, that.id) && Objects.equals(accountNumber, that.accountNumber) && Objects.equals(accountBalance, that.accountBalance) && Objects.equals(accountHolder, that.accountHolder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, accountNumber, accountBalance, accountHolder, isActive);
     }
 }

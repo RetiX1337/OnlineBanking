@@ -4,6 +4,7 @@ import javax.persistence.*;
 import org.onlinebanking.core.domain.models.paymentinstruments.PaymentInstrument;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cards")
@@ -54,6 +55,18 @@ public abstract class Card extends PaymentInstrument {
         return expiryDate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Card card)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(cardNumber, card.cardNumber) && Objects.equals(expiryDate, card.expiryDate) && Objects.equals(CVVHash, card.CVVHash) && Objects.equals(PINHash, card.PINHash);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), cardNumber, expiryDate, CVVHash, PINHash);
+    }
 
     @Override
     public String getDescription() {
