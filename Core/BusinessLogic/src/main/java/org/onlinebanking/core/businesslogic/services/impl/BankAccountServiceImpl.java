@@ -7,7 +7,7 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.BankAccountDAO;
 import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;
-import org.onlinebanking.core.domain.exceptions.DAOException;
+import org.onlinebanking.core.domain.exceptions.ServiceException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
@@ -36,7 +36,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public BankAccount openBankAccount(BankAccount bankAccount) {
         if (bankAccount == null || bankAccount.getAccountHolder() == null) {
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         populateBankAccount(bankAccount);
@@ -45,7 +45,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             savedBankAccount = bankAccountDAO.save(bankAccount);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
         paymentInstrumentService.openPaymentInstrument(initBankTransfer(savedBankAccount));
         return savedBankAccount;
@@ -77,14 +77,14 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public BankAccount updateBankAccount(BankAccount bankAccount) {
         if (bankAccount == null) {
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         try {
             return bankAccountDAO.update(bankAccount);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 
@@ -92,14 +92,14 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public List<BankAccount> findByCustomer(Customer customer) {
         if (customer == null) {
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         try {
             return bankAccountDAO.findByCustomer(customer);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 
@@ -107,7 +107,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public BankAccount findByAccountNumber(String accountNumber) {
         if (accountNumber == null || accountNumber.isBlank()) {
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         try {
@@ -118,7 +118,7 @@ public class BankAccountServiceImpl implements BankAccountService {
                     "Bank Account " + accountNumber));
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 

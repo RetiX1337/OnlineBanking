@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.exceptions.DAOException;
+import org.onlinebanking.core.domain.exceptions.ServiceException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.models.Customer;
 import org.onlinebanking.core.domain.models.paymentinstruments.BankTransfer;
@@ -108,7 +108,7 @@ public class TransactionServiceImplTest {
 
     @Test
     public void processPayment_whenTransaction_isNull() {
-        assertThrows(DAOException.class, () -> transactionService.processPayment(null));
+        assertThrows(ServiceException.class, () -> transactionService.processPayment(null));
     }
 
     @Test
@@ -120,7 +120,7 @@ public class TransactionServiceImplTest {
 
         Mockito.when(transactionDAO.save(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(DAOException.class, () -> transactionService.processPayment(transaction));
+        assertThrows(ServiceException.class, () -> transactionService.processPayment(transaction));
     }
 
     @Test
@@ -145,12 +145,12 @@ public class TransactionServiceImplTest {
 
         Mockito.when(transactionDAO.findBySenderBankAccount(bankAccount)).thenThrow(RuntimeException.class);
 
-        assertThrows(DAOException.class, () -> transactionService.findByBankAccount(bankAccount));
+        assertThrows(ServiceException.class, () -> transactionService.findByBankAccount(bankAccount));
     }
 
     @Test
     public void findByBankAccount_whenBankAccount_isNull() {
-        assertThrows(DAOException.class, () -> transactionService.findByBankAccount(null));
+        assertThrows(ServiceException.class, () -> transactionService.findByBankAccount(null));
     }
 
     @Test
@@ -169,7 +169,7 @@ public class TransactionServiceImplTest {
 
     @Test
     public void findById_whenId_isNull() {
-        assertThrows(DAOException.class, () -> transactionService.findById(null));
+        assertThrows(ServiceException.class, () -> transactionService.findById(null));
     }
 
     @Test
@@ -183,7 +183,7 @@ public class TransactionServiceImplTest {
     public void findById_whenTransactionDAO_fails() {
         Mockito.when(transactionDAO.findById(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(DAOException.class, () -> transactionService.findById(1L));
+        assertThrows(ServiceException.class, () -> transactionService.findById(1L));
     }
 
     private static BankTransfer initValidBankTransfer(BankAccount sender) {

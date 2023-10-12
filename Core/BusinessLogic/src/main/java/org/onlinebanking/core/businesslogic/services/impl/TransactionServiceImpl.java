@@ -6,7 +6,7 @@ import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
-import org.onlinebanking.core.domain.exceptions.DAOException;
+import org.onlinebanking.core.domain.exceptions.ServiceException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebanking.core.domain.models.BankAccount;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.PersistenceException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -46,7 +45,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction processPayment(Transaction transaction) {
         if (isInvalid(transaction)) {
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         BankAccount sender = transaction.getSender();
@@ -70,7 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
                 return transactionDAO.save(transaction);
             } catch (Exception e) {
                 logger.error(e);
-                throw new DAOException();
+                throw new ServiceException();
             }
         } else {
             throw new FailedTransactionException(String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE, sender.getAccountNumber()));
@@ -81,14 +80,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
         if (bankAccount == null) {
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         try {
             return transactionDAO.findBySenderBankAccount(bankAccount);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 
@@ -96,7 +95,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction findById(Long id) {
         if (id == null) {
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         Transaction transaction;
@@ -104,7 +103,7 @@ public class TransactionServiceImpl implements TransactionService {
             transaction = transactionDAO.findById(id);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
 
         if (transaction == null) {

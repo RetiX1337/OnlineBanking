@@ -1,7 +1,7 @@
 package org.onlinebankingweb.exceptionhandlers.rest;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import org.onlinebanking.core.domain.exceptions.DAOException;
+import org.onlinebanking.core.domain.exceptions.ServiceException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedTransactionException;
 import org.onlinebankingweb.dto.responses.ExceptionResponse;
@@ -25,8 +25,8 @@ public class RestExceptionHandler {
                 e.getMessage()), HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(DAOException.class)
-    public ResponseEntity<ExceptionResponse> handleDAOException(DAOException e) {
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<ExceptionResponse> handleDAOException(ServiceException e) {
         return new ResponseEntity<>(new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal server error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
