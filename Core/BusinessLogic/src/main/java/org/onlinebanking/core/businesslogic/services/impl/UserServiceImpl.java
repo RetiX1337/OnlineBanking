@@ -14,17 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.SQLNonTransientException;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "User couldn't be found by %s";
-    private final static String FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE
-            = "User for email address %s already exists";
+    private final static String FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE = "User for email address %s already exists";
     private final static Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private final UserDAO userDAO;
 
@@ -62,11 +57,9 @@ public class UserServiceImpl implements UserService {
             logger.error(e);
             throw new DAOException();
         }
-
         if (user == null) {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " ID " + id));
         }
-
         return user;
     }
 

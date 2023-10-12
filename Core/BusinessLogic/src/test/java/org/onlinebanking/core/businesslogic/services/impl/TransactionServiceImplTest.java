@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
-import org.onlinebanking.core.businesslogic.services.impl.TransactionServiceImpl;
 import org.onlinebanking.core.dataaccess.dao.interfaces.TransactionDAO;
 import org.onlinebanking.core.domain.exceptions.DAOException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
