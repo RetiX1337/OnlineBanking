@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.UserDAO;
-import org.onlinebanking.core.domain.exceptions.DAOException;
+import org.onlinebanking.core.domain.exceptions.ServiceException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.exceptions.FailedUserRegistrationException;
 import org.onlinebanking.core.domain.models.user.User;
@@ -30,11 +30,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User registerUser(User user) {
+        if (user == null || user.getEmail() == null) {
+            throw new ServiceException();
+        }
+
         String email = user.getEmail();
         try {
             findByEmail(email);
-            throw new FailedUserRegistrationException(
-                    String.format(FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE, email));
+            throw new FailedUserRegistrationException(String.format(FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE, email));
         } catch (EntityNotFoundException ignored) {}
 
         user.setRoles(List.of(UserRole.USER_ROLE));
@@ -43,19 +46,22 @@ public class UserServiceImpl implements UserService {
             return userDAO.save(user);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public User findById(Long id) {
+        if (id == null) {
+            throw new ServiceException();
+        }
         User user;
         try {
             user = userDAO.findById(id);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
         if (user == null) {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " ID " + id));
@@ -66,28 +72,37 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User update(User user) {
+        if (user == null) {
+            throw new ServiceException();
+        }
         try {
             return userDAO.update(user);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 
     @Transactional
     @Override
     public void delete(User user) {
+        if (user == null) {
+            throw new ServiceException();
+        }
         try {
             userDAO.delete(user);
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public User findByEmail(String email) {
+        if (email == null) {
+            throw new ServiceException();
+        }
         try {
             return userDAO.findByEmail(email);
         } catch (NoResultException e) {
@@ -95,7 +110,7 @@ public class UserServiceImpl implements UserService {
                     String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " email " + email));
         } catch (Exception e) {
             logger.error(e);
-            throw new DAOException();
+            throw new ServiceException();
         }
     }
 }

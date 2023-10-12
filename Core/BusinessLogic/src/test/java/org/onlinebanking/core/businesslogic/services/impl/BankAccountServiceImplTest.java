@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.BankAccountDAO;
-import org.onlinebanking.core.domain.exceptions.DAOException;
+import org.onlinebanking.core.domain.exceptions.ServiceException;
 import org.onlinebanking.core.domain.exceptions.EntityNotFoundException;
 import org.onlinebanking.core.domain.models.BankAccount;
 import org.onlinebanking.core.domain.models.Customer;
@@ -63,14 +63,14 @@ public class BankAccountServiceImplTest {
 
     @Test
     public void openBankAccount_whenBankAccount_isNull() {
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.openBankAccount(null));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.openBankAccount(null));
     }
 
     @Test
     public void openBankAccount_whenAccountHolder_isNull() {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountHolder(null);
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.openBankAccount(bankAccount));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.openBankAccount(bankAccount));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class BankAccountServiceImplTest {
         Mockito.when(bankAccountDAO.findByAccountNumber(any())).thenThrow(RuntimeException.class);
         Mockito.when(bankAccountDAO.save(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.openBankAccount(bankAccount));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.openBankAccount(bankAccount));
     }
 
     @Test
@@ -96,9 +96,9 @@ public class BankAccountServiceImplTest {
         Mockito.when(bankAccountDAO.findByAccountNumber(any())).thenThrow(NoResultException.class);
         Mockito.when(bankAccountDAO.save(any())).thenReturn(expectedSavedBankAccount);
 
-        Mockito.when(paymentInstrumentService.openPaymentInstrument(any())).thenThrow(DAOException.class);
+        Mockito.when(paymentInstrumentService.openPaymentInstrument(any())).thenThrow(ServiceException.class);
 
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.openBankAccount(bankAccount));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.openBankAccount(bankAccount));
     }
 
     @Test
@@ -200,7 +200,7 @@ public class BankAccountServiceImplTest {
 
     @Test
     public void updateBankAccount_whenBankAccount_isNull() {
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.updateBankAccount(null));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.updateBankAccount(null));
     }
 
     @Test
@@ -208,7 +208,7 @@ public class BankAccountServiceImplTest {
         BankAccount bankAccount = new BankAccount();
         Mockito.when(bankAccountDAO.update(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.updateBankAccount(bankAccount));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.updateBankAccount(bankAccount));
     }
 
     @Test
@@ -228,14 +228,14 @@ public class BankAccountServiceImplTest {
 
     @Test
     public void findByCustomer_whenCustomer_isNull() {
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.findByCustomer(null));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByCustomer(null));
     }
 
     @Test
     public void findByCustomer_whenBankAccountDAO_fails() {
         Mockito.when(bankAccountDAO.findByCustomer(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.findByCustomer(new Customer()));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByCustomer(new Customer()));
     }
 
     @Test
@@ -254,12 +254,12 @@ public class BankAccountServiceImplTest {
 
     @Test
     public void findByAccountNumber_whenAccountNumber_isNull() {
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.findByAccountNumber(null));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByAccountNumber(null));
     }
 
     @Test
     public void findByAccountNumber_whenAccountNumber_isBlank() {
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.findByAccountNumber(" "));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByAccountNumber(" "));
     }
 
     @Test
@@ -277,6 +277,6 @@ public class BankAccountServiceImplTest {
 
         Mockito.when(bankAccountDAO.findByAccountNumber(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(DAOException.class, () -> bankAccountServiceImpl.findByAccountNumber(accountNumber));
+        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByAccountNumber(accountNumber));
     }
 }
