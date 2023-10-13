@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:fragment="form-div" class="bg-light p-5 border rounded-3">
-    <h2 class="display-4 d-flex justify-content-center">Transaction Form</h2>
+    <h2 class="display-4 d-flex justify-content-center">Bank Transfer Form</h2>
     <form id="form-1" th:action="@{~/payment-instrument/open-payment-instrument}" th:object="${paymentInstrumentRequest}" method="post">
         <input type="hidden" th:name="bankAccountNumber" th:value="${accountNumber}">
         <input type="hidden" th:name="paymentInstrumentRequest" th:value="${'BANK_TRANSFER'}">
