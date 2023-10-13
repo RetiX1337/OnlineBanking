@@ -1,4 +1,4 @@
-package org.onlinebankingweb.controllers.mvc;
+package org.onlinebankingweb.controllers.view;
 
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.domain.models.BankAccount;

@@ -25,9 +25,7 @@ public class BankAccountMapper {
                                                    UserPrincipal userPrincipal) {
         User user = userService.findByEmail(userPrincipal.getUsername());
         Customer customer = customerService.findByUser(user);
-        if (!bankAccountCreationRequest.getCustomerTaxPayerId().equals(customer.getTaxPayerId())) {
-            throw new AccessDeniedException("The tax payer ID does not belong to the authenticated customer");
-        }
+
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountHolder(customer);
         return bankAccount;
