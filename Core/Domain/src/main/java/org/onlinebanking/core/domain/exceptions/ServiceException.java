@@ -6,4 +6,8 @@ public class ServiceException extends RuntimeException {
     public ServiceException() {
         super(DAO_EXCEPTION_MESSAGE);
     }
+
+    public ServiceException(Throwable cause) {
+        super(cause);
+    }
 }

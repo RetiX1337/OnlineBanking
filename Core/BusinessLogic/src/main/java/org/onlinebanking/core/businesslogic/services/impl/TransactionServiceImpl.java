@@ -1,7 +1,5 @@
 package org.onlinebanking.core.businesslogic.services.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.businesslogic.services.TransactionService;
@@ -28,7 +26,6 @@ public class TransactionServiceImpl implements TransactionService {
     private static final String FAILED_TRANSACTION_EXCEPTION_MESSAGE
             = "Transaction couldn't be processed for sender %s";
     private static final String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "Transaction couldn't be found for %s";
-    private final static Logger logger = LogManager.getLogger(TransactionServiceImpl.class);
     private final TransactionDAO transactionDAO;
     private final BankAccountService bankAccountService;
     private final PaymentInstrumentService paymentInstrumentService;
@@ -44,10 +41,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     @Override
     public Transaction processPayment(Transaction transaction) {
-        if (isInvalid(transaction)) {
-            throw new ServiceException();
-        }
-
         BankAccount sender = transaction.getSender();
         BankAccount receiver = transaction.getReceiver();
         BigDecimal amount = transaction.getAmount();
@@ -68,42 +61,32 @@ public class TransactionServiceImpl implements TransactionService {
                 populateTransaction(transaction);
                 return transactionDAO.save(transaction);
             } catch (Exception e) {
-                logger.error(e);
-                throw new ServiceException();
+                throw new ServiceException(e);
             }
         } else {
-            throw new FailedTransactionException(String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE, sender.getAccountNumber()));
+            throw new FailedTransactionException(
+                    String.format(FAILED_TRANSACTION_EXCEPTION_MESSAGE, sender.getAccountNumber()));
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null) {
-            throw new ServiceException();
-        }
-
         try {
             return transactionDAO.findBySenderBankAccount(bankAccount);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public Transaction findById(Long id) {
-        if (id == null) {
-            throw new ServiceException();
-        }
-
         Transaction transaction;
         try {
             transaction = transactionDAO.findById(id);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
 
         if (transaction == null) {
@@ -120,9 +103,5 @@ public class TransactionServiceImpl implements TransactionService {
 
     private String createTransactionName(BankAccount sender, BankAccount receiver) {
         return sender.getAccountHolder().getFirstName() + " to " + receiver.getAccountHolder().getFirstName() + " " + receiver.getAccountHolder().getAddress();
-    }
-
-    private static boolean isInvalid(Transaction transaction) {
-        return transaction == null || transaction.getSender() == null || transaction.getReceiver() == null || transaction.getAmount() == null || transaction.getPaymentInstrument() == null;
     }
 }

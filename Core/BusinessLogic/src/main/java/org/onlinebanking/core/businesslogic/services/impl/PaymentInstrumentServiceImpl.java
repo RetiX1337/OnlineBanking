@@ -1,7 +1,5 @@
 package org.onlinebanking.core.businesslogic.services.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.PaymentInstrumentDAO;
 import org.onlinebanking.core.domain.models.paymentinstruments.cards.Card;
@@ -22,7 +20,6 @@ import java.util.Random;
 @Service
 public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The PaymentInstrument couldn't be found by %s";
-    private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final PaymentInstrumentDAO paymentInstrumentDAO;
 
     @Autowired
@@ -34,10 +31,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional
     @Override
     public PaymentInstrument openPaymentInstrument(PaymentInstrument paymentInstrument) {
-        if (paymentInstrument == null) {
-            throw new ServiceException();
-        }
-
         if (paymentInstrument instanceof Card) {
             populateCard(paymentInstrument);
         }
@@ -45,39 +38,28 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
         try {
             return paymentInstrumentDAO.save(paymentInstrument);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
     @Transactional
     @Override
     public PaymentInstrument updatePaymentInstrument(PaymentInstrument paymentInstrument) {
-        if (paymentInstrument == null) {
-            throw new ServiceException();
-        }
-
         try {
             return paymentInstrumentDAO.update(paymentInstrument);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<PaymentInstrument> findByBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null) {
-            throw new ServiceException();
-        }
-
         List<PaymentInstrument> paymentInstruments;
         try {
             paymentInstruments = paymentInstrumentDAO.findByBankAccount(bankAccount);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
         if (paymentInstruments.isEmpty()) {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
@@ -89,10 +71,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional(readOnly = true)
     @Override
     public PaymentInstrument findById(Long id) {
-        if (id == null) {
-            throw new ServiceException();
-        }
-
         try {
             PaymentInstrument paymentInstrument = paymentInstrumentDAO.findById(id);
             if (paymentInstrument == null) {
@@ -100,21 +78,15 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
             }
             return paymentInstrument;
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
     private PaymentInstrument findByCardNumber(String cardNumber) {
-        if (cardNumber == null) {
-            throw new ServiceException();
-        }
-
         try {
             return paymentInstrumentDAO.findByCardNumber(cardNumber);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 

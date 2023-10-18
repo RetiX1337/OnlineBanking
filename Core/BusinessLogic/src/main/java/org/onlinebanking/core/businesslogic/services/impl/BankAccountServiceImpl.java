@@ -1,7 +1,5 @@
 package org.onlinebanking.core.businesslogic.services.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.iban4j.Iban;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
@@ -22,7 +20,6 @@ import java.util.List;
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The BankAccount couldn't be found by %s";
-    private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final BankAccountDAO bankAccountDAO;
     private final PaymentInstrumentService paymentInstrumentService;
 
@@ -35,17 +32,12 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public BankAccount openBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null || bankAccount.getAccountHolder() == null) {
-            throw new ServiceException();
-        }
-
         populateBankAccount(bankAccount);
         BankAccount savedBankAccount;
         try {
             savedBankAccount = bankAccountDAO.save(bankAccount);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
         paymentInstrumentService.openPaymentInstrument(initBankTransfer(savedBankAccount));
         return savedBankAccount;
@@ -54,7 +46,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public boolean activateBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null || bankAccount.isActive() || !isPresent(bankAccount)) {
+        if (bankAccount.isActive() || !isPresent(bankAccount)) {
             return false;
         }
         bankAccount.activateBankAccount();
@@ -65,7 +57,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public boolean deactivateBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null || !bankAccount.isActive() || !isPresent(bankAccount) ) {
+        if (!bankAccount.isActive() || !isPresent(bankAccount) ) {
             return false;
         }
         bankAccount.deactivateBankAccount();
@@ -76,49 +68,33 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public BankAccount updateBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null) {
-            throw new ServiceException();
-        }
-
         try {
             return bankAccountDAO.update(bankAccount);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<BankAccount> findByCustomer(Customer customer) {
-        if (customer == null) {
-            throw new ServiceException();
-        }
-
         try {
             return bankAccountDAO.findByCustomer(customer);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
     @Transactional(readOnly = true)
     @Override
     public BankAccount findByAccountNumber(String accountNumber) {
-        if (accountNumber == null || accountNumber.isBlank()) {
-            throw new ServiceException();
-        }
-
         try {
             return bankAccountDAO.findByAccountNumber(accountNumber);
         } catch (NoResultException e) {
-            logger.error(e);
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
-                    "Bank Account " + accountNumber));
+                    "Bank Account " + accountNumber), e);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 

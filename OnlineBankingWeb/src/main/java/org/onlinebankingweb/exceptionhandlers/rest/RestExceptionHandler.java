@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice(basePackages = "org.onlinebankingweb.controllers.rest")
 public class RestExceptionHandler {
+
+    //TODO add logging
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(EntityNotFoundException e) {
         return new ResponseEntity<>(new ExceptionResponse(HttpStatus.NOT_FOUND.value(), "Entity not found",
@@ -26,7 +28,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<ExceptionResponse> handleDAOException(ServiceException e) {
+    public ResponseEntity<ExceptionResponse> handleServiceException(ServiceException e) {
         return new ResponseEntity<>(new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal server error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
