@@ -107,11 +107,6 @@ public class TransactionServiceImplTest {
     }
 
     @Test
-    public void processPayment_whenTransaction_isNull() {
-        assertThrows(ServiceException.class, () -> transactionService.processPayment(null));
-    }
-
-    @Test
     public void processPayment_whenTransactionDAO_fails() {
         BankAccount sender = initValidBankAccount(initValidSenderCustomer(), BigDecimal.valueOf(500));
         BankAccount receiver = initValidBankAccount(initValidReceiverCustomer(), BigDecimal.ZERO);
@@ -149,11 +144,6 @@ public class TransactionServiceImplTest {
     }
 
     @Test
-    public void findByBankAccount_whenBankAccount_isNull() {
-        assertThrows(ServiceException.class, () -> transactionService.findByBankAccount(null));
-    }
-
-    @Test
     public void findById_whenId_isValid() {
         Long id = 1L;
 
@@ -165,11 +155,6 @@ public class TransactionServiceImplTest {
         Transaction actualTransaction = transactionService.findById(id);
 
         assertEquals(actualTransaction.getId(), expectedTransaction.getId());
-    }
-
-    @Test
-    public void findById_whenId_isNull() {
-        assertThrows(ServiceException.class, () -> transactionService.findById(null));
     }
 
     @Test

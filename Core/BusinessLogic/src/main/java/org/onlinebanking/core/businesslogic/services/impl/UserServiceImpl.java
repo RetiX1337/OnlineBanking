@@ -1,7 +1,5 @@
 package org.onlinebanking.core.businesslogic.services.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.onlinebanking.core.businesslogic.services.UserService;
 import org.onlinebanking.core.dataaccess.dao.interfaces.UserDAO;
 import org.onlinebanking.core.domain.exceptions.ServiceException;
@@ -20,7 +18,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "User couldn't be found by %s";
     private final static String FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE = "User for email address %s already exists";
-    private final static Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private final UserDAO userDAO;
 
     public UserServiceImpl(@Autowired UserDAO userDAO) {
@@ -38,8 +35,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.save(user);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -50,8 +46,7 @@ public class UserServiceImpl implements UserService {
         try {
             user = userDAO.findById(id);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
         if (user == null) {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " ID " + id));
@@ -65,8 +60,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.update(user);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -76,8 +70,7 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.delete(user);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -88,10 +81,9 @@ public class UserServiceImpl implements UserService {
             return userDAO.findByEmail(email);
         } catch (NoResultException e) {
             throw new EntityNotFoundException(
-                    String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " email " + email));
+                    String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE, " email " + email), e);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 

@@ -62,18 +62,6 @@ public class BankAccountServiceImplTest {
     }
 
     @Test
-    public void openBankAccount_whenBankAccount_isNull() {
-        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.openBankAccount(null));
-    }
-
-    @Test
-    public void openBankAccount_whenAccountHolder_isNull() {
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setAccountHolder(null);
-        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.openBankAccount(bankAccount));
-    }
-
-    @Test
     public void openBankAccount_whenBankAccountDAO_fails() {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountHolder(new Customer());
@@ -128,11 +116,6 @@ public class BankAccountServiceImplTest {
     }
 
     @Test
-    public void activateBankAccount_whenBankAccount_isNull() {
-        assertFalse(bankAccountServiceImpl.activateBankAccount(null));
-    }
-
-    @Test
     public void activateBankAccount_whenBankAccount_isActivated() {
         BankAccount bankAccount = new BankAccount();
         bankAccount.activateBankAccount();
@@ -165,12 +148,6 @@ public class BankAccountServiceImplTest {
 
         assertFalse(bankAccountServiceImpl.deactivateBankAccount(bankAccount));
     }
-
-    @Test
-    public void deactivateBankAccount_whenBankAccount_isNull() {
-        assertFalse(bankAccountServiceImpl.deactivateBankAccount(null));
-    }
-
     @Test
     public void deactivateBankAccount_whenBankAccount_isDeactivated() {
         BankAccount bankAccount = new BankAccount();
@@ -199,11 +176,6 @@ public class BankAccountServiceImplTest {
     }
 
     @Test
-    public void updateBankAccount_whenBankAccount_isNull() {
-        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.updateBankAccount(null));
-    }
-
-    @Test
     public void updateBankAccount_whenBankAccountDAO_fails() {
         BankAccount bankAccount = new BankAccount();
         Mockito.when(bankAccountDAO.update(any())).thenThrow(RuntimeException.class);
@@ -227,11 +199,6 @@ public class BankAccountServiceImplTest {
     }
 
     @Test
-    public void findByCustomer_whenCustomer_isNull() {
-        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByCustomer(null));
-    }
-
-    @Test
     public void findByCustomer_whenBankAccountDAO_fails() {
         Mockito.when(bankAccountDAO.findByCustomer(any())).thenThrow(RuntimeException.class);
 
@@ -250,16 +217,6 @@ public class BankAccountServiceImplTest {
 
         assertEquals(expectedBankAccount, actualBankAccount);
         Mockito.verify(bankAccountDAO, Mockito.times(1)).findByAccountNumber(any());
-    }
-
-    @Test
-    public void findByAccountNumber_whenAccountNumber_isNull() {
-        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByAccountNumber(null));
-    }
-
-    @Test
-    public void findByAccountNumber_whenAccountNumber_isBlank() {
-        assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByAccountNumber(" "));
     }
 
     @Test

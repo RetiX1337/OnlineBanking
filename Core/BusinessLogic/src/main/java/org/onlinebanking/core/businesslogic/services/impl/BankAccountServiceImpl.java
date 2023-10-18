@@ -1,7 +1,5 @@
 package org.onlinebanking.core.businesslogic.services.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.iban4j.Iban;
 import org.onlinebanking.core.businesslogic.services.BankAccountService;
 import org.onlinebanking.core.businesslogic.services.PaymentInstrumentService;
@@ -22,7 +20,6 @@ import java.util.List;
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
     private final static String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE = "The BankAccount couldn't be found by %s";
-    private final static Logger logger = LogManager.getLogger(BankAccountServiceImpl.class);
     private final BankAccountDAO bankAccountDAO;
     private final PaymentInstrumentService paymentInstrumentService;
 
@@ -40,8 +37,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         try {
             savedBankAccount = bankAccountDAO.save(bankAccount);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
         paymentInstrumentService.openPaymentInstrument(initBankTransfer(savedBankAccount));
         return savedBankAccount;
@@ -75,8 +71,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         try {
             return bankAccountDAO.update(bankAccount);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -86,8 +81,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         try {
             return bankAccountDAO.findByCustomer(customer);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -97,12 +91,10 @@ public class BankAccountServiceImpl implements BankAccountService {
         try {
             return bankAccountDAO.findByAccountNumber(accountNumber);
         } catch (NoResultException e) {
-            logger.error(e);
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
-                    "Bank Account " + accountNumber));
+                    "Bank Account " + accountNumber), e);
         } catch (Exception e) {
-            logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
