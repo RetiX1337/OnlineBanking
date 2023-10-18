@@ -30,15 +30,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User registerUser(User user) {
-        if (user == null || user.getEmail() == null) {
-            throw new ServiceException();
-        }
-
         String email = user.getEmail();
-        try {
-            findByEmail(email);
-            throw new FailedUserRegistrationException(String.format(FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE, email));
-        } catch (EntityNotFoundException ignored) {}
+        checkIfUserEmailExists(email);
 
         user.setRoles(List.of(UserRole.USER_ROLE));
 
@@ -53,9 +46,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public User findById(Long id) {
-        if (id == null) {
-            throw new ServiceException();
-        }
         User user;
         try {
             user = userDAO.findById(id);
@@ -72,9 +62,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User update(User user) {
-        if (user == null) {
-            throw new ServiceException();
-        }
         try {
             return userDAO.update(user);
         } catch (Exception e) {
@@ -86,9 +73,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void delete(User user) {
-        if (user == null) {
-            throw new ServiceException();
-        }
         try {
             userDAO.delete(user);
         } catch (Exception e) {
@@ -100,9 +84,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public User findByEmail(String email) {
-        if (email == null) {
-            throw new ServiceException();
-        }
         try {
             return userDAO.findByEmail(email);
         } catch (NoResultException e) {
@@ -112,5 +93,12 @@ public class UserServiceImpl implements UserService {
             logger.error(e);
             throw new ServiceException();
         }
+    }
+
+    private void checkIfUserEmailExists(String email) {
+        try {
+            findByEmail(email);
+            throw new FailedUserRegistrationException(String.format(FAILED_USER_REGISTRATION_EXCEPTION_MESSAGE, email));
+        } catch (EntityNotFoundException ignored) {}
     }
 }

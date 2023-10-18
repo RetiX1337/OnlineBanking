@@ -26,7 +26,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<ExceptionResponse> handleDAOException(ServiceException e) {
+    public ResponseEntity<ExceptionResponse> handleServiceException(ServiceException e) {
         return new ResponseEntity<>(new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal server error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }

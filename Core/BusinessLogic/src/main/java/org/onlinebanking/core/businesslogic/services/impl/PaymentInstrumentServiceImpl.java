@@ -34,10 +34,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional
     @Override
     public PaymentInstrument openPaymentInstrument(PaymentInstrument paymentInstrument) {
-        if (paymentInstrument == null) {
-            throw new ServiceException();
-        }
-
         if (paymentInstrument instanceof Card) {
             populateCard(paymentInstrument);
         }
@@ -53,10 +49,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional
     @Override
     public PaymentInstrument updatePaymentInstrument(PaymentInstrument paymentInstrument) {
-        if (paymentInstrument == null) {
-            throw new ServiceException();
-        }
-
         try {
             return paymentInstrumentDAO.update(paymentInstrument);
         } catch (Exception e) {
@@ -68,10 +60,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional(readOnly = true)
     @Override
     public List<PaymentInstrument> findByBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null) {
-            throw new ServiceException();
-        }
-
         List<PaymentInstrument> paymentInstruments;
         try {
             paymentInstruments = paymentInstrumentDAO.findByBankAccount(bankAccount);
@@ -89,10 +77,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     @Transactional(readOnly = true)
     @Override
     public PaymentInstrument findById(Long id) {
-        if (id == null) {
-            throw new ServiceException();
-        }
-
         try {
             PaymentInstrument paymentInstrument = paymentInstrumentDAO.findById(id);
             if (paymentInstrument == null) {
@@ -106,10 +90,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
     }
 
     private PaymentInstrument findByCardNumber(String cardNumber) {
-        if (cardNumber == null) {
-            throw new ServiceException();
-        }
-
         try {
             return paymentInstrumentDAO.findByCardNumber(cardNumber);
         } catch (Exception e) {

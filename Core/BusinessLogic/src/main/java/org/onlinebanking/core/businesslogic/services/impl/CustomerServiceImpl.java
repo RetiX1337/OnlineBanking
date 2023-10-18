@@ -30,10 +30,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public Customer registerCustomer(Customer customer) {
-        if (customer == null || customer.getTaxPayerId() == null) {
-            throw new ServiceException();
-        }
-
         String taxPayerId = customer.getTaxPayerId();
         try {
             findByTaxPayerId(taxPayerId);
@@ -53,10 +49,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void deleteCustomer(Customer customer) {
-        if (customer == null) {
-            throw new ServiceException();
-        }
-
         try {
             customerDAO.delete(customer);
         } catch (Exception e) {
@@ -68,9 +60,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public Customer updateCustomer(Customer customer) {
-        if (customer == null) {
-            throw new ServiceException();
-        }
         try {
             return customerDAO.update(customer);
         } catch (Exception e) {
@@ -82,10 +71,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public boolean assignCustomerToUser(Customer customer, User user) {
-        if (customer == null || user == null) {
-            throw new ServiceException();
-        }
-
         if (customer.getUser() != null) {
             return false;
         }
@@ -98,10 +83,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(readOnly = true)
     @Override
     public Customer findByTaxPayerId(String taxPayerId) {
-        if (taxPayerId == null) {
-            throw new ServiceException();
-        }
-
         try {
             return customerDAO.findByTaxPayerId(taxPayerId);
         } catch (NoResultException e) {
@@ -116,10 +97,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public Customer findByUser(User user) {
-        if (user == null) {
-            throw new ServiceException();
-        }
-
         try {
             return customerDAO.findByUser(user);
         } catch (NoResultException e) {

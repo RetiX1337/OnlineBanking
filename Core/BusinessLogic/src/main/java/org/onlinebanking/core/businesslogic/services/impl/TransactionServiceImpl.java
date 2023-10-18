@@ -44,10 +44,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     @Override
     public Transaction processPayment(Transaction transaction) {
-        if (isInvalid(transaction)) {
-            throw new ServiceException();
-        }
-
         BankAccount sender = transaction.getSender();
         BankAccount receiver = transaction.getReceiver();
         BigDecimal amount = transaction.getAmount();
@@ -79,10 +75,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<Transaction> findByBankAccount(BankAccount bankAccount) {
-        if (bankAccount == null) {
-            throw new ServiceException();
-        }
-
         try {
             return transactionDAO.findBySenderBankAccount(bankAccount);
         } catch (Exception e) {
@@ -94,10 +86,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public Transaction findById(Long id) {
-        if (id == null) {
-            throw new ServiceException();
-        }
-
         Transaction transaction;
         try {
             transaction = transactionDAO.findById(id);
@@ -120,9 +108,5 @@ public class TransactionServiceImpl implements TransactionService {
 
     private String createTransactionName(BankAccount sender, BankAccount receiver) {
         return sender.getAccountHolder().getFirstName() + " to " + receiver.getAccountHolder().getFirstName() + " " + receiver.getAccountHolder().getAddress();
-    }
-
-    private static boolean isInvalid(Transaction transaction) {
-        return transaction == null || transaction.getSender() == null || transaction.getReceiver() == null || transaction.getAmount() == null || transaction.getPaymentInstrument() == null;
     }
 }
