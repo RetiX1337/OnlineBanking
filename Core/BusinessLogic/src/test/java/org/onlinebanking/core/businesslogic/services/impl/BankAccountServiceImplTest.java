@@ -205,6 +205,8 @@ public class BankAccountServiceImplTest {
         assertThrows(ServiceException.class, () -> bankAccountServiceImpl.findByCustomer(new Customer()));
     }
 
+
+
     @Test
     public void findByAccountNumber_whenAccountNumber_isValid() {
         String accountNumber = "some_number";
